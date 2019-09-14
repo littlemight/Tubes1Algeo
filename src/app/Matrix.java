@@ -1,19 +1,193 @@
 package app;
 
 class Matrix {
-  private int m;
-  private int n;
-  Matrix(int maxm, int maxn) {
-    this.m = maxm + 1;
-    this.n = maxn + 1;
+  public final int m;
+  public final int n;
+  public double[][] mat;
+  private static final double EPS = 1e-9;
+
+  /* KONSTRUKTOR */
+  public Matrix(int m, int n) {
+    this.m = m;
+    this.n = n;
+    this.mat = new double[m + 1][n + 1];
+  }
+
+  public Matrix(double[][] inp) { // Konstruktor dari 2d array
+    this.m = inp.length - 1;
+    this.n = inp[0].length - 1;
+    this.mat = new double[m + 1][n + 1];
+    for (int i = 1; i <= m; i++) {
+      for (int j = 1; j <= n; j++) {
+        this.mat[i][j] = inp[i][j];
+      }
+    }
+  }
+
+  public Matrix(Matrix inp) { // Copy
+    this.n = inp.n;
+    this.m = inp.m;
+    this.mat = new double[m + 1][n + 1];
+    for (int i = 1; i <= m; i++) {
+      for (int j = 1; j <= n; j++) {
+        mat[i][j] = inp.mat[i][j];
+      }
+    }
+  }
+
+  public Matrix mult(Matrix M) {
+    Matrix ret = new Matrix(this.m, M.n);
+    for (int i = 1; i <= ret.m; i++) {
+      for (int j = 1; j <= ret.n; j++) {
+        for (int k = 1; k <= this.n; k++) {
+          ret.mat[i][j] += (this.mat[i][k] * M.mat[k][j]);
+        }
+      }
+    }
+    return ret;
+  }
+
+  public void swap(int r1, int r2) {
+    double[] tmp = mat[r1];
+    mat[r1] = mat[r2];
+    mat[r2] = tmp;
   }
 
   public void show() {
     for (int i = 1; i <= m; i++) {
       for (int j = 1; j <= n; j++) {
-        System.out.printf("%f ");
+        System.out.printf("%f ", this.mat[i][j]);
       }
       System.out.println();
     }
+  }
+
+  /* OPERASI */
+  /** Eliminations */
+  private int nextCandidate(Matrix M, int r, int c) {
+    int ret = r;
+    for (int i = r; i <= M.m; i++) {
+      if (Math.abs(M.mat[i][c]) > Math.abs(M.mat[ret][c])) {
+        ret = i;
+      }
+    }
+    return ret;
+  }
+
+  private int findNextLeading(Matrix M, int row, int col) {
+    int ret = col;
+    while (Math.abs(M.mat[row][ret]) < EPS && ret < M.n) { // Find next leading non zero element
+      ret++;
+    }
+    return ret;
+  }
+
+  private void normalize(Matrix M, int row, int col) {
+    double norm = M.mat[row][col];
+    for (int j = col; j <= M.n; j++) {
+      M.mat[row][j] /= norm;
+    }
+  }
+
+  private Matrix gaussElim(Matrix M) {
+    int nex = 1;
+    for (int no = 1; no <= Math.min(M.m, M.n); no++) {
+      // Find next candidate
+      int mx = nextCandidate(M, no, nex);
+
+      // Swap
+      if (no != mx) {
+        M.swap(no, mx);
+      }
+
+      if (Math.abs(M.mat[no][nex]) > EPS) {
+        // OBE
+        for (int i = no + 1; i <= M.m; i++) {
+          double fac = M.mat[i][nex] / M.mat[no][nex];
+          for (int j = nex; j <= M.n; j++) {
+            M.mat[i][j] -= fac*M.mat[no][j];
+          }
+        }
+
+        normalize(M, no, nex);
+        if (nex < M.n) {
+          nex++;
+        }
+      } else {
+        if (nex < M.n) {
+          nex = findNextLeading(M, no, nex);
+          if (nex <= M.n) {
+            if (no != Math.min(M.n, M.m)) {
+              no--;
+            } else {
+              normalize(M, no, nex);
+            }
+          }
+        }
+      }
+    }
+    return M;
+  }
+
+  public Matrix getEchelonG() {
+    return gaussElim(new Matrix(this));
+  }
+  
+  public void toEchelonG() {
+    gaussElim(this);
+  }
+
+  /** Determinant */
+  public double getDeterminant() {
+    double det = 1;
+    Matrix M = new Matrix(this);
+    int nex = 1;
+    // Modified Gauss Elimination with Determinant calculation
+    for (int no = 1; no <= Math.min(M.m, M.n); no++) {
+      // Find next candidate
+      int mx = nextCandidate(M, no, nex);
+
+      // Swap
+      if (no != mx) {
+        M.swap(no, mx);
+        det *= -1;
+      }
+
+      if (Math.abs(M.mat[no][nex]) > EPS) {
+        // OBE
+        for (int i = no + 1; i <= M.m; i++) {
+          double fac = M.mat[i][nex] / M.mat[no][nex];
+          for (int j = nex; j <= M.n; j++) {
+            M.mat[i][j] -= fac*M.mat[no][j];
+          }
+        }
+
+        det *= M.mat[no][nex];
+        normalize(M, no, nex);
+        if (nex < M.n) {
+          nex++;
+        }
+      } else {
+        if (nex < M.n) {
+          nex = findNextLeading(M, no, nex);
+          if (nex <= M.n) {
+            if (no != Math.min(M.n, M.m)) {
+              no--;
+            } else {
+              det *= M.mat[no][nex];
+              normalize(M, no, nex);
+            }
+          }
+        }
+      }
+    }
+
+    for (int i = 1; i <= n; i++) {
+      if (M.mat[i][i] < EPS) {
+        det = 0;
+        break;
+      }
+    }
+    return det;
   }
 }

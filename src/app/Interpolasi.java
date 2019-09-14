@@ -1,15 +1,17 @@
 package app;
 import java.util.*;
 
-class Interpolasi {
-  private int n;
-  private int m;
+class Interpolasi extends Matrix {
   private double[][] aug;
   private String pers;
   private double[] a;
   private double[] x;
   private double[] y;
 
+  Interpolasi() {
+    ReadPointsKB();
+  }
+  
   public void ReadPointsKB() {
     Scanner in = new Scanner(System.in);
     n = in.nextInt();
@@ -27,13 +29,10 @@ class Interpolasi {
       }
       aug[i][n + 2] = y[i - 1];
     }
-
-    Gauss G = new Gauss(aug);
-    a = G.GetSol();
   }
 
-  private void SolvePers() {
-    Gauss G = new Gauss(aug);
-    a = G.GetSol();
-  }
+  // private void SolvePers() {
+  //   Gauss G = new Gauss(aug);
+  //   a = G.GetSol();
+  // }
 }

@@ -9,11 +9,11 @@ public class GaussJordan {
   
   GaussJordan(double[][] inp) {
     mat = inp;
-    GaussJordanElim(mat);
-    SolveX();
+    gaussJordanElim(mat);
+    solveX();
   }
 
-  private void GaussJordanElim(double[][] mat) {
+  private void gaussJordanElim(double[][] mat) {
       m = mat.length - 1;
       n = mat[0].length - 1;
       int nex = 1;
@@ -77,11 +77,11 @@ public class GaussJordan {
     mat[r2] = tmp;
   }
 
-  public double[][] GetEchelon() {
+  public double[][] getEchelon() {
     return mat;
   }
 
-  private boolean IsUnique() {
+  private boolean isUnique() {
     for (int no = 1; no <= Math.min(n, m); no++) {
       if (Math.abs(mat[no][no] - 1) > EPS) {
         return false;
@@ -90,8 +90,8 @@ public class GaussJordan {
     return true;
   }
   
-  private void SolveX() {
-    if (IsUnique()) {
+  private void solveX() {
+    if (isUnique()) {
       sol = new double[n];
       for (int i = Math.min(n - 1, m); i >= 1; i--) {
         double left = 0;
@@ -103,7 +103,7 @@ public class GaussJordan {
     }
   }
 
-  public double[] GetSol() {
+  public double[] getSol() {
     return sol;
   }
 }
