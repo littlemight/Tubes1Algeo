@@ -35,11 +35,11 @@ class Matrix {
     }
   }
 
-  public int rlength(Matrix M){
+  public int rlength(){
     return this.m;
   }
 
-  public int clength(Matrix M){
+  public int clength(){
     return this.n;
   }
 
