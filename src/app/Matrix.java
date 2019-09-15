@@ -35,6 +35,14 @@ class Matrix {
     }
   }
 
+  public int rlength(Matrix M){
+    return this.m;
+  }
+
+  public int clength(Matrix M){
+    return this.n;
+  }
+
   public Matrix mult(Matrix M) {
     Matrix ret = new Matrix(this.m, M.n);
     for (int i = 1; i <= ret.m; i++) {
