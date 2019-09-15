@@ -198,4 +198,81 @@ class Matrix {
     }
     return det;
   }
+
+  public static Matrix Inverse(Matrix in_ar){
+    int m=in_ar.rlength();
+    int n=m;
+    Matrix ar = new Matrix(m,n+n);
+
+    for (int i=0;i<m;i++){
+        for (int j=0;j<n;j++){
+            ar.mat[i][j] = in_ar.mat[i][j];
+            ar.mat[i][j+n] = 0;
+        }
+
+        ar.mat[i][i+n] = 1;
+    }
+
+    int[] front = new int[m];
+    int curid=0;
+
+    while (curid<m && front[curid]<n){
+        int min_id=curid;
+        for (int i=curid;i<m;i++){
+            int tm=curid;
+
+            while ((tm<n) && ar.mat[i][tm]==0){
+                tm++;
+            }
+
+            front[i]=tm;
+
+            if (front[i]<front[min_id]){
+                min_id=i;
+            }
+        }
+
+        // swap
+        double[] temp = new double[n+1];
+        temp = ar.mat[min_id];
+        ar.mat[min_id] = ar.mat[curid];
+        ar.mat[curid] = temp;
+
+        int tmp = front[min_id];
+        front[min_id] = front[curid];
+        front[curid] = tmp;
+        //------------------
+        
+        if (front[curid]!=n){
+            double bag = ar.mat[curid][front[curid]];
+
+            for (int i=front[curid];i<n+n;i++){
+                ar.mat[curid][i] /= bag;  
+            }
+
+            for (int i=0;i<m;i++){
+                if (front[i]>front[curid] || i==curid) continue;
+
+                double factor = ar.mat[i][front[curid]] / ar.mat[curid][front[curid]];
+
+                for (int j=front[curid];j<n+n;j++){
+                    ar.mat[i][j] -= ar.mat[curid][j] * factor;
+                }
+            }
+            
+            curid++;
+        }
+
+    }
+
+    Matrix res = new Matrix(m,n);
+    for (int i=0;i<m;i++){
+        for (int j=0;j<n;j++){
+            res.mat[i][j] = ar.mat[i][j+n];
+        }
+    }
+
+    return res;
+  }
+
 }
