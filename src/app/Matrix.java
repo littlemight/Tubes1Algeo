@@ -3,7 +3,7 @@ package app;
 class Matrix {
   private final int m;
   private final int n;
-  private double[][] mat;
+  public double[][] mat;
   private static final double EPS = 1e-9;
 
   /* KONSTRUKTOR */
@@ -35,16 +35,12 @@ class Matrix {
     }
   }
 
-  public int rlength(){
+  public int getM() {
     return this.m;
   }
 
-  public int clength(){
+  public int getN() {
     return this.n;
-  }
-
-  public double EL(int i, int j) {
-    return mat[i][j];
   }
 
   public Matrix mult(Matrix M) {
@@ -66,8 +62,8 @@ class Matrix {
   }
 
   public void show() {
-    for (int i = 1; i <= m; i++) {
-      for (int j = 1; j <= n; j++) {
+    for (int i = 1; i <= this.getM(); i++) {
+      for (int j = 1; j <= this.getN(); j++) {
         System.out.printf("%f ", this.mat[i][j]);
       }
       System.out.println();
@@ -204,7 +200,7 @@ class Matrix {
   }
 
   public static Matrix Inverse(Matrix in_ar){
-    int m=in_ar.rlength();
+    int m=in_ar.getM();
     int n=m;
     Matrix ar = new Matrix(m,n+n);
 

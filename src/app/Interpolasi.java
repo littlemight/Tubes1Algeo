@@ -37,7 +37,7 @@ class Interpolasi {
   public void solvePers() {
     Matrix EF = M.getEchelonG();
     for (int i = 0; i <= n; i++) {
-      a[i] = EF.mat[i + 1][EF.n];  
+      a[i] = EF.mat[i + 1][EF.getN()];  
     }
   }
   

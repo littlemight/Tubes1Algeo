@@ -20,10 +20,5 @@ public class App {
         EF.show();
         
         n = in.nextInt();
-        // in.close();
-        // Interpolasi INP = new Interpolasi(n);
-        // INP.readPointsKB();
-        // INP.solvePers();
-        // INP.show();
     }
 }
