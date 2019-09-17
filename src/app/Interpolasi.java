@@ -8,16 +8,15 @@ class Interpolasi {
   private double[] y;
   private Matrix M;
 
-  //  Interpolasi (int n) { // Interpolasi dari n buah data
-  // konstruktor nanti
-  // }
-
-  public void readPointsKB() {
-    Scanner in = new Scanner(System.in);
-    n = in.nextInt();
+  Interpolasi (int n) { // Interpolasi dari n + 1 buah titik
     this.x = new double[n + 1];
     this.y = new double[n + 1];
     this.a = new double[n + 1];
+    this.n = n;
+  }
+
+  public void readPointsKB() {
+    Scanner in = new Scanner(System.in);
 
     for (int i = 0; i <= n; i++) {
       x[i] = in.nextDouble();
@@ -32,7 +31,7 @@ class Interpolasi {
       aug[i][n + 2] = y[i - 1];
     }
     this.M = new Matrix(aug);
-    in.close();
+    this.M.show();
   }
 
   public void solvePers() {
@@ -41,11 +40,10 @@ class Interpolasi {
       a[i] = EF.mat[i + 1][EF.n];  
     }
   }
-
+  
   public void show() {
     for (int i = 0; i <= n; i++) {
-      System.out.printf("a[%d] : %lf\n", i, a[i]);
+      System.out.printf("a[%d] : %f\n", i, a[i]);
     }
   }
-
 }

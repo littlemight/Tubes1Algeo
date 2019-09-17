@@ -4,7 +4,7 @@ import java.util.*;
 public class App {
     public static void main(String[] args) throws Exception {
         double[][] ar;
-        int m, n;
+        int n, m;
         Scanner in = new Scanner(System.in);
         m = in.nextInt();
         n = in.nextInt();
@@ -18,9 +18,12 @@ public class App {
         System.out.println();
         Matrix EF = A.getEchelonG();
         EF.show();
-
-        double det = A.getDeterminant();
-        System.out.println("Determinant is " + det);
-        in.close();
+        
+        n = in.nextInt();
+        // in.close();
+        // Interpolasi INP = new Interpolasi(n);
+        // INP.readPointsKB();
+        // INP.solvePers();
+        // INP.show();
     }
 }

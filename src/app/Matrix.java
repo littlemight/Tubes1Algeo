@@ -1,9 +1,9 @@
 package app;
 
 class Matrix {
-  public final int m;
-  public final int n;
-  public double[][] mat;
+  private final int m;
+  private final int n;
+  private double[][] mat;
   private static final double EPS = 1e-9;
 
   /* KONSTRUKTOR */
@@ -41,6 +41,10 @@ class Matrix {
 
   public int clength(){
     return this.n;
+  }
+
+  public double EL(int i, int j) {
+    return mat[i][j];
   }
 
   public Matrix mult(Matrix M) {
