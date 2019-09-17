@@ -18,6 +18,7 @@ public class App {
         System.out.println();
         Matrix EF = A.getEchelonG();
         EF.show();
+        Matrix.Inverse(EF).show();
         
         n = in.nextInt();
     }

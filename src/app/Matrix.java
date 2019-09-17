@@ -204,8 +204,8 @@ class Matrix {
     int n=m;
     Matrix ar = new Matrix(m,n+n);
 
-    for (int i=0;i<m;i++){
-        for (int j=0;j<n;j++){
+    for (int i=1;i<=m;i++){
+        for (int j=1;j<=n;j++){
             ar.mat[i][j] = in_ar.mat[i][j];
             ar.mat[i][j+n] = 0;
         }
@@ -213,15 +213,15 @@ class Matrix {
         ar.mat[i][i+n] = 1;
     }
 
-    int[] front = new int[m];
-    int curid=0;
+    int[] front = new int[m+2];
+    int curid=1;
 
-    while (curid<m && front[curid]<n){
+    while (curid<=m && front[curid]<=n){
         int min_id=curid;
-        for (int i=curid;i<m;i++){
+        for (int i=curid;i<=m;i++){
             int tm=curid;
 
-            while ((tm<n) && ar.mat[i][tm]==0){
+            while ((tm<=n) && ar.mat[i][tm]==0){
                 tm++;
             }
 
@@ -243,19 +243,19 @@ class Matrix {
         front[curid] = tmp;
         //------------------
         
-        if (front[curid]!=n){
+        if (front[curid]!=n+1){
             double bag = ar.mat[curid][front[curid]];
 
-            for (int i=front[curid];i<n+n;i++){
+            for (int i=front[curid];i<=n+n;i++){
                 ar.mat[curid][i] /= bag;  
             }
 
-            for (int i=0;i<m;i++){
+            for (int i=1;i<=m;i++){
                 if (front[i]>front[curid] || i==curid) continue;
 
                 double factor = ar.mat[i][front[curid]] / ar.mat[curid][front[curid]];
 
-                for (int j=front[curid];j<n+n;j++){
+                for (int j=front[curid];j<=n+n;j++){
                     ar.mat[i][j] -= ar.mat[curid][j] * factor;
                 }
             }
@@ -266,8 +266,8 @@ class Matrix {
     }
 
     Matrix res = new Matrix(m,n);
-    for (int i=0;i<m;i++){
-        for (int j=0;j<n;j++){
+    for (int i=1;i<=m;i++){
+        for (int j=1;j<=n;j++){
             res.mat[i][j] = ar.mat[i][j+n];
         }
     }
