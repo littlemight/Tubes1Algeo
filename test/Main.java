@@ -22,12 +22,12 @@ class Main {
         System.out.println();
       }
       System.out.println();
-      BufferedWriter writer = new BufferedWriter(new FileWriter("./SPLHilbert" + x + ".txt"));
+      BufferedWriter writer = new BufferedWriter(new FileWriter("./1SPLHilbert" + x + ".txt"));
       String out = "";
       for (int i = 1; i <= x; i++) {
-        for (int j = 1; j <= x; j++) {
+        for (int j = 1; j <= x + 1; j++) {
           out += Double.toString(ar[i][j]);
-          if (j < x) out += " "; 
+          if (j <= x) out += " "; 
         }
         if (i < x) out += "\n";
       }
