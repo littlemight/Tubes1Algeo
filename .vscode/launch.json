@@ -2,9 +2,15 @@
   "configurations": [
     {
       "type": "java",
+<<<<<<< HEAD
       "name": "CodeLens (Launch) - SPL",
       "request": "launch",
       "mainClass": "app.SPL",
+=======
+      "name": "CodeLens (Launch) - Main",
+      "request": "launch",
+      "mainClass": "Main",
+>>>>>>> 1f415d6ca690e34568d8b9e2d76b9d5605b5c816
       "projectName": "Belajar"
     },
     {
