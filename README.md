@@ -17,5 +17,13 @@
 ## INTERPOLASI POLINOM
 - [ ] Nunggu SPL
 
+## MAIN 
+- [ ] I/O dari keyboard
+- [ ] I/O dari file
+
+## TEST CASES (ada di folder "test")
+- [x] Studi Kasus 1
+- [x] Studi Kasus 2
+
 ## GUI
 - [ ] lul
