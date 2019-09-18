@@ -174,9 +174,25 @@ class Matrix {
 
     return res;
   }
+
+  public Matrix getAdjoint(){
+    return this.getCofactor().getTranspose();
+  }
   
   public void toEchelonG() {
     gaussElim(this);
+  }
+
+  public Matrix getTranspose(){
+    Matrix res = new Matrix(this.n, this.m);
+
+    for(int i=1;i<=this.m;i++){
+      for(int j=1;j<=this.n;j++){
+        res.mat[j][i] = this.mat[i][j];
+      }
+    }
+
+    return res;
   }
 
   /** Determinant */
