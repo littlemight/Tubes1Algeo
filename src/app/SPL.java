@@ -19,6 +19,32 @@ class SPL {
     EF = new Matrix(M.getEchelonG());
     this.makeSol();
   }
+
+
+  public SPL(Matrix coef, Matrix res){ //cramer's rule
+    double det = coef.getDeterminant();
+    this.state = (det==0) ? 0 : 1;
+
+
+    for(int i=1;i<=coef.getN();i++){
+      Matrix dummy = new Matrix(coef.getM(), coef.getN());
+
+      for(int j=1;j<=coef.getM();j++){
+        for(int k=1;k<=coef.getN();k++){
+          if(k==i){
+            dummy.mat[j][k]=res.mat[k][1];
+          } else {
+            dummy.mat[j][k]=coef.mat[j][k];
+          }
+        }
+      }
+
+      double det2 = dummy.getDeterminant();
+      this.sol[i]=det2/det;
+    }
+
+
+  }
   
   public void genFreeVar() {
     char[] alphabet = new char[26];
