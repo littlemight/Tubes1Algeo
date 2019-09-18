@@ -8,9 +8,9 @@ public class App {
         Scanner in = new Scanner(System.in);
         m = in.nextInt();
         n = in.nextInt();
-        ar = new double[m + 1][n + 2];
+        ar = new double[m + 1][n + 1];
         for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= (n + 1); j++) {
+            for (int j = 1; j <= n; j++) {
                 ar[i][j] = in.nextDouble();
             }
         }
@@ -19,7 +19,7 @@ public class App {
         Matrix EF = A.getEchelonG();
         EF.show();
         Matrix.Inverse(EF).show();
-        
         n = in.nextInt();
+        in.close();
     }
 }

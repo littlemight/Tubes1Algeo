@@ -32,6 +32,7 @@ class Interpolasi {
     }
     this.M = new Matrix(aug);
     this.M.show();
+    in.close();
   }
 
   public void solvePers() {
