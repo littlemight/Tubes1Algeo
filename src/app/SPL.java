@@ -4,7 +4,7 @@ import app.Matrix;
 class SPL {
   private Matrix M;
   private Matrix EF;
-  public Matrix free_solution;
+  public Matrix free_solution;  // tempat solusi variabel bebas
   public double[] sol;
   public static String[] free_var;
   public String str_sol;
@@ -21,7 +21,7 @@ class SPL {
     this.makeSol();
     genFreeVar();
 
-    free_solution.show();
+  //  free_solution.show(); // buat ngetes doang
   }
 
 
