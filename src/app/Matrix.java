@@ -1,8 +1,8 @@
 package app;
 
 class Matrix {
-  private final int m;
-  private final int n;
+  final int m;
+  final int n;
   public double[][] mat;
   private static final double EPS = 1e-9;
 

@@ -70,7 +70,7 @@ class SPL {
 
   private boolean hasSol() {
     boolean bisa = true;
-    double[] x =  new double[EF.getM() + 1];
+    double[] x =  new double[EF.getN() + 1];
     for (int i = EF.getM(); i >= 1; i--) {
       double lhs = 0;
       for (int j = i + 1; j <= EF.getN(); j++) {
@@ -109,31 +109,31 @@ class SPL {
 
   private void solvePar() {
     int r=EF.getM(), c=EF.getN();
-    boolean[] udh = new boolean[c+2];
-    Matrix free_sol = new Matrix(c,c+c+1);
+    boolean[] udh = new boolean[c];
+    Matrix free_sol = new Matrix(c-1,c+c-1);
 
     for (int i=1;i<=r;i++){
       int lead = EF.leading(i);
       if (lead == -1) break;
-      if (lead > c) break;
+      if (lead >= c) break;
 
-      for (int j=lead+1;j<=c;j++){
+      for (int j=lead+1;j<c;j++){
         free_sol.mat[lead][j] = -EF.mat[i][j];
       }
-      free_sol.mat[lead][c+c+1] = EF.mat[i][c];
+      free_sol.mat[lead][c+c-1] = EF.mat[i][c];
       udh[lead] = true;
     }
 
     int misal_cnt = 0;
-    for (int i=1;i<=c;i++){
+    for (int i=1;i<c;i++){
       if (udh[i]) continue;
 
-      free_sol.mat[i][c+misal_cnt+1] = 1;
+      free_sol.mat[i][c+misal_cnt] = 1;
       misal_cnt++;
     }
 
-    for (int i=c;i>0;i--){
-      for (int j=i+1;j<=c;j++){
+    for (int i=c-1;i>0;i--){
+      for (int j=i+1;j<c;j++){
         double fac;
         if (Math.abs(free_sol.mat[i][j]) < EPS) continue;
         
@@ -143,10 +143,10 @@ class SPL {
       }
     }
 
-    free_solution = new Matrix(c,c+1);
-    for (int i=1;i<=c;i++){
-      for (int j=1;j<=c+1;j++){
-        free_solution.mat[i][j] = free_sol.mat[i][c+j];
+    free_solution = new Matrix(c-1,c);
+    for (int i=1;i<c;i++){
+      for (int j=1;j<=c;j++){
+        free_solution.mat[i][j] = free_sol.mat[i][c+j-1];
       }
     }
 
