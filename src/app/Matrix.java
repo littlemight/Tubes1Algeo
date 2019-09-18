@@ -61,14 +61,14 @@ class Matrix {
     mat[r2] = tmp;
   }
 
-  public void add(int r1, int r2, int fac) {
+  public void add(int r1, int r2, double fac) {
     for (int i=1;i<=this.getN();i++){
       if (Math.abs(this.mat[r2][i]) < EPS) continue;
       this.mat[r1][i] += this.mat[r2][i] * fac;
     }
   }
 
-  public void rowtimesX(int r, int x) {
+  public void rowtimesX(int r, double x) {
     for (int i=1;i<=this.getN();i++){
       if (Math.abs(this.mat[r][i]) < EPS) continue;
       this.mat[r][i] *= x;

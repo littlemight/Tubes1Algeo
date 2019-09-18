@@ -107,7 +107,7 @@ class SPL {
 
   }
 
-  private void SolvePar() {
+  private void solvePar() {
     int r=EF.getM(), c=EF.getN();
     boolean[] udh = new boolean[c+2];
     Matrix free_sol = new Matrix(c,c+c+1);
@@ -121,7 +121,7 @@ class SPL {
         free_sol.mat[lead][j] = -EF.mat[i][j];
       }
       free_sol.mat[lead][c+c+1] = EF.mat[i][c];
-      udh[lead] = 1;
+      udh[lead] = true;
     }
 
     int misal_cnt = 0;
