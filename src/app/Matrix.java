@@ -161,9 +161,59 @@ class Matrix {
   public Matrix getEchelonG() {
     return gaussElim(new Matrix(this));
   }
+
+  public Matrix getCofactor() {
+    Matrix res = new Matrix(this.m, this.n);
+
+    for(int i=1;i<=this.m;i++){
+      for(int j=1;j<=this.n;j++){
+        Matrix dummy = new Matrix(this.m-1, this.n-1);
+
+        for(int k=1;k<=this.m;k++){
+          for(int l=1;l<=this.n;l++){
+            if(k!=i && l!=j){
+              if(k < i){
+                if(l < j){
+                  dummy.mat[k][l] = this.mat[k][l];
+                } else {
+                  dummy.mat[k][l-1] = this.mat[k][l];
+                }
+              } else {
+                if(l < j){
+                  dummy.mat[k-1][l] = this.mat[k][l];
+                } else {
+                  dummy.mat[k-1][l-1] = this.mat[k][l];
+                }
+              }
+            }
+          }
+        }
+
+        res.mat[i][j] = dummy.getDeterminant();
+      }
+    }
+
+    return res;
+  }
+
+  public Matrix getAdjoint(){
+    return this.getCofactor().getTranspose();
+  }
   
   public void toEchelonG() {
     gaussElim(this);
+  }
+
+  public Matrix getTranspose(){
+    Matrix res = new Matrix(this.n, this.m);
+
+    for(int i=1;i<=this.m;i++){
+      for(int j=1;j<=this.n;j++){
+        res.mat[j][i] = this.mat[i][j];
+      }
+    }
+
+    return res;
   }
 
   /** Determinant */
