@@ -23,7 +23,8 @@
 
 ## TEST CASES (ada di folder "test")
 - [x] Studi Kasus 1
-- [x] Studi Kasus 2
+- [ ] Studi Kasus 2
+- [ ] sisanya (mager)
 
 ## GUI
 - [ ] lul
