@@ -54,12 +54,35 @@ class Matrix {
     }
     return ret;
   }
-
+//==============*** OBE ***======================
   public void swap(int r1, int r2) {
     double[] tmp = mat[r1];
     mat[r1] = mat[r2];
     mat[r2] = tmp;
   }
+
+  public void add(int r1, int r2, int fac) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r2][i]) < EPS) continue;
+      this.mat[r1][i] += this.mat[r2][i] * fac;
+    }
+  }
+
+  public void rowtimesX(int r, int x) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r][i]) < EPS) continue;
+      this.mat[r][i] *= x;
+    }
+  }
+
+  public int leading(int r) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r][i]) > EPS) return i;
+    }
+
+    return -1;
+  }
+//================================================
 
   public void show() {
     for (int i = 1; i <= this.getM(); i++) {
@@ -112,9 +135,7 @@ class Matrix {
         // OBE
         for (int i = no + 1; i <= M.m; i++) {
           double fac = M.mat[i][nex] / M.mat[no][nex];
-          for (int j = nex; j <= M.n; j++) {
-            M.mat[i][j] -= fac*M.mat[no][j];
-          }
+          M.add(i, no, -fac);
         }
 
         normalize(M, no, nex);
@@ -165,9 +186,7 @@ class Matrix {
         // OBE
         for (int i = no + 1; i <= M.m; i++) {
           double fac = M.mat[i][nex] / M.mat[no][nex];
-          for (int j = nex; j <= M.n; j++) {
-            M.mat[i][j] -= fac*M.mat[no][j];
-          }
+          M.add(i, no, -fac);
         }
 
         det *= M.mat[no][nex];
@@ -233,10 +252,7 @@ class Matrix {
         }
 
         // swap
-        double[] temp = new double[n+1];
-        temp = ar.mat[min_id];
-        ar.mat[min_id] = ar.mat[curid];
-        ar.mat[curid] = temp;
+        ar.swap(curid, min_id);
 
         int tmp = front[min_id];
         front[min_id] = front[curid];
@@ -245,19 +261,13 @@ class Matrix {
         
         if (front[curid]!=n+1){
             double bag = ar.mat[curid][front[curid]];
-
-            for (int i=front[curid];i<=n+n;i++){
-                ar.mat[curid][i] /= bag;  
-            }
+            ar.rowtimesX(curid, 1/bag);
 
             for (int i=1;i<=m;i++){
                 if (front[i]>front[curid] || i==curid) continue;
 
                 double factor = ar.mat[i][front[curid]] / ar.mat[curid][front[curid]];
-
-                for (int j=front[curid];j<=n+n;j++){
-                    ar.mat[i][j] -= ar.mat[curid][j] * factor;
-                }
+                ar.add(i, curid, -factor);
             }
             
             curid++;
