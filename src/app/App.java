@@ -15,6 +15,8 @@ public class App {
             }
         }
         Matrix A = new Matrix(ar);
+        Matrix TETE = A.getCofactor();
+        TETE.show();
         System.out.println();
         Matrix EF = A.getEchelonG();
         EF.show();
