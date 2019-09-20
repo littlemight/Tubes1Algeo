@@ -2,8 +2,13 @@
 
 ## CARA TES
 Jalanin App.class, masukin nama file yang ada di folder test. Kalo mau ngasih matriks uji sendiri edit file "custom.txt" di folder test.
-Buar generate matriks dan ngecek semua operasi2 yang ada, bisa pake 
-https://matrix.reshish.com/, wolfram, etc.
+Buar generate matriks:
+- https://www.iotools.net/math/matrix-generator
+
+Buat ngetes hasil operasi2 matriks:
+- https://matrix.reshish.com/
+- wolfram
+- etc
 
 ## !! KURANG !!
 1. cramer belum throw exception kalo n != m
