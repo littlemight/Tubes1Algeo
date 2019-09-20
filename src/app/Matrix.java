@@ -271,7 +271,7 @@ class Matrix {
     return det;
   }
 
-  public static Matrix Inverse(Matrix in_ar){
+  public static Matrix Inverse(Matrix in_ar){ // Pre-kondisi matriks M x M
     int m=in_ar.getM();
     int n=m;
     Matrix ar = new Matrix(m,n+n);
