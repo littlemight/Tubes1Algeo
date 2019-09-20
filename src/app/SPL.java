@@ -18,10 +18,9 @@ class SPL {
   1 : unique sol
   2 : many sol
   */
-  public SPL(Matrix aug) { // Constructor from a augmented matrix
+  public SPL(Matrix aug) { // Constructor from augmented matrix
     M = new Matrix(aug);
     EF = new Matrix(M.getEchelonG());
-<<<<<<< HEAD
     double[][] koef = new double[M.getM() + 1][M.getN()];
     double[][] b = new double[M.getM() + 1][2];
     for (int i = 1; i <= M.getM(); i++) {
@@ -37,13 +36,8 @@ class SPL {
     A = new Matrix(koef);
     B = new Matrix(b);
 
-    this.makeSol();
-=======
->>>>>>> 39a8447060ff51e60614557c40e11f2b9c766999
+    // this.makeSol();
     genFreeVar();
-    this.makeSol();
-
-  //  free_solution.show(); // buat ngetes doang
   }
 
 
@@ -101,16 +95,14 @@ class SPL {
     }
   }
 
-  private void makeSol() {
+  private void solveGauss() {
     state = this.getState();
-    if (state == 0) {
-      this.str_sol = "Solusi tidak ada";
-    } else if (state == 1) {
-      reverseSubstitute();
-    }
+    // if (state == 0) {
+    //   this.str_sol = "Solusi tidak ada";
+    // } else if (state == 1) {
+    //   reverseSubstitute();
+    // }
     solvePar();
-    
-    System.out.println("State is " + state);
   }
 
   private int getState() {
@@ -207,8 +199,6 @@ class SPL {
         free_solution.mat[i][j] = free_sol.mat[i][c+j-1];
       }
     }
-<<<<<<< HEAD
-=======
   }
 
   void show_var(){ 
@@ -244,10 +234,8 @@ class SPL {
         if (free_solution.mat[i][c]<0) System.out.print(" - " + Math.abs(free_solution.mat[i][c]));
         else System.out.print(" + " + free_solution.mat[i][c]);
       }
-
       System.out.println();
     }
-    
   }
   
   public static void main(String[] args) {
@@ -259,12 +247,12 @@ class SPL {
     ar = new double[m + 1][n + 1];
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
-            ar[i][j] = in.nextDouble();
+          ar[i][j] = in.nextDouble();
         }
     }
     Matrix M = new Matrix(ar);
     SPL sol = new SPL(M);
+    sol.solveGauss();
     sol.show_var();
->>>>>>> 39a8447060ff51e60614557c40e11f2b9c766999
   }
 }
