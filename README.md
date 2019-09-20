@@ -1,4 +1,18 @@
-# Check List
+# NOTES
+
+## CARA TES
+Jalanin App.class, masukin nama file yang ada di folder test. Kalo mau ngasih matriks uji sendiri edit file "custom.txt" di folder test.
+Buar generate matriks dan ngecek semua operasi2 yang ada, bisa pake 
+https://matrix.reshish.com/, wolfram, etc.
+
+## !! KURANG !!
+1. cramer belum throw exception kalo n != m
+2. determinan belum throw exception kalo n != m
+3. interpolasi
+4. filter point yang diinput di interpolasi
+5. kalo x sama tapi y beda juga ga bisa
+6. inverse belum ada throw exception kalo n != m (tepatnya kalo m > n)
+7. you tell me
 
 ## MATRIX
 - [x] Gauss Elim
@@ -28,3 +42,4 @@
 
 ## GUI
 - [ ] lul
+
