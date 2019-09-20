@@ -8,9 +8,8 @@ class SPL {
   private Matrix B; // Kons matrix
   private Matrix EF;
   public Matrix free_solution;  // tempat solusi variabel bebas
-  public double[] sol;
+  public Matrix sol;
   public static String[] free_var;
-  public String str_sol;
   private int state;
   private double EPS = 1e-9;
   /*
@@ -35,8 +34,7 @@ class SPL {
     
     A = new Matrix(koef);
     B = new Matrix(b);
-
-    // this.makeSol();
+    sol = new Matrix(M.getN(), 1);
     genFreeVar();
   }
 
@@ -52,6 +50,8 @@ class SPL {
       tmp[i][K.getN() + 1] = B.mat[i][1];
     }
     M = new Matrix(tmp);
+    sol = new Matrix(M.getN(), 1);
+    genFreeVar();
   }
   
   public void solveCramer() {
@@ -71,12 +71,13 @@ class SPL {
       }
 
       double det2 = dummy.getDeterminant();
-      this.sol[i]=det2/det;
+      this.sol.mat[i][1] = det2/det;
     }
   }
 
   public static void genFreeVar() {
     if (free_var != null) return;
+    
     char[] alphabet = new char[26];
     for (char cur = 'a'; cur <= 'z'; cur++) {
       alphabet[cur - 'a'] = cur;
@@ -146,16 +147,16 @@ class SPL {
     return unik;
   }
 
-  private void reverseSubstitute() { // prekondisi, state == 1
-    sol =  new double[EF.getN() + 1];
-    for (int i = EF.getM(); i >= 1; i--) {
-      double lhs = 0;
-      for (int j = i + 1; j <= EF.getN(); j++) {
-        lhs += EF.mat[i][j] * sol[j];
-      }
-      sol[i] = (EF.mat[i][EF.getN()] - lhs) / (EF.mat[i][i]);
-    }
-  }
+  // private void reverseSubstitute() { // prekondisi, state == 1
+  //   sol =  new double[EF.getN() + 1];
+  //   for (int i = EF.getM(); i >= 1; i--) {
+  //     double lhs = 0;
+  //     for (int j = i + 1; j <= EF.getN(); j++) {
+  //       lhs += EF.mat[i][j] * sol[j];
+  //     }
+  //     sol[i] = (EF.mat[i][EF.getN()] - lhs) / (EF.mat[i][i]);
+  //   }
+  // }
 
   private void solvePar() {
     int r=EF.getM(), c=EF.getN();
