@@ -242,7 +242,7 @@ class SPL {
       }
       if (Math.abs(free_solution.mat[i][c])>EPS){
         if (free_solution.mat[i][c]<0) System.out.print(" - " + Math.abs(free_solution.mat[i][c]));
-        else if (first) System.out.print(" + " + free_solution.mat[i][c]);
+        else if (!first) System.out.print(" + " + free_solution.mat[i][c]);
         else System.out.print(" " + free_solution.mat[i][c]);
       }
 
