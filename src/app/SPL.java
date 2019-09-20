@@ -18,13 +18,26 @@ class SPL {
   1 : unique sol
   2 : many sol
   */
-  public SPL(Matrix aug) { // Constructor from a augmented matrix
+  public SPL(Matrix aug) { // Constructor from augmented matrix
     M = new Matrix(aug);
     EF = new Matrix(M.getEchelonG());
-    genFreeVar();
-    this.makeSol();
+    double[][] koef = new double[M.getM() + 1][M.getN()];
+    double[][] b = new double[M.getM() + 1][2];
+    for (int i = 1; i <= M.getM(); i++) {
+      for (int j = 1; j <= M.getN() - 1; j++) {
+        koef[i][j] = M.mat[i][j];
+      }
+    }
 
-  //  free_solution.show(); // buat ngetes doang
+    for (int i = 1; i <= M.getM(); i++) {
+      b[i][1] = M.mat[i][M.getN()];
+    }
+    
+    A = new Matrix(koef);
+    B = new Matrix(b);
+
+    // this.makeSol();
+    genFreeVar();
   }
 
 
@@ -82,16 +95,14 @@ class SPL {
     }
   }
 
-  private void makeSol() {
+  private void solveGauss() {
     state = this.getState();
-    if (state == 0) {
-      this.str_sol = "Solusi tidak ada";
-    } else if (state == 1) {
-      reverseSubstitute();
-    }
+    // if (state == 0) {
+    //   this.str_sol = "Solusi tidak ada";
+    // } else if (state == 1) {
+    //   reverseSubstitute();
+    // }
     solvePar();
-    
-    System.out.println("State is " + state);
   }
 
   private int getState() {
@@ -226,10 +237,8 @@ class SPL {
         else if (!first) System.out.print(" + " + free_solution.mat[i][c]);
         else System.out.print(" " + free_solution.mat[i][c]);
       }
-
       System.out.println();
     }
-    
   }
   
   public static void main(String[] args) {
@@ -241,11 +250,12 @@ class SPL {
     ar = new double[m + 1][n + 1];
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
-            ar[i][j] = in.nextDouble();
+          ar[i][j] = in.nextDouble();
         }
     }
     Matrix M = new Matrix(ar);
     SPL sol = new SPL(M);
+    sol.solveGauss();
     sol.show_var();
   }
 }

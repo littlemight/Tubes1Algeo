@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - SPL",
+      "request": "launch",
+      "mainClass": "app.SPL"
+    }
+  ]
+}
