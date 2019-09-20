@@ -9,14 +9,23 @@ class Matrix {
   public double[][] mat;
   private static final double EPS = 1e-9;
 
-  /* KONSTRUKTOR */
+  //================================================================================
+  // Constructor
+  //================================================================================
+
+  public Matrix() {
+    this.m = 0;
+    this.n = 0;
+    this.mat = new double[0][0];
+  }
+
   public Matrix(int m, int n) {
     this.m = m;
     this.n = n;
     this.mat = new double[m + 1][n + 1];
   }
 
-  public Matrix(double[][] inp) { // Konstruktor dari 2d array
+  public Matrix(double[][] inp) {
     this.m = inp.length - 1;
     this.n = inp[0].length - 1;
     this.mat = new double[m + 1][n + 1];
@@ -27,7 +36,7 @@ class Matrix {
     }
   }
 
-  public Matrix(Matrix inp) { // Copy
+  public Matrix(Matrix inp) { 
     this.n = inp.n;
     this.m = inp.m;
     this.mat = new double[m + 1][n + 1];
@@ -38,6 +47,10 @@ class Matrix {
     }
   }
 
+  //================================================================================
+  // Selector / Getter
+  //================================================================================
+
   public int getM() {
     return this.m;
   }
@@ -46,123 +59,12 @@ class Matrix {
     return this.n;
   }
 
-  public Matrix mult(Matrix M) {
-    Matrix ret = new Matrix(this.m, M.n);
-    for (int i = 1; i <= ret.m; i++) {
-      for (int j = 1; j <= ret.n; j++) {
-        for (int k = 1; k <= this.n; k++) {
-          ret.mat[i][j] += (this.mat[i][k] * M.mat[k][j]);
-        }
-      }
-    }
-    return ret;
-  }
-//==============*** OBE ***======================
-  public void swap(int r1, int r2) {
-    double[] tmp = mat[r1];
-    mat[r1] = mat[r2];
-    mat[r2] = tmp;
-  }
-
-  public void add(int r1, int r2, double fac) {
-    for (int i=1;i<=this.getN();i++){
-      if (Math.abs(this.mat[r2][i]) < EPS) continue;
-      this.mat[r1][i] += this.mat[r2][i] * fac;
-    }
-  }
-
-  public void rowtimesX(int r, double x) {
-    for (int i=1;i<=this.getN();i++){
-      if (Math.abs(this.mat[r][i]) < EPS) continue;
-      this.mat[r][i] *= x;
-    }
-  }
-
-  public int leading(int r) {
-    for (int i=1;i<=this.getN();i++){
-      if (Math.abs(this.mat[r][i]) > EPS) return i;
-    }
-
-    return -1;
-  }
-//================================================
-
-  public void show() {
-    for (int i = 1; i <= this.getM(); i++) {
-      for (int j = 1; j <= this.getN(); j++) {
-        System.out.printf("%f ", this.mat[i][j]);
-      }
-      System.out.println();
-    }
-  }
-
-  /* OPERASI */
-  /** Eliminations */
-  private int nextCandidate(Matrix M, int r, int c) {
-    int ret = r;
-    for (int i = r; i <= M.m; i++) {
-      if (Math.abs(M.mat[i][c]) > Math.abs(M.mat[ret][c])) {
-        ret = i;
-      }
-    }
-    return ret;
-  }
-
-  private int findNextLeading(Matrix M, int row, int col) {
-    int ret = col;
-    while (Math.abs(M.mat[row][ret]) < EPS && ret < M.n) { // Find next leading non zero element
-      ret++;
-    }
-    return ret;
-  }
-
-  private void normalize(Matrix M, int row, int col) {
-    double norm = M.mat[row][col];
-    for (int j = col; j <= M.n; j++) {
-      M.mat[row][j] /= norm;
-    }
-  }
-
-  private Matrix gaussElim(Matrix M) {
-    int nex = 1;
-    for (int no = 1; no <= Math.min(M.m, M.n); no++) {
-      // Find next candidate
-      int mx = nextCandidate(M, no, nex);
-
-      // Swap
-      if (no != mx) {
-        M.swap(no, mx);
-      }
-
-      if (Math.abs(M.mat[no][nex]) > EPS) {
-        // OBE
-        for (int i = no + 1; i <= M.m; i++) {
-          double fac = M.mat[i][nex] / M.mat[no][nex];
-          M.add(i, no, -fac);
-        }
-
-        normalize(M, no, nex);
-        if (nex < M.n) {
-          nex++;
-        }
-      } else {
-        if (nex < M.n) {
-          nex = findNextLeading(M, no, nex);
-          if (nex <= M.n) {
-            if (no != Math.min(M.n, M.m)) {
-              no--;
-            } else {
-              normalize(M, no, nex);
-            }
-          }
-        }
-      }
-    }
-    return M;
-  }
-
-  public Matrix getEchelonG() {
+  public Matrix getEchelon() {
     return gaussElim(new Matrix(this));
+  }
+  
+  public Matrix getReducedEchelon() {
+    return gaussJordanElim(new Matrix(this));
   }
 
   public Matrix getCofactor() {
@@ -195,32 +97,17 @@ class Matrix {
         res.mat[i][j] = dummy.getDeterminant();
       }
     }
-
     return res;
   }
 
   public Matrix getAdjoint(){
     return this.getCofactor().getTranspose();
   }
-  
-  public void toEchelonG() {
-    gaussElim(this);
-  }
 
-  public Matrix getTranspose(){
-    Matrix res = new Matrix(this.n, this.m);
-
-    for(int i=1;i<=this.m;i++){
-      for(int j=1;j<=this.n;j++){
-        res.mat[j][i] = this.mat[i][j];
-      }
-    }
-
-    return res;
-  }
-
-  /** Determinant */
   public double getDeterminant() {
+    if (this.getN() != this.getM()) {
+      return 420;
+    }
     double det = 1;
     Matrix M = new Matrix(this);
     int nex = 1;
@@ -254,8 +141,15 @@ class Matrix {
             if (no != Math.min(M.n, M.m)) {
               no--;
             } else {
-              det *= M.mat[no][nex];
-              normalize(M, no, nex);
+              if (Math.abs(M.mat[no][nex]) > EPS) {
+                det *= M.mat[no][nex];
+                normalize(M, no, nex);
+                for (int i = 1; i <= M.m; i++) {
+                  if (i == no) continue;
+                  double fac = M.mat[i][nex] / M.mat[no][nex];
+                  M.add(i, no, -fac);
+                }
+              }
             }
           }
         }
@@ -263,7 +157,7 @@ class Matrix {
     }
 
     for (int i = 1; i <= n; i++) {
-      if (M.mat[i][i] < EPS) {
+      if (Math.abs(M.mat[i][i]) < EPS) {
         det = 0;
         break;
       }
@@ -271,7 +165,19 @@ class Matrix {
     return det;
   }
 
-  public static Matrix Inverse(Matrix in_ar){ // Pre-kondisi matriks M x M
+  public Matrix getTranspose(){
+    Matrix res = new Matrix(this.n, this.m);
+
+    for(int i=1;i<=this.m;i++){
+      for(int j=1;j<=this.n;j++){
+        res.mat[j][i] = this.mat[i][j];
+      }
+    }
+
+    return res;
+  }
+
+  public static Matrix inverse(Matrix in_ar){ // Pre-kondisi matriks M x M
     int m=in_ar.getM();
     int n=m;
     Matrix ar = new Matrix(m,n+n);
@@ -328,7 +234,15 @@ class Matrix {
 
     }
 
+    // ar.show();
     Matrix res = new Matrix(m,n);
+    for (int i = 1; i <= m; i++) {
+      if (Math.abs(ar.mat[i][i]) < EPS) {
+        res.mat = null;
+        return res;
+      }
+    }
+
     for (int i=1;i<=m;i++){
         for (int j=1;j<=n;j++){
             res.mat[i][j] = ar.mat[i][j+n];
@@ -338,12 +252,61 @@ class Matrix {
     return res;
   }
 
-  public static void read(Matrix in, String filename){
+  //================================================================================
+  // Setter
+  //================================================================================
+  public void toEchelon() {
+    gaussElim(this);
+  }
+
+  public void toReducedEchelon() {
+    gaussJordanElim(this);
+  }
+
+  //================================================================================
+  // Input / Output
+  //================================================================================
+
+  public void show() {
+    if (this.mat == null) {
+      System.out.println("Matriks invalid.");
+      return;
+    }
+    
+    System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
+    for (int i = 1; i <= this.getM(); i++) {
+      for (int j = 1; j <= this.getN(); j++) {
+        System.out.printf("%f ", this.mat[i][j]);
+      }
+      System.out.println();
+    }
+  }
+  
+  public static Matrix readKB() {
+    Scanner in = new Scanner(System.in);
+    int m_sz, n_sz;
+    System.out.println("Banyaknya baris: ");
+    m_sz = in.nextInt();
+    System.out.println("Banyaknya kolom: ");
+    n_sz = in.nextInt();
+    double[][] tmp = new double[m_sz + 1][n_sz + 1];
+
+    for (int i = 1; i <= m_sz; i++) {
+      for (int j = 1; j <= n_sz; j++) {
+        tmp[i][j] = in.nextDouble();
+      }
+    }
+    Matrix ret = new Matrix(tmp);
+    in.close();
+    return ret;
+  }
+
+  public static Matrix readFile(String filename){
     int line_cnt=0;
     String line;
     String[] arr = new String[101];
     double[][] res;
-    Matrix mat;
+    Matrix mat = new Matrix();
 
     try {
       FileReader filetoread = new FileReader(filename);
@@ -357,27 +320,29 @@ class Matrix {
 
       res = parse(arr,line_cnt);
       mat = new Matrix(res);
-      mat.show();
+      // mat.show();
 
       buffer.close();
-      in = mat;
+      return mat;
     }
     catch(FileNotFoundException ex) {
       System.out.println(
           "Unable to open file '" + 
-          filename + "'");                
+          filename + "'");
+      return mat;            
     }
     catch(IOException ex) {
       System.out.println(
           "Error reading file '" 
-          + filename + "'");                  
+          + filename + "'");
+      return mat;                  
       // Or we could just do this: 
       // ex.printStackTrace();
     }
     
   }
 
-  public static double[][] parse(String[] s, int n){
+  private static double[][] parse(String[] s, int n){
     double[][] res;
 
     if (n==0) return new double[0][0];
@@ -393,7 +358,6 @@ class Matrix {
     }
 
     
-
     for (int i=2;i<=n;i++){
       temp = s[i].split(" ");
       for (int j=1;j<=m;j++){
@@ -404,4 +368,166 @@ class Matrix {
     return res;
   }
 
+  //================================================================================
+  // OBE (Basic Elementary Operation) & Elimination Helpers
+  //================================================================================
+
+  public void swap(int r1, int r2) {
+    double[] tmp = mat[r1];
+    mat[r1] = mat[r2];
+    mat[r2] = tmp;
+  }
+
+  public void add(int r1, int r2, double fac) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r2][i]) < EPS) continue;
+      this.mat[r1][i] += this.mat[r2][i] * fac;
+    }
+  }
+
+  public void rowtimesX(int r, double x) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r][i]) < EPS) continue;
+      this.mat[r][i] *= x;
+    }
+  }
+
+  public int leading(int r) {
+    for (int i=1;i<=this.getN();i++){
+      if (Math.abs(this.mat[r][i]) > EPS) return i;
+    }
+
+    return -1;
+  }
+
+  private int nextCandidate(Matrix M, int r, int c) {
+    int ret = r;
+    for (int i = r; i <= M.m; i++) {
+      if (Math.abs(M.mat[i][c]) > Math.abs(M.mat[ret][c])) {
+        ret = i;
+      }
+    }
+    return ret;
+  }
+
+  private int findNextLeading(Matrix M, int row, int col) {
+    int ret = col;
+    while (Math.abs(M.mat[row][ret]) < EPS && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
+      ret++;
+    }
+    return ret;
+  }
+
+  private void normalize(Matrix M, int row, int col) {
+    double norm = M.mat[row][col];
+    for (int j = col; j <= M.n; j++) {
+      M.mat[row][j] /= norm;
+    }
+  }
+
+  //================================================================================
+  // Operation
+  //================================================================================
+  public Matrix mult(Matrix M) {
+    Matrix ret = new Matrix(this.m, M.n);
+    for (int i = 1; i <= ret.m; i++) {
+      for (int j = 1; j <= ret.n; j++) {
+        for (int k = 1; k <= this.n; k++) {
+          ret.mat[i][j] += (this.mat[i][k] * M.mat[k][j]);
+        }
+      }
+    }
+    return ret;
+  }
+
+  private Matrix gaussElim(Matrix M) {
+    int nex = 1;
+    for (int no = 1; no <= Math.min(M.m, M.n); no++) {
+      // Find next candidate
+      int mx = nextCandidate(M, no, nex);
+
+      // Swap
+      if (no != mx) {
+        M.swap(no, mx);
+      }
+
+      if (Math.abs(M.mat[no][nex]) > EPS) {
+        // OBE
+        for (int i = no + 1; i <= M.m; i++) {
+          double fac = M.mat[i][nex] / M.mat[no][nex];
+          M.add(i, no, -fac);
+        }
+
+        normalize(M, no, nex);
+        if (nex < M.n) {
+          nex++;
+        }
+      } else {
+        if (nex < M.n) {
+          nex = findNextLeading(M, no, nex);
+          if (nex <= M.n) {
+            if (no != Math.min(M.n, M.m)) {
+              no--;
+            } else {
+              if (Math.abs(M.mat[no][nex]) > EPS) {
+                normalize(M, no, nex);
+                for (int i = 1; i <= M.m; i++) {
+                  if (i == no) continue;
+                  double fac = M.mat[i][nex] / M.mat[no][nex];
+                  M.add(i, no, -fac);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return M;
+  }
+
+  private Matrix gaussJordanElim(Matrix M) {
+    int nex = 1;
+    for (int no = 1; no <= Math.min(M.m, M.n); no++) {
+      // Find next candidate
+      int mx = nextCandidate(M, no, nex);
+
+      // Swap
+      if (no != mx) {
+        M.swap(no, mx);
+      }
+
+      if (Math.abs(M.mat[no][nex]) > EPS) {
+        // OBE
+        for (int i = 1; i <= M.m; i++) {
+          if (i == no) continue;
+          double fac = M.mat[i][nex] / M.mat[no][nex];
+          M.add(i, no, -fac);
+        }
+
+        normalize(M, no, nex);
+        if (nex < M.n) {
+          nex++;
+        }
+      } else {
+        if (nex < M.n) {
+          nex = findNextLeading(M, no, nex);
+          if (nex <= M.n) {
+            if (no != Math.min(M.n, M.m)) {
+              no--;
+            } else {
+              if (Math.abs(M.mat[no][nex]) > EPS) {
+                normalize(M, no, nex);
+                for (int i = 1; i <= M.m; i++) {
+                  if (i == no) continue;
+                  double fac = M.mat[i][nex] / M.mat[no][nex];
+                  M.add(i, no, -fac);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return M;
+  }
 }

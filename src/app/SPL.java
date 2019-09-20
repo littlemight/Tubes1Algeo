@@ -19,7 +19,7 @@ class SPL {
   */
   public SPL(Matrix aug) { // Constructor from augmented matrix
     M = new Matrix(aug);
-    EF = new Matrix(M.getEchelonG());
+    EF = new Matrix(M.getEchelon());
     double[][] koef = new double[M.getM() + 1][M.getN()];
     double[][] b = new double[M.getM() + 1][2];
     for (int i = 1; i <= M.getM(); i++) {
@@ -63,7 +63,7 @@ class SPL {
       for(int j=1;j<=A.getM();j++){
         for(int k=1;k<=A.getN();k++){
           if(k==i){
-            dummy.mat[j][k]=A.mat[k][1];
+            dummy.mat[j][k]=B.mat[k][1];
           } else {
             dummy.mat[j][k]=A.mat[j][k];
           }
@@ -96,41 +96,50 @@ class SPL {
     }
   }
 
-  private void solveGauss() {
+  public void solveGauss() {
+    EF = new Matrix(M.getEchelon());
     state = this.getState();
-    // if (state == 0) {
-    //   this.str_sol = "Solusi tidak ada";
-    // } else if (state == 1) {
-    //   reverseSubstitute();
-    // }
     solvePar();
   }
 
+  public void solveGaussJordan() {
+    EF = new Matrix(M.getReducedEchelon());
+    state = this.getState();
+    solvePar();
+  }
+
+  public void solveInverse() {
+    if (Matrix.inverse(A).mat != null) {
+      sol = new Matrix((Matrix.inverse(A)).mult(B));
+    } else {
+      sol.mat = null;
+    }
+  }
+
   private int getState() {
-    int state;
+    int ret_state;
     if (!hasSol()) {
-      state = 0;
+      ret_state = 0;
     } else {
       if (isUnique()) {
-        state = 1;
+        ret_state = 1;
       } else {
-        state = 2;
+        ret_state = 2;
       }
     }
-    return state;
+    return ret_state;
   }
 
   private boolean hasSol() {
     boolean bisa = true;
-    double[] x =  new double[EF.getN() + 1];
-    for (int i = EF.getM(); i >= 1; i--) {
-      double lhs = 0;
-      for (int j = i + 1; j <= EF.getN(); j++) {
-        lhs += EF.mat[i][j] * x[j];
+    for (int i = EF.getM(); i >= 1 && bisa; i--) {
+      boolean isAllZero = true;
+      for (int j = 1; j <= EF.getN() - 1 && isAllZero; j++) {
+        if (Math.abs(EF.mat[i][j]) > EPS) {
+          isAllZero = false;
+        }
       }
-      if (Math.abs(EF.mat[i][i]) > EPS) {
-        x[i] = (EF.mat[i][EF.getN()] - lhs) / (EF.mat[i][i]);
-      } else if (Math.abs(EF.mat[i][EF.getN()] - lhs) > EPS) {
+      if (isAllZero && Math.abs(EF.mat[i][EF.getN()]) > EPS) {
         bisa = false;
       }
     }
@@ -140,23 +149,12 @@ class SPL {
   private boolean isUnique() {
     boolean unik = true;
     for (int i = 1; i <= Math.min(EF.getM(), EF.getN()) && unik; i++) {
-      if (EF.mat[i][i] == 0) {
+      if (Math.abs(EF.mat[i][i]) <= EPS) {
         unik = false;
       }
     }
     return unik;
   }
-
-  // private void reverseSubstitute() { // prekondisi, state == 1
-  //   sol =  new double[EF.getN() + 1];
-  //   for (int i = EF.getM(); i >= 1; i--) {
-  //     double lhs = 0;
-  //     for (int j = i + 1; j <= EF.getN(); j++) {
-  //       lhs += EF.mat[i][j] * sol[j];
-  //     }
-  //     sol[i] = (EF.mat[i][EF.getN()] - lhs) / (EF.mat[i][i]);
-  //   }
-  // }
 
   private void solvePar() {
     int r=EF.getM(), c=EF.getN();
@@ -202,20 +200,31 @@ class SPL {
     }
   }
 
-  void show_var(){ 
+  public void showSol(){ 
+    if (state == 0) {
+      System.out.println("Solusi tidak ada");
+      return;
+    }
     int r=free_solution.getM(), c=free_solution.getN();
-    boolean first=true;
-
+    boolean first;
     for (int i=1;i<=r;i++){
       System.out.print("X" + i + " =");
+      first = true;
       for (int j=1;j<c;j++){
         if (Math.abs(free_solution.mat[i][j])<EPS) continue;
 
         if (free_solution.mat[i][j]<0){
-          if (free_solution.mat[i][j]==1){
-            System.out.print(" - ");  
+          if (free_solution.mat[i][j]==-1){
+            System.out.print(" -");
+            if (!first) {
+              System.out.print(" ");
+            }  
           } else{
-            System.out.print(" - " + Math.abs(free_solution.mat[i][j]));
+            System.out.print(" -");
+            if (!first) {
+              System.out.print(" ");
+            }  
+            System.out.print(Math.abs(free_solution.mat[i][j]));
           }
         } else if (first){
           if (free_solution.mat[i][j]==1){
@@ -234,29 +243,18 @@ class SPL {
         System.out.print(free_var[j-1]);
       }
       if (Math.abs(free_solution.mat[i][c])>EPS){
-        if (free_solution.mat[i][c]<0) System.out.print(" - " + Math.abs(free_solution.mat[i][c]));
-        else if (!first) System.out.print(" + " + free_solution.mat[i][c]);
-        else System.out.print(" " + free_solution.mat[i][c]);
+        if (free_solution.mat[i][c]<0) {
+          System.out.print(" -");
+          if (!first) {
+            System.out.print(" ");
+          }  
+          System.out.print(Math.abs(free_solution.mat[i][c]));
+        } else if (!first) {
+          System.out.print(" + " + free_solution.mat[i][c]);
+        } else System.out.print(" " + free_solution.mat[i][c]);
       }
       System.out.println();
     }
   }
-  
-  public static void main(String[] args) {
-    double[][] ar;
-    int n, m;
-    Scanner in = new Scanner(System.in);
-    m = in.nextInt();
-    n = in.nextInt();
-    ar = new double[m + 1][n + 1];
-    for (int i = 1; i <= m; i++) {
-        for (int j = 1; j <= n; j++) {
-          ar[i][j] = in.nextDouble();
-        }
-    }
-    Matrix M = new Matrix(ar);
-    SPL sol = new SPL(M);
-    sol.solveGauss();
-    sol.show_var();
-  }
+
 }
