@@ -24,6 +24,7 @@ public class App {
 
         // SPL tes = new SPL(EF);
         // SPL tes = new SPL(EF);
+        // SPL tes = new SPL(EF);
         
         Matrix.Inverse(EF).show();
         n = in.nextInt();

@@ -338,12 +338,10 @@ class Matrix {
     return res;
   }
 
-  public static void read(){
+  public static void read(Matrix in, String filename){
     int line_cnt=0;
-    String filename = "./1SPL1.txt", line;
+    String line;
     String[] arr = new String[101];
-  //  Scanner cin = new Scanner(System.in);
-  //  filename = cin.next();  // input dikasih .txt
     double[][] res;
     Matrix mat;
 
@@ -362,6 +360,7 @@ class Matrix {
       mat.show();
 
       buffer.close();
+      in = mat;
     }
     catch(FileNotFoundException ex) {
       System.out.println(
@@ -375,7 +374,7 @@ class Matrix {
       // Or we could just do this: 
       // ex.printStackTrace();
     }
-
+    
   }
 
   public static double[][] parse(String[] s, int n){
@@ -405,7 +404,4 @@ class Matrix {
     return res;
   }
 
-  public static void main(String[] args){
-    read();
-  }
 }
