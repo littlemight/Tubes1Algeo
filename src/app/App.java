@@ -20,10 +20,15 @@ public class App {
         System.out.println();
         Matrix EF = A.getEchelonG();
         EF.show();
+<<<<<<< HEAD
+        SPL tes = new SPL(A);
+
+=======
         SPL tes = new SPL(EF);
         
         Matrix.Inverse(EF).show();
         n = in.nextInt();
+>>>>>>> 39a8447060ff51e60614557c40e11f2b9c766999
         in.close();
     }
 }
