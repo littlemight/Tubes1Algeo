@@ -14,7 +14,7 @@ class Interpolasi {
     this.a = new double[n + 1];
     this.n = n;
   }
-
+  
   public void readPointsKB() {
     Scanner in = new Scanner(System.in);
 

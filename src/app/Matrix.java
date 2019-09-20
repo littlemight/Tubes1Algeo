@@ -1,5 +1,8 @@
 package app;
 
+import java.io.*;
+import java.util.*;
+
 class Matrix {
   final int m;
   final int n;
@@ -335,4 +338,74 @@ class Matrix {
     return res;
   }
 
+  public static void read(){
+    int line_cnt=0;
+    String filename = "./1SPL1.txt", line;
+    String[] arr = new String[101];
+  //  Scanner cin = new Scanner(System.in);
+  //  filename = cin.next();  // input dikasih .txt
+    double[][] res;
+    Matrix mat;
+
+    try {
+      FileReader filetoread = new FileReader(filename);
+
+      BufferedReader buffer = new BufferedReader(filetoread);
+
+      while ((line = buffer.readLine()) != null){
+        line_cnt++;
+        arr[line_cnt] = line;
+      }
+
+      res = parse(arr,line_cnt);
+      mat = new Matrix(res);
+      mat.show();
+
+      buffer.close();
+    }
+    catch(FileNotFoundException ex) {
+      System.out.println(
+          "Unable to open file '" + 
+          filename + "'");                
+    }
+    catch(IOException ex) {
+      System.out.println(
+          "Error reading file '" 
+          + filename + "'");                  
+      // Or we could just do this: 
+      // ex.printStackTrace();
+    }
+
+  }
+
+  public static double[][] parse(String[] s, int n){
+    double[][] res;
+
+    if (n==0) return new double[0][0];
+
+    int m=0;
+   
+    String[] temp;
+    temp = s[1].split(" ");
+    m = temp.length;
+    res = new double[n+1][m+1];
+    for (int j=1;j<=m;j++){
+      res[1][j] = Double.parseDouble(temp[j-1]);
+    }
+
+    
+
+    for (int i=2;i<=n;i++){
+      temp = s[i].split(" ");
+      for (int j=1;j<=m;j++){
+        res[i][j] = Double.parseDouble(temp[j-1]);
+      }
+    }
+
+    return res;
+  }
+
+  public static void main(String[] args){
+    read();
+  }
 }
