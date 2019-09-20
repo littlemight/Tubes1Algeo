@@ -21,25 +21,6 @@ class SPL {
   public SPL(Matrix aug) { // Constructor from a augmented matrix
     M = new Matrix(aug);
     EF = new Matrix(M.getEchelonG());
-<<<<<<< HEAD
-    double[][] koef = new double[M.getM() + 1][M.getN()];
-    double[][] b = new double[M.getM() + 1][2];
-    for (int i = 1; i <= M.getM(); i++) {
-      for (int j = 1; j <= M.getN() - 1; j++) {
-        koef[i][j] = M.mat[i][j];
-      }
-    }
-
-    for (int i = 1; i <= M.getM(); i++) {
-      b[i][1] = M.mat[i][M.getN()];
-    }
-    
-    A = new Matrix(koef);
-    B = new Matrix(b);
-
-    this.makeSol();
-=======
->>>>>>> 39a8447060ff51e60614557c40e11f2b9c766999
     genFreeVar();
     this.makeSol();
 
