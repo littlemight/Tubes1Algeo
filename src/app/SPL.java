@@ -179,7 +179,7 @@ class SPL {
     }
   }
 
-  void show_var(){  // Prekondisi matriks solusinya tidak unik
+  void show_var(){ 
     int r=free_solution.getM(), c=free_solution.getN();
 
     for (int i=1;i<=r;i++){
