@@ -211,6 +211,7 @@ class SPL {
 
   void show_var(){ 
     int r=free_solution.getM(), c=free_solution.getN();
+    boolean first=true;
 
     for (int i=1;i<=r;i++){
       System.out.print("X" + i + " =");
@@ -223,7 +224,7 @@ class SPL {
           } else{
             System.out.print(" - " + Math.abs(free_solution.mat[i][j]));
           }
-        } else if (j==1){
+        } else if (first){
           if (free_solution.mat[i][j]==1){
             System.out.print(" ");  
           } else{
@@ -233,14 +234,15 @@ class SPL {
           if (free_solution.mat[i][j]==1){
             System.out.print(" + ");  
           } else{
-          System.out.print(" + " + free_solution.mat[i][j]);
+           System.out.print(" + " + free_solution.mat[i][j]);
           }
         }
+        first = false;
         System.out.print(free_var[j-1]);
       }
       if (Math.abs(free_solution.mat[i][c])>EPS){
         if (free_solution.mat[i][c]<0) System.out.print(" - " + Math.abs(free_solution.mat[i][c]));
-        else if (c!=1) System.out.print(" + " + free_solution.mat[i][c]);
+        else if (first) System.out.print(" + " + free_solution.mat[i][c]);
         else System.out.print(" " + free_solution.mat[i][c]);
       }
 
