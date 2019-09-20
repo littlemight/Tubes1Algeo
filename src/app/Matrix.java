@@ -360,6 +360,7 @@ class Matrix {
       mat.show();
 
       buffer.close();
+      in = mat;
     }
     catch(FileNotFoundException ex) {
       System.out.println(
@@ -373,7 +374,7 @@ class Matrix {
       // Or we could just do this: 
       // ex.printStackTrace();
     }
-    in = mat;
+    
   }
 
   public static double[][] parse(String[] s, int n){
