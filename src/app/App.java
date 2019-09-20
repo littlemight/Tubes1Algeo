@@ -20,13 +20,8 @@ public class App {
         System.out.println();
         Matrix EF = A.getEchelonG();
         EF.show();
-<<<<<<< HEAD
-        SPL tes = new SPL(EF);
-        
-=======
-        Matrix.Inverse(EF).show();
-        n = in.nextInt();
+        SPL tes = new SPL(A);
+
         in.close();
->>>>>>> 9bbb49c6d4ec8bca85730e8298deeef49f310425
     }
 }

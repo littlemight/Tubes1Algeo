@@ -2,7 +2,9 @@ package app;
 import app.Matrix;
 
 class SPL {
-  private Matrix M;
+  private Matrix M; // Augmented matrix
+  private Matrix A; // Coefficient matrix
+  private Matrix B; // Kons matrix
   private Matrix EF;
   public Matrix free_solution;  // tempat solusi variabel bebas
   public double[] sol;
@@ -18,6 +20,21 @@ class SPL {
   public SPL(Matrix aug) { // Constructor from a augmented matrix
     M = new Matrix(aug);
     EF = new Matrix(M.getEchelonG());
+    double[][] koef = new double[M.getM() + 1][M.getN()];
+    double[][] b = new double[M.getM() + 1][2];
+    for (int i = 1; i <= M.getM(); i++) {
+      for (int j = 1; j <= M.getN() - 1; j++) {
+        koef[i][j] = M.mat[i][j];
+      }
+    }
+
+    for (int i = 1; i <= M.getM(); i++) {
+      b[i][1] = M.mat[i][M.getN()];
+    }
+    
+    A = new Matrix(koef);
+    B = new Matrix(b);
+
     this.makeSol();
     genFreeVar();
 
@@ -25,20 +42,31 @@ class SPL {
   }
 
 
-  public SPL(Matrix coef, Matrix res){ //cramer's rule
-    double det = coef.getDeterminant();
+  public SPL(Matrix K, Matrix X) {
+    A = new Matrix(K);
+    B = new Matrix(X);
+    double[][] tmp = new double[K.getM() + 1][K.getN() + X.getN() + 1];
+    for (int i = 1; i <= K.getM(); i++) {
+      for (int j = 1; j <= K.getN(); j++) {
+        tmp[i][j] = A.mat[i][j];
+      }
+      tmp[i][K.getN() + 1] = B.mat[i][1];
+    }
+    M = new Matrix(tmp);
+  }
+  
+  public void solveCramer() {
+    double det = A.getDeterminant();
     this.state = (det==0) ? 0 : 1;
 
-
-    for(int i=1;i<=coef.getN();i++){
-      Matrix dummy = new Matrix(coef.getM(), coef.getN());
-
-      for(int j=1;j<=coef.getM();j++){
-        for(int k=1;k<=coef.getN();k++){
+    for(int i=1;i<=A.getN();i++){
+      Matrix dummy = new Matrix(A.getM(), A.getN());
+      for(int j=1;j<=A.getM();j++){
+        for(int k=1;k<=A.getN();k++){
           if(k==i){
-            dummy.mat[j][k]=res.mat[k][1];
+            dummy.mat[j][k]=A.mat[k][1];
           } else {
-            dummy.mat[j][k]=coef.mat[j][k];
+            dummy.mat[j][k]=A.mat[j][k];
           }
         }
       }
@@ -46,10 +74,8 @@ class SPL {
       double det2 = dummy.getDeterminant();
       this.sol[i]=det2/det;
     }
-
-
   }
-  
+
   public static void genFreeVar() {
     char[] alphabet = new char[26];
     for (char cur = 'a'; cur <= 'z'; cur++) {
@@ -175,6 +201,5 @@ class SPL {
         free_solution.mat[i][j] = free_sol.mat[i][c+j-1];
       }
     }
-
   }
 }
