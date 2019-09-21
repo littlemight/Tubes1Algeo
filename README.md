@@ -21,8 +21,8 @@ Buat ngetes hasil operasi2 matriks:
 
 ## MATRIX
 - [x] Gauss Elim
-- [ ] Gauss-Jordan Elim (belum di masukkin ke kelas Matrix)
-- [ ] Metode OBE
+- [x] Gauss-Jordan Elim
+- [x] OBE
 - [x] Metode kali
 - [x] Kofaktor
 - [x] Adjoin
@@ -30,7 +30,7 @@ Buat ngetes hasil operasi2 matriks:
 
 ## SPL
 - [x] Handle ga ada solusi, solusi unik, solusi banyak (belum di test)
-- [ ] Metode inverse
+- [x] Inverse
 - [x] Kaidah Cramer (belum di test)
 
 ## INTERPOLASI POLINOM
@@ -38,7 +38,8 @@ Buat ngetes hasil operasi2 matriks:
 
 ## MAIN 
 - [ ] I/O dari keyboard
-- [ ] I/O dari file
+- [x] Input dari file
+- [ ] Output ke file
 
 ## TEST CASES (ada di folder "test")
 - [x] Studi Kasus 1
