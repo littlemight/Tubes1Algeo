@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Driver",
+      "request": "launch",
+      "mainClass": "app.Driver",
+      "projectName": "Belajar"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - SPL",
       "request": "launch",
       "mainClass": "app.SPL",

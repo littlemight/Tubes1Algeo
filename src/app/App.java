@@ -15,7 +15,7 @@ public class App {
             System.out.println();
             
             System.out.println("Echelon:");
-            M.getEchelon().show();
+            M.getEchelon().show(); 
             System.out.println();
     
             System.out.println("Reduced Echelon:");
