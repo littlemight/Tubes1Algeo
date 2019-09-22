@@ -7,7 +7,7 @@ class Matrix {
   final int m;
   final int n;
   public double[][] mat;
-  private static final double EPS = 1e-15;
+  private static final double EPS = 1e-12;
 
   //================================================================================
   // Constructor
