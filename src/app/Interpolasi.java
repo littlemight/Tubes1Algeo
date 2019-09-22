@@ -1,6 +1,5 @@
 package app;
 import java.util.*;
-import app.SPL;
 
 class Interpolasi {
   private SPL solver;
@@ -65,16 +64,35 @@ class Interpolasi {
   public static Interpolasi fread(String filename){
     Matrix temp = new Matrix();
 
-    temp = Matrix.readfile(filename);
+    temp = Matrix.readFile(filename);
     Interpolasi ret;
 
     if (temp != null){
-      int id = temp.getM();
+      int n = temp.getM(), id = 1;
+      HashSet<Double> cekX = new HashSet<Double>();
+
+      double[] in_x = new double[n + 1];
+      double[] in_y = new double[n + 1];
+      for (int i = 1; i <= n; i++) {
+        double tm_x, tm_y;
+        tm_x = temp.mat[i][1];
+        tm_y = temp.mat[i][2];
+        if (cekX.contains(tm_x)) {
+          System.out.println("Titik tidak valid.");
+        } else {
+          cekX.add(tm_x);
+          in_x[id] = tm_x;
+          in_y[id] = tm_y;
+          id++;
+        }
+      }
+      id--;
+
       double[][] fil_x = new double[id + 1][2];
       double[][] fil_y = new double[id + 1][2];
       for (int i = 1; i <= id; i++) {
-        fil_x[i][1] = temp[i][1];
-        fil_y[i][1] = temp[i][2];
+        fil_x[i][1] = in_x[i];
+        fil_y[i][1] = in_y[i];
       }
 
       ret = new Interpolasi(fil_x, fil_y);
