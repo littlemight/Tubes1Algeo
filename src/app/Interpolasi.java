@@ -1,11 +1,13 @@
 package app;
 import java.util.*;
+import app.SPL;
 
 class Interpolasi {
+  private static final double EPS = 1e-12;
   private SPL solver;
   String persamaan;
-  double mn_x, mx_x;
-
+  double mn_x, mx_x;    
+  
   Interpolasi (double[][] x, double[][] y) {
      Matrix B = new Matrix(y);
      double[][] kons = new double[y.length][x.length];
@@ -63,51 +65,113 @@ class Interpolasi {
 
   public void solveInterGauss() {
     solver.solveGauss();
-    solver.sol.show();
+    // solver.sol.show();
+    makePersamaan();
   }
 
   public void solveInterGaussJordan() {
     solver.solveGaussJordan();
-    solver.sol.show();
+    // solver.sol.show();
+    makePersamaan();
   }
 
   public void solveInterCramer() {
     solver.solveCramer();
-    solver.sol.show();  
+    // solver.sol.show();  
+    makePersamaan();
   }
 
   public void solveInterInverse() {
     solver.solveInverse();
-    solver.sol.show();
+    // solver.sol.show();
+    makePersamaan();
   }
 
-  public void getPersamaan() {
-    persamaan = "";
+  public void makePersamaan() {
+    persamaan = "p(x) =";
     boolean first = true;
-    
+    for (int i = 1; i <= solver.sol.getM(); i++) {
+      if (Math.abs(solver.sol.mat[i][1]) < EPS) continue;
+      double cur = solver.sol.mat[i][1];
+      if (Math.abs(cur) <= 1e-4) continue;
+
+      if (first) {
+        first = false;
+        if (cur > 0) {
+          persamaan += " ";
+          persamaan += formatOutput(cur);
+        } else {
+          persamaan += " -";
+          persamaan += formatOutput(cur);
+        }
+      } else {
+        if (cur > 0) {
+          persamaan += " + ";
+        } else {
+          persamaan += " - ";
+        }
+        persamaan += formatOutput(cur);
+      }
+
+      if (i > 1) {
+        persamaan += "x";
+        if (i > 2) {
+          persamaan += "^";
+          persamaan += (i - 1);
+        }
+      }
+    }
   }
+
+  public static String formatOutput(double val) { // normalize absolute value of val
+    String ret = "";
+    if (Math.abs(val) > EPS) {
+      ret += String.format("%.4f", Math.abs(val));
+    } 
+    return ret;
+  }
+
+  public void showPersamaan() {
+    System.out.println(persamaan);
+  }
+
+  public double getY(double x) {
+    double ret = 0;
+    for (int i = 1; i <= solver.sol.getM(); i++) {
+      ret += Math.pow(x, i - 1) * solver.sol.mat[i][1];
+    }
+    return ret;
+  }
+
   public static void main(String[] args) {
     Interpolasi sol = Interpolasi.readKB();
     System.out.println();
 
     System.out.println("GAUSS");
     sol.solveInterGauss();
+    sol.showPersamaan();
     System.out.println();
 
     System.out.println("ECHELON FORM:");
     sol.solver.EF.show();
+    sol.showPersamaan();
     System.out.println();
 
     System.out.println("GAUSS JORDAN");
     sol.solveInterGaussJordan();
+    sol.showPersamaan();
     System.out.println();
 
     System.out.println("CRAMER");
     sol.solveInterCramer();
+    sol.showPersamaan();
     System.out.println();
 
-    System.out.println("INVERSE");
-    sol.solveInterInverse();
-    System.out.println();
+    // System.out.println("INVERSE");
+    // sol.solveInterInverse();
+    // sol.showPersamaan();
+    // System.out.println();
+
+    System.out.println(1971 + " " + sol.getY(1971));
   }
 }

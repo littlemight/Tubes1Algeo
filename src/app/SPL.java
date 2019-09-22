@@ -11,7 +11,7 @@ class SPL {
   public Matrix sol;
   public static String[] free_var;
   private int state;
-  private double EPS = 1e-9;
+  private double EPS = 1e-15;
 
   /*
   0 : doesnt have sol
