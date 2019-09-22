@@ -6,12 +6,13 @@ class SPL {
   private Matrix M; // Augmented matrix
   private Matrix A; // Coefficient matrix
   private Matrix B; // Kons matrix
-  private Matrix EF;
+  public Matrix EF;
   public Matrix free_solution;  // tempat solusi variabel bebas
   public Matrix sol;
   public static String[] free_var;
   private int state;
   private double EPS = 1e-9;
+
   /*
   0 : doesnt have sol
   1 : unique sol
@@ -57,19 +58,20 @@ class SPL {
   public void solveCramer() {
     double det = A.getDeterminant();
     this.state = (det==0) ? 0 : 1;
+    this.sol = new Matrix(A.getM(), 1);
 
     for(int i=1;i<=A.getN();i++){
       Matrix dummy = new Matrix(A.getM(), A.getN());
       for(int j=1;j<=A.getM();j++){
         for(int k=1;k<=A.getN();k++){
           if(k==i){
-            dummy.mat[j][k]=B.mat[k][1];
+            dummy.mat[j][k]=B.mat[j][1];
           } else {
             dummy.mat[j][k]=A.mat[j][k];
           }
         }
       }
-
+      // dummy.show();
       double det2 = dummy.getDeterminant();
       this.sol.mat[i][1] = det2/det;
     }
@@ -198,6 +200,10 @@ class SPL {
         free_solution.mat[i][j] = free_sol.mat[i][c+j-1];
       }
     }
+
+    if (state == 1) {
+      storeSol();
+    }
   }
 
   public void showSol(){ 
@@ -257,4 +263,16 @@ class SPL {
     }
   }
 
+  public void storeSol(){ // state = 1
+    int r=free_solution.getM(), c=free_solution.getN();
+    sol = new Matrix(r, 1);
+
+    for (int i=1;i<=r;i++){
+      sol.mat[i][1] = 0;
+      for (int j=1;j<=c;j++){
+        if (Math.abs(free_solution.mat[i][j])<EPS) continue;
+        sol.mat[i][1] += free_solution.mat[i][j];
+      }
+    }
+  }
 }

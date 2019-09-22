@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Interpolasi",
+      "request": "launch",
+      "mainClass": "app.Interpolasi",
+      "projectName": "Belajar"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Driver",
       "request": "launch",
       "mainClass": "app.Driver",
