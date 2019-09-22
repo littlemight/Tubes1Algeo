@@ -1,5 +1,6 @@
 package app;
 import java.util.*;
+import app.SPL;
 
 class Interpolasi {
   private SPL solver;
@@ -59,6 +60,28 @@ class Interpolasi {
 
     Interpolasi ret = new Interpolasi(fil_x, fil_y);
     return ret;
+  }
+
+  public static Interpolasi fread(String filename){
+    Matrix temp = new Matrix();
+
+    temp = Matrix.readfile(filename);
+    Interpolasi ret;
+
+    if (temp != null){
+      int id = temp.getM();
+      double[][] fil_x = new double[id + 1][2];
+      double[][] fil_y = new double[id + 1][2];
+      for (int i = 1; i <= id; i++) {
+        fil_x[i][1] = temp[i][1];
+        fil_y[i][1] = temp[i][2];
+      }
+
+      ret = new Interpolasi(fil_x, fil_y);
+      return ret;
+    } else {  // input tidak valid;
+      return null;  
+    }
   }
 
   public void solveInterGauss() {

@@ -199,7 +199,7 @@ class Matrix {
         for (int i=curid;i<=m;i++){
             int tm=curid;
 
-            while ((tm<=n) && ar.mat[i][tm]==0){
+            while ((tm<=n) && Math.abs(ar.mat[i][tm])<EPS){
                 tm++;
             }
 
