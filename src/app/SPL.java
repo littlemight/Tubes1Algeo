@@ -58,9 +58,6 @@ class SPL {
   public void solveCramer() {
     double det = A.getDeterminant();
     this.state = (det==0) ? 0 : 1;
-    if (state == 0) {
-      System.out.println("");
-    }
     this.sol = new Matrix(A.getM(), 1);
     try {
       for(int i=1;i<=A.getN();i++){
@@ -236,19 +233,19 @@ class SPL {
             if (!first) {
               System.out.print(" ");
             }  
-            System.out.print(Math.abs(free_solution.mat[i][j]));
+            System.out.print(Util.formatOutputAbs(free_solution.mat[i][j]));
           }
         } else if (first){
           if (free_solution.mat[i][j]==1){
             System.out.print(" ");  
           } else{
-            System.out.print(" " + free_solution.mat[i][j]);
+            System.out.print(" " + Util.formatOutputAbs(free_solution.mat[i][j]));
           }
         } else{
           if (free_solution.mat[i][j]==1){
             System.out.print(" + ");  
           } else{
-           System.out.print(" + " + free_solution.mat[i][j]);
+           System.out.print(" + " + Util.formatOutputAbs(free_solution.mat[i][j]));
           }
         }
         first = false;
@@ -260,10 +257,10 @@ class SPL {
           if (!first) {
             System.out.print(" ");
           }  
-          System.out.print(Math.abs(free_solution.mat[i][c]));
+          System.out.print(Util.formatOutputAbs(free_solution.mat[i][c]));
         } else if (!first) {
-          System.out.print(" + " + free_solution.mat[i][c]);
-        } else System.out.print(" " + free_solution.mat[i][c]);
+          System.out.print(" + " + Util.formatOutputAbs(free_solution.mat[i][c]));
+        } else System.out.print(" " + Util.formatOutputAbs(free_solution.mat[i][c]));
       }
       System.out.println();
     }
@@ -274,11 +271,12 @@ class SPL {
     sol = new Matrix(r, 1);
 
     for (int i=1;i<=r;i++){
-      sol.mat[i][1] = 0;
-      for (int j=1;j<=c;j++){
-        if (Math.abs(free_solution.mat[i][j])<EPS) continue;
-        sol.mat[i][1] += free_solution.mat[i][j];
-      }
+      sol.mat[i][1] = free_solution.mat[i][c];
+      // for (int j=1;j<=c;j++){
+      //   // if (Math.abs(free_solution.mat[i][j])<EPS) continue;
+      //   sol.mat[i][1] += free_solution.mat[i][j];
+      // }
     }
+    sol.show();
   }
 }

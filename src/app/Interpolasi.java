@@ -13,9 +13,10 @@ class Interpolasi {
      double[][] kons = new double[y.length][x.length];
      for (int i = 1; i <= y.length - 1; i++) {
        for (int j = 1; j <= x.length - 1; j++) {
-         kons[i][j] = Math.pow(x[i][1], j - 1);
+         kons[i][j] = Util.fastPow(x[i][1], j - 1);
        }
      }
+
      Matrix A = new Matrix(kons);
      System.out.println("LHS");
      A.show();
@@ -53,6 +54,7 @@ class Interpolasi {
         id++;
       }
     }
+
     if(valid){
       id--;
 
@@ -147,10 +149,10 @@ class Interpolasi {
         first = false;
         if (cur > 0) {
           persamaan += " ";
-          persamaan += Util.formatOutput(cur);
+          persamaan += Util.formatOutputAbs(cur);
         } else {
           persamaan += " -";
-          persamaan += Util.formatOutput(cur);
+          persamaan += Util.formatOutputAbs(cur);
         }
       } else {
         if (cur > 0) {
@@ -158,7 +160,7 @@ class Interpolasi {
         } else {
           persamaan += " - ";
         }
-        persamaan += Util.formatOutput(cur);
+        persamaan += Util.formatOutputAbs(cur);
       }
 
       if (i > 1) {
@@ -179,14 +181,18 @@ class Interpolasi {
   public double getY(double x) {
     double ret = 0;
     for (int i = 1; i <= solver.sol.getM(); i++) {
-      ret += Math.pow(x, i - 1) * solver.sol.mat[i][1];
+      ret += Util.fastPow(x, i - 1) * solver.sol.mat[i][1];
     }
     return ret;
   }
 
   public static void main(String[] args) {
     try {
-      Interpolasi sol = Interpolasi.readKB();
+      Scanner in = new Scanner(System.in);
+      System.out.println("Masukkan nama file:");
+      String str = in.nextLine();
+      System.out.println(str);
+      Interpolasi sol = Interpolasi.readFile("../test/" + str + ".txt");
       System.out.println();
 
       System.out.println("GAUSS");
@@ -214,7 +220,8 @@ class Interpolasi {
       sol.showPersamaan();
       System.out.println();
 
-      System.out.println(1971 + " " + sol.getY(1971));
+      double x = in.nextDouble();
+      System.out.println(x + " " + sol.getY(x));
     } catch (NullPointerException e){
       System.out.println("Input tidak valid.");
     }

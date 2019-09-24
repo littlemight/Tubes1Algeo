@@ -7,7 +7,7 @@ class Matrix {
   final int m;
   final int n;
   public double[][] mat;
-  private static final double EPS = 1e-4;
+  private static final double EPS = 1e-12;
 
   //================================================================================
   // Constructor
@@ -73,39 +73,37 @@ class Matrix {
       if (this.m != this.n) {
         throw new NullPointerException();
       }
-    } catch (NullPointerException e) {
-      System.out.println("Dimensi matriks tidak valid untuk matriks kofaktor");
-      return null;
-    }
-
-    for(int i=1;i<=this.m;i++){
-      for(int j=1;j<=this.n;j++){
-        Matrix dummy = new Matrix(this.m-1, this.n-1);
-
-        for(int k=1;k<=this.m;k++){
-          for(int l=1;l<=this.n;l++){
-            if(k!=i && l!=j){
-              if(k < i){
-                if(l < j){
-                  dummy.mat[k][l] = this.mat[k][l];
+      for(int i=1;i<=this.m;i++){
+        for(int j=1;j<=this.n;j++){
+          Matrix dummy = new Matrix(this.m-1, this.n-1);
+  
+          for(int k=1;k<=this.m;k++){
+            for(int l=1;l<=this.n;l++){
+              if(k!=i && l!=j){
+                if(k < i){
+                  if(l < j){
+                    dummy.mat[k][l] = this.mat[k][l];
+                  } else {
+                    dummy.mat[k][l-1] = this.mat[k][l];
+                  }
                 } else {
-                  dummy.mat[k][l-1] = this.mat[k][l];
-                }
-              } else {
-                if(l < j){
-                  dummy.mat[k-1][l] = this.mat[k][l];
-                } else {
-                  dummy.mat[k-1][l-1] = this.mat[k][l];
+                  if(l < j){
+                    dummy.mat[k-1][l] = this.mat[k][l];
+                  } else {
+                    dummy.mat[k-1][l-1] = this.mat[k][l];
+                  }
                 }
               }
             }
           }
+          res.mat[i][j] = dummy.getDeterminant();
         }
-
-        res.mat[i][j] = dummy.getDeterminant();
       }
+      return res;
+    } catch (NullPointerException e) {
+      System.out.println("Dimensi matriks tidak valid untuk matriks kofaktor");
+      return null;
     }
-    return res;
   }
 
   public Matrix getAdjoint(){
@@ -113,12 +111,11 @@ class Matrix {
   }
 
   public double getDeterminant() {
-    if (this.getN() != this.getM()) {
-      return -1;
-    }
+    // Pre kondisi n == m
     double det = 1;
     Matrix M = new Matrix(this);
     int nex = 1;
+
     // Modified Gauss Elimination with Determinant calculation
     for (int no = 1; no <= Math.min(M.m, M.n); no++) {
       // Find next candidate
@@ -139,33 +136,35 @@ class Matrix {
 
         det *= M.mat[no][nex];
         normalize(M, no, nex);
+        M.mat[no][nex] = 1;
         if (nex < M.n) {
           nex++;
         }
       } else {
-        if (nex < M.n) {
           nex = findNextLeading(M, no, nex);
-          if (nex <= M.n) {
-            if (no != Math.min(M.n, M.m)) {
-              no--;
-            } else {
-              if (Math.abs(M.mat[no][nex]) > EPS) {
-                det *= M.mat[no][nex];
-                normalize(M, no, nex);
-                for (int i = 1; i <= M.m; i++) {
-                  if (i == no) continue;
-                  double fac = M.mat[i][nex] / M.mat[no][nex];
-                  M.add(i, no, -fac);
-                }
-              }
+          mx = nextCandidate(M, no, nex);
+          if (no != mx) {
+            M.swap(no, mx);
+          }
+          if (Math.abs(M.mat[no][nex]) > EPS) {
+            for (int i = 1; i <= M.m; i++) {
+              if (i == no) continue;
+              double fac = M.mat[i][nex] / M.mat[no][nex];
+              M.add(i, no, -fac);
+              M.mat[i][nex] = 0;
+            }
+            det *= M.mat[no][nex];
+            normalize(M, no, nex);
+            M.mat[no][nex] = 1;
+            if (nex < M.n) {
+              nex++;
             }
           }
-        }
       }
     }
 
     for (int i = 1; i <= n; i++) {
-      if (Math.abs(M.mat[i][i]) < EPS) {
+      if (Math.abs(M.mat[i][i]) <= EPS) {
         det = 0;
         break;
       }
@@ -390,14 +389,14 @@ class Matrix {
 
   public void add(int r1, int r2, double fac) {
     for (int i=1;i<=this.getN();i++){
-      // if (Math.abs(this.mat[r2][i]) < EPS) continue;
+      if (Math.abs(this.mat[r2][i]*fac) < EPS) continue;
       this.mat[r1][i] += this.mat[r2][i] * fac;
     }
   }
 
   public void rowtimesX(int r, double x) {
     for (int i=1;i<=this.getN();i++){
-      // if (Math.abs(this.mat[r][i]) < EPS) continue;
+      if (Math.abs(this.mat[r][i]) < EPS) continue;
       this.mat[r][i] *= x;
     }
   }
@@ -422,7 +421,7 @@ class Matrix {
 
   private int findNextLeading(Matrix M, int row, int col) {
     int ret = col;
-    while (Math.abs(M.mat[row][ret]) < EPS && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
+    while (Math.abs(M.mat[row][ret]) <= EPS && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
       ret++;
     }
     return ret;
@@ -466,9 +465,10 @@ class Matrix {
         for (int i = no + 1; i <= M.m; i++) {
           double fac = M.mat[i][nex] / M.mat[no][nex];
           M.add(i, no, -fac);
+          M.mat[i][nex] = 0;
         }
-
         normalize(M, no, nex);
+        M.mat[no][nex] = 1;
         if (nex < M.n) {
           nex++;
         }
@@ -482,8 +482,10 @@ class Matrix {
             for (int i = no + 1; i <= M.m; i++) {
               double fac = M.mat[i][nex] / M.mat[no][nex];
               M.add(i, no, -fac);
+              M.mat[i][nex] = 0;
             }
             normalize(M, no, nex);
+            M.mat[no][nex] = 1;
             if (nex < M.n) {
               nex++;
             }
@@ -491,11 +493,6 @@ class Matrix {
       }
     }
 
-    // for (int i = 1; i <= M.m; i++) {
-    //   for (int j = 1; j <= M.n; j++) {
-    //     M.mat[i][j] = (double)Math.round(M.mat[i][j] * 100000d) / 100000d;
-    //   }
-    // }
     return M;
   }
 
@@ -516,9 +513,11 @@ class Matrix {
           if (i == no) continue;
           double fac = M.mat[i][nex] / M.mat[no][nex];
           M.add(i, no, -fac);
+          M.mat[i][nex] = 0;
         }
 
         normalize(M, no, nex);
+        M.mat[no][nex] = 1;
         if (nex < M.n) {
           nex++;
         }
@@ -533,18 +532,14 @@ class Matrix {
               if (i == no) continue;
               double fac = M.mat[i][nex] / M.mat[no][nex];
               M.add(i, no, -fac);
+              M.mat[i][nex] = 0;
             }
             normalize(M, no, nex);
+            M.mat[no][nex] = 1;
             if (nex < M.n) {
               nex++;
             }
           }
-      }
-    }
-
-    for (int i = 1; i <= M.m; i++) {
-      for (int j = 1; j <= M.n; j++) {
-        M.mat[i][j] = (double)Math.round(M.mat[i][j] * 10000d) / 10000d;
       }
     }
     return M;
