@@ -7,7 +7,7 @@ class Matrix {
   final int m;
   final int n;
   public double[][] mat;
-  private static final double EPS = 1e-12;
+  private static final double EPS = 1e-4;
 
   //================================================================================
   // Constructor
@@ -69,6 +69,14 @@ class Matrix {
 
   public Matrix getCofactor() {
     Matrix res = new Matrix(this.m, this.n);
+    try {
+      if (this.m != this.n) {
+        throw new NullPointerException();
+      }
+    } catch (NullPointerException e) {
+      System.out.println("Dimensi matriks tidak valid untuk matriks kofaktor");
+      return null;
+    }
 
     for(int i=1;i<=this.m;i++){
       for(int j=1;j<=this.n;j++){
@@ -106,7 +114,7 @@ class Matrix {
 
   public double getDeterminant() {
     if (this.getN() != this.getM()) {
-      return 420;
+      return -1;
     }
     double det = 1;
     Matrix M = new Matrix(this);
@@ -177,7 +185,7 @@ class Matrix {
     return res;
   }
 
-  public static Matrix inverse(Matrix in_ar){ // Pre-kondisi matriks M x M
+  public static Matrix inverse(Matrix in_ar) {
     int m=in_ar.getM();
     int n=m;
     Matrix ar = new Matrix(m,n+n);
@@ -268,17 +276,19 @@ class Matrix {
   //================================================================================
 
   public void show() {
-    if (this.mat == null) {
-      System.out.println("Matriks invalid.");
-      return;
-    }
-    
-    System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
-    for (int i = 1; i <= this.getM(); i++) {
-      for (int j = 1; j <= this.getN(); j++) {
-        System.out.printf("%f ", this.mat[i][j]);
+    try {
+      if (this.mat == null) {
+        throw new NullPointerException();
       }
-      System.out.println();
+      System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
+      for (int i = 1; i <= this.getM(); i++) {
+        for (int j = 1; j <= this.getN(); j++) {
+          System.out.printf("%f ", this.mat[i][j]);
+        }
+        System.out.println();
+      }
+    } catch (NullPointerException e) {
+      System.out.println("Matriks invalid.");
     }
   }
   

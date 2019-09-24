@@ -58,22 +58,28 @@ class SPL {
   public void solveCramer() {
     double det = A.getDeterminant();
     this.state = (det==0) ? 0 : 1;
+    if (state == 0) {
+      System.out.println("");
+    }
     this.sol = new Matrix(A.getM(), 1);
-
-    for(int i=1;i<=A.getN();i++){
-      Matrix dummy = new Matrix(A.getM(), A.getN());
-      for(int j=1;j<=A.getM();j++){
-        for(int k=1;k<=A.getN();k++){
-          if(k==i){
-            dummy.mat[j][k]=B.mat[j][1];
-          } else {
-            dummy.mat[j][k]=A.mat[j][k];
+    try {
+      for(int i=1;i<=A.getN();i++){
+        Matrix dummy = new Matrix(A.getM(), A.getN());
+        for(int j=1;j<=A.getM();j++){
+          for(int k=1;k<=A.getN();k++){
+            if(k==i){
+              dummy.mat[j][k]=B.mat[j][1];
+            } else {
+              dummy.mat[j][k]=A.mat[j][k];
+            }
           }
         }
+        // dummy.show();
+        double det2 = dummy.getDeterminant();
+        this.sol.mat[i][1] = det2/det;
       }
-      // dummy.show();
-      double det2 = dummy.getDeterminant();
-      this.sol.mat[i][1] = det2/det;
+    } catch (ArrayIndexOutOfBoundsException e){
+      System.out.println("Dimensi matriks tidak valid untuk metode cramer.");
     }
   }
 

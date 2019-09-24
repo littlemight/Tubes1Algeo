@@ -60,10 +60,11 @@ class Interpolasi {
     }
 
     Interpolasi ret = new Interpolasi(fil_x, fil_y);
+    in.close();
     return ret;
   }
 
-  public static Interpolasi fread(String filename){
+  public static Interpolasi readFile(String filename){
     Matrix temp = new Matrix();
 
     temp = Matrix.readFile(filename);
@@ -134,16 +135,16 @@ class Interpolasi {
     for (int i = 1; i <= solver.sol.getM(); i++) {
       if (Math.abs(solver.sol.mat[i][1]) < EPS) continue;
       double cur = solver.sol.mat[i][1];
-      if (Math.abs(cur) <= 1e-4) continue;
+      if (Math.abs(cur) < 1e-4) continue;
 
       if (first) {
         first = false;
         if (cur > 0) {
           persamaan += " ";
-          persamaan += formatOutput(cur);
+          persamaan += Util.formatOutput(cur);
         } else {
           persamaan += " -";
-          persamaan += formatOutput(cur);
+          persamaan += Util.formatOutput(cur);
         }
       } else {
         if (cur > 0) {
@@ -151,7 +152,7 @@ class Interpolasi {
         } else {
           persamaan += " - ";
         }
-        persamaan += formatOutput(cur);
+        persamaan += Util.formatOutput(cur);
       }
 
       if (i > 1) {
@@ -164,13 +165,6 @@ class Interpolasi {
     }
   }
 
-  public static String formatOutput(double val) { // normalize absolute value of val
-    String ret = "";
-    if (Math.abs(val) > EPS) {
-      ret += String.format("%.4f", Math.abs(val));
-    } 
-    return ret;
-  }
 
   public void showPersamaan() {
     System.out.println(persamaan);
@@ -208,10 +202,10 @@ class Interpolasi {
     sol.showPersamaan();
     System.out.println();
 
-    // System.out.println("INVERSE");
-    // sol.solveInterInverse();
-    // sol.showPersamaan();
-    // System.out.println();
+    System.out.println("INVERSE");
+    sol.solveInterInverse();
+    sol.showPersamaan();
+    System.out.println();
 
     System.out.println(1971 + " " + sol.getY(1971));
   }
