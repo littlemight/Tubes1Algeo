@@ -34,6 +34,8 @@ class Interpolasi {
     int n = in.nextInt();
     HashSet<Double> cekX = new HashSet<Double>();
 
+    boolean valid = true;
+
     double[] in_x = new double[n + 1];
     double[] in_y = new double[n + 1];
     int id = 1;
@@ -42,7 +44,8 @@ class Interpolasi {
       tm_x = in.nextDouble();
       tm_y = in.nextDouble();
       if (cekX.contains(tm_x)) {
-        System.out.println("Titik tidak valid.");
+        valid=false;
+        break;
       } else {
         cekX.add(tm_x);
         in_x[id] = tm_x;
@@ -50,20 +53,24 @@ class Interpolasi {
         id++;
       }
     }
-    id--;
+    if(valid){
+      id--;
 
-    double[][] fil_x = new double[id + 1][2];
-    double[][] fil_y = new double[id + 1][2];
-    for (int i = 1; i <= id; i++) {
-      fil_x[i][1] = in_x[i];
-      fil_y[i][1] = in_y[i];
+      double[][] fil_x = new double[id + 1][2];
+      double[][] fil_y = new double[id + 1][2];
+      for (int i = 1; i <= id; i++) {
+        fil_x[i][1] = in_x[i];
+        fil_y[i][1] = in_y[i];
+      }
+
+      Interpolasi ret = new Interpolasi(fil_x, fil_y);
+      return ret;
+    } else {
+      return null;
     }
-
-    Interpolasi ret = new Interpolasi(fil_x, fil_y);
-    return ret;
   }
 
-  public static Interpolasi fread(String filename){
+  public static Interpolasi readFile(String filename){
     Matrix temp = new Matrix();
 
     temp = Matrix.readFile(filename);
@@ -134,16 +141,16 @@ class Interpolasi {
     for (int i = 1; i <= solver.sol.getM(); i++) {
       if (Math.abs(solver.sol.mat[i][1]) < EPS) continue;
       double cur = solver.sol.mat[i][1];
-      if (Math.abs(cur) <= 1e-4) continue;
+      if (Math.abs(cur) < 1e-4) continue;
 
       if (first) {
         first = false;
         if (cur > 0) {
           persamaan += " ";
-          persamaan += formatOutput(cur);
+          persamaan += Util.formatOutput(cur);
         } else {
           persamaan += " -";
-          persamaan += formatOutput(cur);
+          persamaan += Util.formatOutput(cur);
         }
       } else {
         if (cur > 0) {
@@ -151,7 +158,7 @@ class Interpolasi {
         } else {
           persamaan += " - ";
         }
-        persamaan += formatOutput(cur);
+        persamaan += Util.formatOutput(cur);
       }
 
       if (i > 1) {
@@ -164,13 +171,6 @@ class Interpolasi {
     }
   }
 
-  public static String formatOutput(double val) { // normalize absolute value of val
-    String ret = "";
-    if (Math.abs(val) > EPS) {
-      ret += String.format("%.4f", Math.abs(val));
-    } 
-    return ret;
-  }
 
   public void showPersamaan() {
     System.out.println(persamaan);
@@ -185,34 +185,38 @@ class Interpolasi {
   }
 
   public static void main(String[] args) {
-    Interpolasi sol = Interpolasi.readKB();
-    System.out.println();
+    try {
+      Interpolasi sol = Interpolasi.readKB();
+      System.out.println();
 
-    System.out.println("GAUSS");
-    sol.solveInterGauss();
-    sol.showPersamaan();
-    System.out.println();
+      System.out.println("GAUSS");
+      sol.solveInterGauss();
+      sol.showPersamaan();
+      System.out.println();
 
-    System.out.println("ECHELON FORM:");
-    sol.solver.EF.show();
-    sol.showPersamaan();
-    System.out.println();
+      System.out.println("ECHELON FORM:");
+      sol.solver.EF.show();
+      sol.showPersamaan();
+      System.out.println();
 
-    System.out.println("GAUSS JORDAN");
-    sol.solveInterGaussJordan();
-    sol.showPersamaan();
-    System.out.println();
+      System.out.println("GAUSS JORDAN");
+      sol.solveInterGaussJordan();
+      sol.showPersamaan();
+      System.out.println();
 
-    System.out.println("CRAMER");
-    sol.solveInterCramer();
-    sol.showPersamaan();
-    System.out.println();
+      System.out.println("CRAMER");
+      sol.solveInterCramer();
+      sol.showPersamaan();
+      System.out.println();
 
-    // System.out.println("INVERSE");
-    // sol.solveInterInverse();
-    // sol.showPersamaan();
-    // System.out.println();
+      System.out.println("INVERSE");
+      sol.solveInterInverse();
+      sol.showPersamaan();
+      System.out.println();
 
-    System.out.println(1971 + " " + sol.getY(1971));
+      System.out.println(1971 + " " + sol.getY(1971));
+    } catch (NullPointerException e){
+      System.out.println("Input tidak valid.");
+    }
   }
 }

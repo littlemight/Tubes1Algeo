@@ -11,10 +11,10 @@ Buat ngetes hasil operasi2 matriks:
 - etc
 
 ## !! KURANG !!
-1. cramer belum throw exception kalo n != m
-2. determinan belum throw exception kalo n != m
-3. interpolasi
-4. filter point yang diinput di interpolasi
+1. cramer belum throw exception kalo n != m (done)
+2. determinan belum throw exception kalo n != m (done)
+3. interpolasi (done)
+4. filter point yang diinput di interpolasi (done)
 5. kalo x sama tapi y beda juga ga bisa
 6. inverse belum ada throw exception kalo n != m (tepatnya kalo m > n)
 7. you tell me
