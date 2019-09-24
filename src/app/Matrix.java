@@ -7,7 +7,7 @@ class Matrix {
   final int m;
   final int n;
   public double[][] mat;
-  private static final double EPS = 1e-9;
+  private static final double EPS = 1e-12;
 
   //================================================================================
   // Constructor
@@ -199,7 +199,7 @@ class Matrix {
         for (int i=curid;i<=m;i++){
             int tm=curid;
 
-            while ((tm<=n) && Math.abs(ar.mat[i][tm])<EPS){
+            while ((tm<=n) && ar.mat[i][tm]==0){
                 tm++;
             }
 
@@ -380,14 +380,14 @@ class Matrix {
 
   public void add(int r1, int r2, double fac) {
     for (int i=1;i<=this.getN();i++){
-      if (Math.abs(this.mat[r2][i]) < EPS) continue;
+      // if (Math.abs(this.mat[r2][i]) < EPS) continue;
       this.mat[r1][i] += this.mat[r2][i] * fac;
     }
   }
 
   public void rowtimesX(int r, double x) {
     for (int i=1;i<=this.getN();i++){
-      if (Math.abs(this.mat[r][i]) < EPS) continue;
+      // if (Math.abs(this.mat[r][i]) < EPS) continue;
       this.mat[r][i] *= x;
     }
   }
@@ -403,7 +403,7 @@ class Matrix {
   private int nextCandidate(Matrix M, int r, int c) {
     int ret = r;
     for (int i = r; i <= M.m; i++) {
-      if (Math.abs(M.mat[i][c]) > Math.abs(M.mat[ret][c])) {
+      if (Math.abs(M.mat[i][c]) > Math.abs(M.mat[ret][c]) && Math.abs(M.mat[i][c]) > EPS) {
         ret = i;
       }
     }
@@ -463,25 +463,29 @@ class Matrix {
           nex++;
         }
       } else {
-        if (nex < M.n) {
           nex = findNextLeading(M, no, nex);
-          if (nex <= M.n) {
-            if (no != Math.min(M.n, M.m)) {
-              no--;
-            } else {
-              if (Math.abs(M.mat[no][nex]) > EPS) {
-                normalize(M, no, nex);
-                for (int i = 1; i <= M.m; i++) {
-                  if (i == no) continue;
-                  double fac = M.mat[i][nex] / M.mat[no][nex];
-                  M.add(i, no, -fac);
-                }
-              }
+          mx = nextCandidate(M, no, nex);
+          if (no != mx) {
+            M.swap(no, mx);
+          }
+          if (Math.abs(M.mat[no][nex]) > EPS) {
+            for (int i = no + 1; i <= M.m; i++) {
+              double fac = M.mat[i][nex] / M.mat[no][nex];
+              M.add(i, no, -fac);
+            }
+            normalize(M, no, nex);
+            if (nex < M.n) {
+              nex++;
             }
           }
-        }
       }
     }
+
+    // for (int i = 1; i <= M.m; i++) {
+    //   for (int j = 1; j <= M.n; j++) {
+    //     M.mat[i][j] = (double)Math.round(M.mat[i][j] * 100000d) / 100000d;
+    //   }
+    // }
     return M;
   }
 
@@ -509,23 +513,28 @@ class Matrix {
           nex++;
         }
       } else {
-        if (nex < M.n) {
           nex = findNextLeading(M, no, nex);
-          if (nex <= M.n) {
-            if (no != Math.min(M.n, M.m)) {
-              no--;
-            } else {
-              if (Math.abs(M.mat[no][nex]) > EPS) {
-                normalize(M, no, nex);
-                for (int i = 1; i <= M.m; i++) {
-                  if (i == no) continue;
-                  double fac = M.mat[i][nex] / M.mat[no][nex];
-                  M.add(i, no, -fac);
-                }
-              }
+          mx = nextCandidate(M, no, nex);
+          if (no != mx) {
+            M.swap(no, mx);
+          }
+          if (Math.abs(M.mat[no][nex]) > EPS) {
+            for (int i = 1; i <= M.m; i++) {
+              if (i == no) continue;
+              double fac = M.mat[i][nex] / M.mat[no][nex];
+              M.add(i, no, -fac);
+            }
+            normalize(M, no, nex);
+            if (nex < M.n) {
+              nex++;
             }
           }
-        }
+      }
+    }
+
+    for (int i = 1; i <= M.m; i++) {
+      for (int j = 1; j <= M.n; j++) {
+        M.mat[i][j] = (double)Math.round(M.mat[i][j] * 10000d) / 10000d;
       }
     }
     return M;
