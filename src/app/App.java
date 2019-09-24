@@ -22,12 +22,12 @@ public class App {
             M.getReducedEchelon().show();
             System.out.println();
     
-            System.out.printf("Determinan: %f\n", M.getDeterminant());
-            System.out.println();
+            // System.out.printf("Determinan: %f\n", M.getDeterminant());
+            // System.out.println();
             
-            System.out.println("Inverse: ");
-            Matrix.inverse(M).show();
-            System.out.println();
+            // System.out.println("Inverse: ");
+            // Matrix.inverse(M).show();
+            // System.out.println();
     
             SPL solusi = new SPL(M);
             System.out.println("SPL:");
