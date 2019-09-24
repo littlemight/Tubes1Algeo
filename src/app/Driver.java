@@ -75,19 +75,21 @@ public class Driver {
             System.out.print("masukkan perintah: ");
             cmd = in.nextInt();
         }
-
+        Matrix mat;
         if(cmd==1){
-            Matrix mat = Matrix.readKB();
-
-            if(mat.isSquare()){
-                System.out.println("Matriks yang anda masukkan adalah: ");
-                mat.show();
-                System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminant());
-            } else {
-                System.out.println("Matriks tidak memiliki determinan karena bukan matriks persegi.");
-            }
+            mat = Matrix.readKB();
         } else { // pasti cmd=2
+            System.out.println("masukkan nama file yang berisi matriks: ");
+            String filename = in.nextLine();
+            mat = Matrix.readFile(filename);
+        }
 
+        if(mat.isSquare()){
+            System.out.println("Matriks yang anda masukkan adalah: ");
+            mat.show();
+            System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminant());
+        } else {
+            System.out.println("Matriks tidak memiliki determinan karena bukan matriks persegi.");
         }
 
     }
