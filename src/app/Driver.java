@@ -33,11 +33,26 @@ public class Driver {
         } while(!cmd.equals("menu"));
 
         if(cmd.equals("menu")){
-            showMenu();
+            showMenu(in);
         }
     }
 
-    private static void showMenu(){
-        System.out.println("Hello");
+    private static void showMenu(Scanner in){
+
+        int cmd;
+        System.out.println("----------------------MENU------------------------");
+        System.out.println("1. Linear System of Equation");
+        System.out.println("2. Determinant of a Matrix");
+        System.out.println("3. Inverse Matrix");
+        System.out.println("4. Cofactor Matrix");
+        System.out.println("5. Adjoint Matrix");
+        System.out.println("6. Polynomial Interpolation");
+        System.out.println("7. Exit");
+        System.out.println("--------------------------------------------------");
+        System.out.print("select a command: ");
+
+        cmd = in.nextInt();
+
+        
     }
 }
