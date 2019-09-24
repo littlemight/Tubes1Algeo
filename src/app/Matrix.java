@@ -47,6 +47,10 @@ class Matrix {
     }
   }
 
+  public boolean isSquare(){
+    return (this.m==this.n);
+  }
+
   //================================================================================
   // Selector / Getter
   //================================================================================
@@ -307,7 +311,6 @@ class Matrix {
       }
     }
     Matrix ret = new Matrix(tmp);
-    in.close();
     return ret;
   }
 
