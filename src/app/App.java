@@ -1,4 +1,6 @@
 package app;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class App {
@@ -22,8 +24,8 @@ public class App {
             M.getReducedEchelon().show();
             System.out.println();
     
-            // System.out.printf("Determinan: %f\n", M.getDeterminant());
-            // System.out.println();
+            System.out.printf("Determinan: %f\n", M.getDeterminant());
+            System.out.println();
             
             // System.out.println("Inverse: ");
             // Matrix.inverse(M).show();
@@ -31,9 +33,9 @@ public class App {
     
             SPL solusi = new SPL(M);
             System.out.println("SPL:");
-    
             System.out.println("Pake Gauss: ");
             solusi.solveGauss();
+            // solusi.EF.show();
             solusi.showSol();
             System.out.println();
     
@@ -42,15 +44,15 @@ public class App {
             solusi.showSol();
             System.out.println();
     
-            System.out.println("Pake Cramer: ");
-            solusi.solveCramer();
-            solusi.showSol();
-            System.out.println();
+            // System.out.println("Pake Cramer: ");
+            // solusi.solveCramer();
+            // solusi.showSol();
+            // System.out.println();
     
-            System.out.println("Pake Inverse: ");
-            solusi.solveInverse();
-            solusi.showSol();
-            System.out.println();
+            // System.out.println("Pake Inverse: ");
+            // solusi.solveInverse();
+            // solusi.showSol();
+            // System.out.println();
 
             System.out.println("================================== NEXT TEST ==================================");
             System.out.print("Nama file: ");

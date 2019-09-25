@@ -1,42 +1,39 @@
 package app;
 
-class Util { 
-  private static double EPS = 1e-4;
+import java.math.BigDecimal;
 
-  public static String formatOutputAbs(double val) { // normalize absolute value of val
+class Util { 
+  private static BigDecimal EPS = BigDecimal.valueOf(1e-12);
+
+  public static String formatOutputAbs(BigDecimal val) { // normalize absolute value of val
     String ret = "";
-    if (Math.abs(val) > EPS) {
-      // double roun = fastPow(10, 4); 
-      // ret += String.format("%.4f", Math.round(Math.abs(val)*roun) / roun);
-      ret += String.format("%.4f", Math.abs(val));
+    if (!isZero(val)) {
+      ret += String.format("%.4f", val.abs());
+      System.out.println(ret);
     } 
     return ret;
   }
 
-  public static String formatOutput(double val) { // normalize absolute value of val
+  public static String formatOutput(BigDecimal val) { // normalize absolute value of val
     String ret = "";
-    if (Math.abs(val) > EPS) {
-      if (val > 0) ret += "+";
+    if (!isZero(val)) {
+      if (val.compareTo(BigDecimal.ZERO) > 0) ret += "+";
       else ret += "-";
       ret += formatOutputAbs(val);
     } 
     return ret;
   }
 
-  public static double fastPow(double val, int p) {
-    if (p == 0) return 1;
+  public static BigDecimal fastPow(BigDecimal val, int p) {
+    if (p == 0) return BigDecimal.ONE;
     if (p == 1) return val;
-    double ret = fastPow(val, p / 2);
-    ret *= ret;
-    if (p % 2 == 1) ret *= val;
+    BigDecimal ret = fastPow(val, p / 2);
+    ret = ret.multiply(ret);
+    if (p % 2 == 1) ret = ret.multiply(val);
     return ret; 
   }
 
-  public static boolean isZero(double val) {
-    return (Math.abs(val) < EPS);
-  }
-
-  public static void main(String[] args) {
-    System.out.println(Util.fastPow(2,5));
+  public static boolean isZero(BigDecimal val) {
+    return (val.abs().compareTo(EPS) < 0);
   }
 }

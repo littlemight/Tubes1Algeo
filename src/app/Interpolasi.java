@@ -1,16 +1,38 @@
 package app;
 import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import app.SPL;
 
 class Interpolasi {
-  private static final double EPS = 1e-12;
   private SPL solver;
   String persamaan;
-  double mn_x, mx_x;    
+  BigDecimal[] x, y;
+  BigDecimal x_min, x_max;    
+  HashSet<BigDecimal> recX;
   
-  Interpolasi (double[][] x, double[][] y) {
+  Interpolasi (BigDecimal[][] x, BigDecimal[][] y) {
      Matrix B = new Matrix(y);
-     double[][] kons = new double[y.length][x.length];
+     BigDecimal[][] kons = new BigDecimal[y.length][x.length];
+     this.x = new BigDecimal[x.length];
+     this.y = new BigDecimal[y.length];
+
+     recX = new HashSet<BigDecimal>();
+
+     for (int i = 1; i <= this.x.length - 1; i++) {
+       this.x[i] = x[i][1];
+       recX.add(this.x[i]);
+       if (i == 1) {
+         x_min = this.x[i];
+         x_max = this.y[i];
+       } else {
+         x_min = x_min.min(this.x[i]);
+         x_max = x_max.max(this.x[i]);
+       }
+
+       this.y[i] = y[i][1];
+     }
+
      for (int i = 1; i <= y.length - 1; i++) {
        for (int j = 1; j <= x.length - 1; j++) {
          kons[i][j] = Util.fastPow(x[i][1], j - 1);
@@ -18,14 +40,6 @@ class Interpolasi {
      }
 
      Matrix A = new Matrix(kons);
-     System.out.println("LHS");
-     A.show();
-     System.out.println();
-
-     System.out.println("RHS");
-     B.show();
-     System.out.println();
-     
      solver = new SPL(A, B);
   }
 
@@ -33,24 +47,24 @@ class Interpolasi {
     Scanner in = new Scanner(System.in);
     System.out.print("Masukkan banyaknya titik: ");
     int n = in.nextInt();
-    HashSet<Double> cekX = new HashSet<Double>();
+    HashSet<BigDecimal> cekX = new HashSet<BigDecimal>();
 
     boolean valid = true;
 
-    double[] in_x = new double[n + 1];
-    double[] in_y = new double[n + 1];
+    BigDecimal[] in_x = new BigDecimal[n + 1];
+    BigDecimal[] in_y = new BigDecimal[n + 1];
     int id = 1;
     for (int i = 1; i <= n; i++) {
       double tm_x, tm_y;
       tm_x = in.nextDouble();
       tm_y = in.nextDouble();
-      if (cekX.contains(tm_x)) {
+      if (cekX.contains(BigDecimal.valueOf(tm_x))) {
         valid=false;
         break;
       } else {
-        cekX.add(tm_x);
-        in_x[id] = tm_x;
-        in_y[id] = tm_y;
+        cekX.add(BigDecimal.valueOf(tm_x));
+        in_x[id] = BigDecimal.valueOf(tm_x);
+        in_y[id] = BigDecimal.valueOf(tm_y);
         id++;
       }
     }
@@ -58,8 +72,8 @@ class Interpolasi {
     if(valid){
       id--;
 
-      double[][] fil_x = new double[id + 1][2];
-      double[][] fil_y = new double[id + 1][2];
+      BigDecimal[][] fil_x = new BigDecimal[id + 1][2];
+      BigDecimal[][] fil_y = new BigDecimal[id + 1][2];
       for (int i = 1; i <= id; i++) {
         fil_x[i][1] = in_x[i];
         fil_y[i][1] = in_y[i];
@@ -80,12 +94,12 @@ class Interpolasi {
 
     if (temp != null){
       int n = temp.getM(), id = 1;
-      HashSet<Double> cekX = new HashSet<Double>();
+      HashSet<BigDecimal> cekX = new HashSet<BigDecimal>();
 
-      double[] in_x = new double[n + 1];
-      double[] in_y = new double[n + 1];
+      BigDecimal[] in_x = new BigDecimal[n + 1];
+      BigDecimal[] in_y = new BigDecimal[n + 1];
       for (int i = 1; i <= n; i++) {
-        double tm_x, tm_y;
+        BigDecimal tm_x, tm_y;
         tm_x = temp.mat[i][1];
         tm_y = temp.mat[i][2];
         if (cekX.contains(tm_x)) {
@@ -99,8 +113,8 @@ class Interpolasi {
       }
       id--;
 
-      double[][] fil_x = new double[id + 1][2];
-      double[][] fil_y = new double[id + 1][2];
+      BigDecimal[][] fil_x = new BigDecimal[id + 1][2];
+      BigDecimal[][] fil_y = new BigDecimal[id + 1][2];
       for (int i = 1; i <= id; i++) {
         fil_x[i][1] = in_x[i];
         fil_y[i][1] = in_y[i];
@@ -115,25 +129,21 @@ class Interpolasi {
 
   public void solveInterGauss() {
     solver.solveGauss();
-    // solver.sol.show();
     makePersamaan();
   }
 
   public void solveInterGaussJordan() {
     solver.solveGaussJordan();
-    // solver.sol.show();
     makePersamaan();
   }
 
   public void solveInterCramer() {
     solver.solveCramer();
-    // solver.sol.show();  
     makePersamaan();
   }
 
   public void solveInterInverse() {
     solver.solveInverse();
-    // solver.sol.show();
     makePersamaan();
   }
 
@@ -141,13 +151,12 @@ class Interpolasi {
     persamaan = "p(x) =";
     boolean first = true;
     for (int i = 1; i <= solver.sol.getM(); i++) {
-      if (Math.abs(solver.sol.mat[i][1]) < EPS) continue;
-      double cur = solver.sol.mat[i][1];
-      if (Math.abs(cur) < 1e-4) continue;
+      if (Util.isZero(solver.sol.mat[i][1])) continue;
+      BigDecimal cur = solver.sol.mat[i][1];
 
       if (first) {
         first = false;
-        if (cur > 0) {
+        if (cur.compareTo(BigDecimal.ZERO) > 0) {
           persamaan += " ";
           persamaan += Util.formatOutputAbs(cur);
         } else {
@@ -155,7 +164,7 @@ class Interpolasi {
           persamaan += Util.formatOutputAbs(cur);
         }
       } else {
-        if (cur > 0) {
+        if (cur.compareTo(BigDecimal.ZERO) > 0) {
           persamaan += " + ";
         } else {
           persamaan += " - ";
@@ -178,11 +187,17 @@ class Interpolasi {
     System.out.println(persamaan);
   }
 
-  public double getY(double x) {
-    double ret = 0;
+  public BigDecimal getY(double x) {
+    BigDecimal ret = BigDecimal.ZERO;
+    BigDecimal xdec = BigDecimal.valueOf(x);
     for (int i = 1; i <= solver.sol.getM(); i++) {
-      ret += Util.fastPow(x, i - 1) * solver.sol.mat[i][1];
+      ret = ret.add(Util.fastPow(xdec, i - 1).multiply(solver.sol.mat[i][1]));
     }
+    return ret;
+  }
+
+  public BigDecimal getVal(double x) {
+    BigDecimal ret = BigDecimal.ZERO;
     return ret;
   }
 
@@ -215,13 +230,15 @@ class Interpolasi {
       sol.showPersamaan();
       System.out.println();
 
-      System.out.println("INVERSE");
-      sol.solveInterInverse();
-      sol.showPersamaan();
-      System.out.println();
+      // System.out.println("INVERSE");
+      // sol.solveInterInverse();
+      // sol.showPersamaan();
+      // System.out.println();
 
-      double x = in.nextDouble();
-      System.out.println(x + " " + sol.getY(x));
+      System.out.println("Masukkan X: ");
+      for (int i = 1; i <= sol.x.length - 1; i++) {
+        System.out.println(sol.x[i] + " " + sol.getY(sol.x[i].doubleValue()));
+      }
     } catch (NullPointerException e){
       System.out.println("Input tidak valid.");
     }
