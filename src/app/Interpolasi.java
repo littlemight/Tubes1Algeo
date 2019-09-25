@@ -16,18 +16,17 @@ class Interpolasi {
      BigDecimal[][] kons = new BigDecimal[y.length][x.length];
      this.x = new BigDecimal[x.length];
      this.y = new BigDecimal[y.length];
-
      recX = new HashSet<BigDecimal>();
-
+    
      for (int i = 1; i <= this.x.length - 1; i++) {
        this.x[i] = x[i][1];
        recX.add(this.x[i]);
        if (i == 1) {
-         x_min = this.x[i];
-         x_max = this.y[i];
+         this.x_min = this.x[i];
+         this.x_max = this.x[i];
        } else {
-         x_min = x_min.min(this.x[i]);
-         x_max = x_max.max(this.x[i]);
+         this.x_min = this.x_min.min(this.x[i]);
+         this.x_max = this.x_max.max(this.x[i]);
        }
 
        this.y[i] = y[i][1];

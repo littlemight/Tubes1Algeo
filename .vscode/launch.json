@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - StudiKasus",
+      "request": "launch",
+      "mainClass": "app.StudiKasus",
+      "projectName": "Belajar"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Util",
       "request": "launch",
       "mainClass": "app.Util",

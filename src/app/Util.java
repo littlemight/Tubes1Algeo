@@ -9,12 +9,11 @@ class Util {
     String ret = "";
     if (!isZero(val)) {
       ret += String.format("%.4f", val.abs());
-      System.out.println(ret);
     } 
     return ret;
   }
 
-  public static String formatOutput(BigDecimal val) { // normalize absolute value of val
+  public static String formatOutput(BigDecimal val) { // normalize value of val
     String ret = "";
     if (!isZero(val)) {
       if (val.compareTo(BigDecimal.ZERO) > 0) ret += "+";
