@@ -3,8 +3,16 @@ import java.util.*;
 import java.io.*;
 import app.*;
 
+/**
+ * Class Driver untuk menjalankan program utama
+ */
 public class Driver {
 
+    /**
+     * Main untuk menjalankan program utama
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Scanner in = new Scanner(System.in);
 
@@ -43,6 +51,9 @@ public class Driver {
         in.close();
     }
 
+    /**
+     * Menampilkan menu di program utama
+     */
     private static void showMenu(){
         Scanner in = new Scanner(System.in);
         int cmd;
@@ -87,6 +98,10 @@ public class Driver {
         System.out.println("Terima kasih sudah menggunakan produk kami, more at junho.id/buy.");
     }
 
+    /**
+     * primitif untuk memanggil operasi-operasi untuk menyelesaikan Sistem Persamaan Linier
+     * @param in
+     */
     public static void linearProgram(Scanner in){
         System.out.println("Program ini akan mencari solusi dari sistem persamaan linier dengan menggunakan bermacam-macam metode");
         System.out.println("Silahkan pilih jenis input (pastikan persamaan sudah dalam bentuk matriks augmented): ");
@@ -119,6 +134,11 @@ public class Driver {
         }
     }
 
+    /**
+     * primitif untuk antarmuka operasi SPL
+     * @param in
+     * @param t
+     */
     private static void splUtil(Scanner in, Matrix t){
         int cmd;
         SPL spl = new SPL(t);
@@ -201,6 +221,11 @@ public class Driver {
         } 
     }
 
+    /**
+     * primitif untuk antarmuka operasi Interpolasi
+     * @param in
+     * @param itp
+     */
     private static void interpolasiUtil(Scanner in, Interpolasi itp){
         int cmd;
         System.out.println("Pilih metode yang ingin digunakan untuk interpolasi");
@@ -267,6 +292,10 @@ public class Driver {
 
     }
 
+    /**
+     * primitif untuk memanggil operasi-operasi untuk menyelesaikan masalah interpolasi
+     * @param in
+     */
     public static void interpolationProgram(Scanner in){
         System.out.println("Program ini akan melakukan interpolasi pada titik-titik yang di input menggunakan keyboard atau dari file");
         System.out.println("Silahkan pilih jenis input titik: ");
@@ -299,6 +328,10 @@ public class Driver {
         interpolasiUtil(in, itp);
     }
 
+    /**
+     * primitif untuk menjalankan studi kasus yang diberikan pada spesifikasi tubes
+     * @param in
+     */
     public static void caseStudies(Scanner in){
         System.out.println("Berikut adalah pengujian studi kasus yang diberikan pada spesifikasi tugas ini.");
         System.out.println("1. 1_1");
