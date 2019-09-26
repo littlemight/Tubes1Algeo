@@ -75,7 +75,7 @@ class SPL {
           }
         }
         BigDecimal det2 = dummy.getDeterminantGJ();
-        this.sol.mat[i][1] = det2.divide(det, 30, RoundingMode.HALF_UP);
+        this.sol.mat[i][1] = det2.divide(det, Util.divScale, RoundingMode.HALF_UP);
       }
     } catch (ArrayIndexOutOfBoundsException e){
       System.out.println("Dimensi matriks tidak valid untuk metode cramer.");
@@ -116,8 +116,8 @@ class SPL {
   }
 
   public void solveInverse() {
-    if (Matrix.inverse(A).mat != null) {
-      sol = new Matrix((Matrix.inverse(A)).mult(B));
+    if (A.getInverseGJ().mat != null) {
+      sol = new Matrix((A.getInverseGJ()).mult(B));
     } else {
       sol.mat = null;
     }
@@ -348,7 +348,7 @@ class SPL {
     }
   }
 
-  public void storeSol(){ // state = 1
+  public void storeSol() { // state = 1
     int r = free_solution.getM(), c = free_solution.getN();
     sol = new Matrix(r, 1);
 

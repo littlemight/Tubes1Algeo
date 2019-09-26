@@ -1,5 +1,6 @@
 package app;
 import java.util.*;
+import java.io.*;
 
 public class Driver {
 
@@ -183,7 +184,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                cofactor.showFile(test);
+                try {
+                    cofactor.showFile(test);
+                } catch (IOException e) {
+                    System.out.println("Tidak dapat menyimpan file.");
+                }
             } 
 
         } else {

@@ -11,17 +11,17 @@ public class App {
         String namaFile = in.nextLine();
         while (!Objects.equals(namaFile, new String("stop"))) {
             Matrix M = new Matrix(Matrix.readFile("../test/" + namaFile));
-            
+            // Matrix M = new Matrix(Matrix.readKB());
             System.out.println("Matrix:");
             // M.show();
-            System.out.println("G:");
-            System.out.println(Util.formatOutput(M.getDeterminantG()));
-            System.out.println();
-            System.out.println("GJ:");
-            System.out.println(Util.formatOutput(M.getDeterminantGJ()));
-            System.out.println();
-            System.out.println("KOFAK:");
-            System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
+            // System.out.println("G:");
+            // System.out.println(Util.formatOutput(M.getDeterminantG()));
+            // System.out.println();
+            // System.out.println("GJ:");
+            // System.out.println(Util.formatOutput(M.getDeterminantGJ()));
+            // System.out.println();
+            // System.out.println("KOFAK:");
+            // System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
             // System.out.println("nama file simpan");
             // String nm = in.nextLine();
             // M.showFile("../test/" + nm);
@@ -38,14 +38,22 @@ public class App {
             // System.out.printf("Determinan: %f\n", M.getDeterminant());
             // System.out.println();
             
-            // System.out.println("Inverse: ");
-            // if (Matrix.inverse(M) != null) {
-            //     Matrix.inverse(M).show();
-            // } else {
-            //     System.out.println("Tidak punya inverse.");
-            // }
-            // System.out.println();
+            System.out.println("Inverse: ");
+            System.out.println("GJ:");
+            if (M.getInverseGJ() != null) {
+                M.getInverseGJ().show();
+            } else {
+                System.out.println("Tidak punya inverse.");
+            }
+            System.out.println();
     
+            System.out.println("Kofaktor:");
+            if (M.getInverseCofactor() != null) {
+                M.getInverseCofactor().show();
+            } else {
+                System.out.println("Tidak punya inverse.");
+            }
+
             // SPL solusi = new SPL(M);
             // System.out.println("SPL:");
             // System.out.println("Pake Gauss: ");
@@ -61,7 +69,8 @@ public class App {
     
             // System.out.println("Pake Gauss Jordan: ");
             // solusi.solveGaussJordan();
-            // solusi.showAug();
+            // // solusi.showAug();
+            // solusi.showEF();
             // System.out.println();
     
             // System.out.println("Pake Cramer: ");

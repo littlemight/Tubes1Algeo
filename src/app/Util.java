@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 
 class Util { 
   private static BigDecimal EPS = BigDecimal.valueOf(1e-12);
+  public static final int divScale = 50;
 
   public static String formatOutputAbsLong(BigDecimal val) { // normalize absolute value of val
     String ret = "";
@@ -26,7 +27,7 @@ class Util {
     String ret = "";
     if (!isZero(val)) {
       if (val.compareTo(BigDecimal.ZERO) < 0) ret += "-";
-      ret += formatOutputAbs(val);
+      ret += formatOutputAbsLong(val);
     } else ret += "0.00000000";
     return ret;
   }
