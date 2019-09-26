@@ -375,7 +375,7 @@ class Matrix {
       // System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
       for (int i = 1; i <= this.getM(); i++) {
         for (int j = 1; j <= this.getN(); j++) {
-          System.out.print(Util.formatOutputLong(this.mat[i][j]));
+          System.out.print(Util.formatOutput(this.mat[i][j]));
           // System.out.print(this.mat[i][j]);
           if (j < this.getN()) System.out.print(" ");
         }

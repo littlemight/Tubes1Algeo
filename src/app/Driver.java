@@ -27,11 +27,11 @@ public class Driver {
         String cmd = in.nextLine();
         do {
             if(!cmd.equals("menu")){
-                System.out.println("invalid command.");
+                System.out.println("Masukan tidak valid.");
             } else {
                 break;
             }
-            System.out.print("enter a command: ");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextLine();
             System.out.println(cmd);
         } while(!cmd.equals("menu"));
@@ -315,11 +315,13 @@ public class Driver {
         System.out.println("12. 5_Penduduk (dalam jutaan) ");
         System.out.println("13. 5_Penduduk");
         System.out.println("14. Menghitung fungsi f(x)");
+
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd < 1 || cmd > 14){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         StudiKasus.initKasus();
@@ -349,7 +351,7 @@ public class Driver {
                     splUtil(in, StudiKasus.hilbert[n]);
                     t--;
                 }
-                in.nextLine();
+                // in.nextLine();
                 break;
             case 5:
                 splUtil(in, StudiKasus.spl2_1);
@@ -421,12 +423,12 @@ public class Driver {
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
         System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         in.nextLine();
@@ -434,7 +436,7 @@ public class Driver {
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
-            System.out.println("masukkan nama file yang berisi matriks (lengkap dengan ekstensi): ");
+            System.out.println("Masukkan nama file yang berisi matriks (lengkap dengan ekstensi): ");
             String filename = in.nextLine();
             filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
@@ -450,7 +452,7 @@ public class Driver {
             System.out.println("1. Gauss");
             System.out.println("2. Gauss-Jordan");
             System.out.println("3. Kofaktor");
-            System.out.print("masukkan perintah: ");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
             while(cmd < 1 || cmd > 3){
                 System.out.println("Perintah tidak valid! coba lagi");
@@ -493,7 +495,7 @@ public class Driver {
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
         System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
@@ -519,8 +521,13 @@ public class Driver {
             System.out.println("Pilih metode untuk mencari matriks balikan");
             System.out.println("1. Gauss-Jordan");
             System.out.println("2. Matriks Adjoin");
+            System.out.print("Masukkan perintah: ");
             do {
-                cmd = in.nextInt();
+                cmd = in.nextInt();                
+                if (cmd < 1 || cmd > 2) {
+                    System.out.println("Perintah tidak valid! Coba lagi");
+                    System.out.print("Masukkan perintah: ");
+                }
             } while(cmd < 1 || cmd > 2);
             Matrix inverse = new Matrix();
             switch(cmd){
@@ -555,12 +562,12 @@ public class Driver {
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
         System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         in.nextLine();
@@ -568,7 +575,7 @@ public class Driver {
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
-            System.out.println("masukkan nama file yang berisi matriks: ");
+            System.out.println("Masukkan nama file yang berisi matriks: ");
             String filename = in.nextLine();
             filename = "./test/" + filename;            
             mat = Matrix.readFile(filename);
@@ -601,12 +608,12 @@ public class Driver {
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
         System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         in.nextLine();
@@ -615,7 +622,7 @@ public class Driver {
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
-            System.out.println("masukkan nama file yang berisi matriks: ");
+            System.out.println("Masukkan nama file yang berisi matriks: ");
             String filename = in.nextLine();
             filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
