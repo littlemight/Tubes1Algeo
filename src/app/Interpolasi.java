@@ -1,11 +1,11 @@
 package app;
 import java.util.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.*;
 import app.SPL;
 
 class Interpolasi {
-  private SPL solver;
+  SPL solver;
   String persamaan;
   BigDecimal[] x, y;
   BigDecimal x_min, x_max;    
@@ -150,17 +150,17 @@ class Interpolasi {
     persamaan = "p(x) =";
     boolean first = true;
     for (int i = 1; i <= solver.sol.getM(); i++) {
-      if (Util.isZero(solver.sol.mat[i][1])) continue;
+      if (Util.isZero(solver.sol.mat[i][1]) || Util.formatOutputAbsLong(solver.sol.mat[i][1]) == "0.00000000") continue;
       BigDecimal cur = solver.sol.mat[i][1];
 
       if (first) {
         first = false;
         if (cur.compareTo(BigDecimal.ZERO) > 0) {
           persamaan += " ";
-          persamaan += Util.formatOutputAbs(cur);
+          persamaan += Util.formatOutputAbsLong(cur);
         } else {
           persamaan += " -";
-          persamaan += Util.formatOutputAbs(cur);
+          persamaan += Util.formatOutputAbsLong(cur);
         }
       } else {
         if (cur.compareTo(BigDecimal.ZERO) > 0) {
@@ -168,7 +168,7 @@ class Interpolasi {
         } else {
           persamaan += " - ";
         }
-        persamaan += Util.formatOutputAbs(cur);
+        persamaan += Util.formatOutputAbsLong(cur);
       }
 
       if (i > 1) {
@@ -185,6 +185,12 @@ class Interpolasi {
   public void showPersamaan() {
     System.out.println(persamaan);
   }
+  
+  public void showPersamaanFile(String filename) throws IOException {
+    BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+    writer.write(persamaan);
+    writer.close();
+  }
 
   public BigDecimal getY(double x) {
     BigDecimal ret = BigDecimal.ZERO;
@@ -195,18 +201,33 @@ class Interpolasi {
     return ret;
   }
 
-  public BigDecimal getVal(double x) {
-    BigDecimal ret = BigDecimal.ZERO;
-    return ret;
+  public boolean isInRange(double x) {
+    BigDecimal xdec = BigDecimal.valueOf(x);
+    System.out.println(x_min + " " + x_max);
+    return (xdec.compareTo(x_min) >= 0 && xdec.compareTo(x_max) <= 0);
   }
 
+  public void queryY(double x) { // x sudah di range xmin xmax
+    System.out.println("y = " + Util.formatOutput(this.getY(x)));
+  }
+
+  public void queryYFile(double x) { // x sudah di range xmin xmax
+    // BigDecimal xdec = BigDecimal.valueOf(x);
+    // System.out.println("y = " + Util.formatOutput(xdec));
+  }
+
+  public void warnX() {
+    System.out.println("! Titik di luar selang interpolasi [" + Util.formatOutput(this.x_min) + ", " + Util.formatOutput(this.x_max) + "], interpolasi mungkin tidak akurat.");
+    // kalo diluar titik, harus pake ekstrapolasi
+  }
+  
   public static void main(String[] args) {
     try {
       Scanner in = new Scanner(System.in);
       System.out.println("Masukkan nama file:");
       String str = in.nextLine();
       System.out.println(str);
-      Interpolasi sol = Interpolasi.readFile("../test/" + str + ".txt");
+      Interpolasi sol = Interpolasi.readFile("../test/" + str);
       System.out.println();
 
       System.out.println("GAUSS");
@@ -220,8 +241,8 @@ class Interpolasi {
       System.out.println();
 
       System.out.println("GAUSS JORDAN");
-      sol.solveInterGaussJordan();
       sol.showPersamaan();
+      sol.solveInterGaussJordan();
       System.out.println();
 
       System.out.println("CRAMER");
@@ -229,15 +250,21 @@ class Interpolasi {
       sol.showPersamaan();
       System.out.println();
 
-      // System.out.println("INVERSE");
-      // sol.solveInterInverse();
-      // sol.showPersamaan();
-      // System.out.println();
+      System.out.println("INVERSE");
+      sol.solveInterInverse();
+      sol.showPersamaan();
+      System.out.println();
 
       System.out.println("Masukkan X: ");
-      for (int i = 1; i <= sol.x.length - 1; i++) {
-        System.out.println(sol.x[i] + " " + sol.getY(sol.x[i].doubleValue()));
-      }
+      double x = in.nextDouble();
+      if (!sol.isInRange(x)) {
+        System.out.println("! Titik di luar selang interpolasi [" + Util.formatOutput(sol.x_min) + ", " + Util.formatOutput(sol.x_max) + "], interpolasi mungkin tidak akurat.");
+      } 
+      sol.queryY(x);
+
+      // for (int i = 1; i <= sol.x.length - 1; i++) {
+      //   System.out.println(sol.x[i] + " " + Util.formatOutput(sol.getY(sol.x[i].doubleValue())));
+      // }
     } catch (NullPointerException e){
       System.out.println("Input tidak valid.");
     }
