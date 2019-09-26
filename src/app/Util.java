@@ -37,7 +37,7 @@ class Util {
     if (!isZero(val)) {
       if (val.compareTo(BigDecimal.ZERO) < 0) ret += "-";
       ret += formatOutputAbs(val);
-    } else ret += "0.0000";
+    } else ret += "0.00";
     return ret;
   }
 

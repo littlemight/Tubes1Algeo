@@ -14,17 +14,16 @@ public class App {
             // Matrix M = new Matrix(Matrix.readFile("../test/" + namaFile));
             Matrix M = StudiKasus.spl1_1;
             // Matrix M = new Matrix(Matrix.readKB());
-            System.out.println("Matrix:");            
-            M.show();
-
-            // System.out.println("G:");
-            // System.out.println(Util.formatOutput(M.getDeterminantG()));
-            // System.out.println();
-            // System.out.println("GJ:");
-            // System.out.println(Util.formatOutput(M.getDeterminantGJ()));
-            // System.out.println();
-            // System.out.println("KOFAK:");
-            // System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
+            System.out.println("Matrix:");
+            // M.show();
+            System.out.println("G:");
+            System.out.println(Util.formatOutput(M.getDeterminantG()));
+            System.out.println();
+            System.out.println("GJ:");
+            System.out.println(Util.formatOutput(M.getDeterminantGJ()));
+            System.out.println();
+            System.out.println("KOFAK:");
+            System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
 
             // System.out.println("nama file simpan");
             // String nm = in.nextLine();

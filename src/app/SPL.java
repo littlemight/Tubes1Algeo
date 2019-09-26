@@ -9,9 +9,9 @@ import java.util.*;
 import java.io.*;
 
 class SPL {
-  private Matrix M; // Augmented matrix
-  private Matrix A; // Coefficient matrix
-  private Matrix B; // Kons matrix
+  public Matrix M; // Augmented matrix
+  public Matrix A; // Coefficient matrix
+  public Matrix B; // Kons matrix
   public Matrix EF;
   public Matrix free_solution;  // tempat solusi variabel bebas
   public Matrix sol;
@@ -64,6 +64,9 @@ class SPL {
     BigDecimal det = A.getDeterminantGJ();
     this.state = (det.compareTo(BigDecimal.ZERO) == 0) ? 0 : 1;
     this.sol = new Matrix(A.getM(), 1);
+    if (Util.isZero(det)) {
+      return;
+    }
     try {
       for(int i=1;i<=A.getN();i++){
         Matrix dummy = new Matrix(A.getM(), A.getN());
