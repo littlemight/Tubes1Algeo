@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.io.*;
 import app.SPL;
 
+/**
+ * class Interpolasi untuk operasi dan primitif menyelesaikan permasalahan interpolasi
+ */
 class Interpolasi {
   SPL solver;
   String persamaan;

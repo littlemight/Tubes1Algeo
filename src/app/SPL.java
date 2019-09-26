@@ -9,7 +9,7 @@ import java.util.*;
 import java.io.*;
 
 /**
- * class SPL
+ * class SPL untuk operasi dan primitif menyelesaikan permasalahan interpolasi
  */
 class SPL {
   public Matrix M; // Augmented matrix

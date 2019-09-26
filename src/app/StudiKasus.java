@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 /**
- * class StudiKasus
+ * class StudiKasus untuk menyimpan object Matrix yang merupakan Studi Kasus yang telah diberikan
  */
 class StudiKasus {
   static Matrix spl1_1, spl1_2, spl1_3;
@@ -88,26 +88,5 @@ class StudiKasus {
       ret = BigDecimal.ZERO;
     }
     return ret;
-  }
-
-  public static void main(String[] args) {
-    // BigDecimal x = BigDecimal.ZERO;
-    // Scanner in = new Scanner(System.in);
-    // BigDecimal two = BigDecimal.valueOf(2);
-    // int n = in.nextInt();
-    // for (int i = 0; i <= n; i++) {
-    //   BigDecimal y = func(x);
-    //   // System.out.println(x + " " + y);
-    //   x = two.multiply(BigDecimal.valueOf(i + 1)).divide(BigDecimal.valueOf(n), 30, RoundingMode.HALF_UP);
-    // }
-
-    // System.out.println("POINTS:");
-    // initSeder(n);
-    // inter_seder.solveInterGaussJordan();
-    // inter_seder.showPersamaan();
-    initKasus();
-    // for (int i = 1; i <= n + 1; i++) {
-    //   System.out.println(inter_seder.x[i] + " " + inter_seder.getY(inter_seder.x[i].doubleValue()));
-    // }
   }
 }

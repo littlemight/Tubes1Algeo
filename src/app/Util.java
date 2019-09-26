@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Class Util berguna untuk menampung method-method pembantu untuk menjalankan program
+ * class Util berguna untuk menampung method-method pembantu untuk menjalankan program
  */
 class Util { 
   private static BigDecimal EPS = BigDecimal.valueOf(1e-12);

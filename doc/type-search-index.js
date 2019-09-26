@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"app","l":"App"},{"p":"app","l":"Driver"},{"p":"app","l":"Interpolasi"},{"p":"app","l":"Matrix"},{"p":"app","l":"SPL"},{"p":"app","l":"StudiKasus"},{"p":"app","l":"Util"}]
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"app","l":"Driver"},{"p":"app","l":"Interpolasi"},{"p":"app","l":"Matrix"},{"p":"app","l":"SPL"},{"p":"app","l":"StudiKasus"},{"p":"app","l":"Util"}]

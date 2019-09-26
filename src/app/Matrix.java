@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import java.util.*;
 
 /**
- * class ini mendefinisikan objek matriks dan semua operasi-operasinya
+ * class Matrix mendefinisikan objek matriks dan semua operasi-operasinya
  */
 class Matrix {
   final int m;

@@ -4,7 +4,7 @@ import java.io.*;
 import app.*;
 
 /**
- * Class Driver untuk menjalankan program utama
+ * class Driver untuk menjalankan program utama
  */
 public class Driver {
 
