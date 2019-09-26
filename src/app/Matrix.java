@@ -6,12 +6,9 @@ import java.math.RoundingMode;
 import java.util.*;
 
 /**
- * test
+ * class ini mendefinisikan objek matriks dan semua operasi-operasinya
  */
 class Matrix {
-  /**
-   * 
-   */
   final int m;
   final int n;
   public BigDecimal[][] mat;
@@ -21,14 +18,20 @@ class Matrix {
   //================================================================================
 
   /**
-   * Kok gak kelihatan sih
-   */
+    * Konstruktor untuk membuat Matriks dengan dimensi 0x0 (Kosong)
+    *
+    */
   public Matrix() {
     this.m = 0;
     this.n = 0;
     this.mat = new BigDecimal[0][0];
   }
-
+  /**
+    * Konstruktor untuk membuat Matriks dengan dimensi m x n
+    *
+    * @param m jumlah baris
+    * @param n jumlah kolom
+    */
   public Matrix(int m, int n) {
     this.m = m;
     this.n = n;
@@ -39,7 +42,11 @@ class Matrix {
       }
     }
   }
-
+  /**
+    * Konstruktor untuk membuat Matriks dengan dimensi sesuai dengan array dua dimensi BigDecimal
+    *
+    * @param inp array dua dimensi BigDecimal
+    */
   public Matrix(BigDecimal[][] inp) {
     this.m = inp.length - 1;
     this.n = inp[0].length - 1;
@@ -50,7 +57,11 @@ class Matrix {
       }
     }
   }
-
+  /**
+    * Konstruktor untuk membuat Matriks dengan input Matriks juga
+    *
+    * @param inp Objek Matriks
+    */
   public Matrix(Matrix inp) { 
     this.n = inp.n;
     this.m = inp.m;
@@ -61,7 +72,10 @@ class Matrix {
       }
     }
   }
-
+  /**
+   * mengecek apabila matriks merupakan matriks persegi
+   * @return mengembalikan true atau false
+   */
   public boolean isSquare(){
     return (this.m==this.n);
   }
@@ -70,22 +84,42 @@ class Matrix {
   // Selector / Getter
   //================================================================================
 
+  /**
+   * selektor baris
+   * @return mengembalikan banyak baris dari matriks
+   */
   public int getM() {
     return this.m;
   }
 
+  /**
+   * selektor kolom
+   * @return mengembalikan banyak kolom dari matriks
+   */
   public int getN() {
     return this.n;
   }
-
+  
+  /**
+   * mencari bentuk eselon
+   * @return mengembalikan matriks eselon
+   */
   public Matrix getEchelon() {
     return gaussElim(new Matrix(this));
   }
   
+  /**
+   * mencari bentuk eselon tereduksi
+   * @return mengembalikan matriks eselon tereduksi
+   */
   public Matrix getReducedEchelon() {
     return gaussJordanElim(new Matrix(this));
   }
 
+  /**
+   * mencari matriks kofaktor
+   * @return mengembalikan matriks kefaktor
+   */
   public Matrix getCofactor() {
     Matrix res = new Matrix(this.m, this.n);
     try {
@@ -126,10 +160,18 @@ class Matrix {
     }
   }
 
+  /**
+   * mencari adjoin matriks
+   * @return mengembalikan matriks adjoin
+   */
   public Matrix getAdjoint(){
     return this.getCofactor().getTranspose();
   }
 
+  /**
+   * mencari nilai determinan menggunakan kofaktor
+   * @return mengembalikan determinan matriks
+   */
   public BigDecimal getDeterminantCofactor() {
     BigDecimal det = BigDecimal.ZERO;
     Matrix M = new Matrix(this);
@@ -167,6 +209,10 @@ class Matrix {
     return det;
   }
 
+  /**
+   * mencari nilai determinan menggunakan Gauss
+   * @return mengembalikan determinan matriks
+   */
   public BigDecimal getDeterminantG() {
     // Pre kondisi n == m
     BigDecimal det = BigDecimal.ONE;
@@ -231,6 +277,10 @@ class Matrix {
     return det;
   }
 
+  /**
+   * mencari nilai determinan menggunakan Gauss-Jordan
+   * @return mengembalikan determinan matriks
+   */
   public BigDecimal getDeterminantGJ() {
     // Pre kondisi n == m
     BigDecimal det = BigDecimal.ONE;
@@ -297,6 +347,10 @@ class Matrix {
     return det;
   }
 
+  /**
+   * mencari matriks transpose
+   * @return mengembalikan matriks transpose
+   */
   public Matrix getTranspose(){
     Matrix res = new Matrix(this.n, this.m);
 
@@ -309,6 +363,10 @@ class Matrix {
     return res;
   }
 
+  /**
+   * mencari matriks balikan menggunakan Gauss-Jordan
+   * @return mengembalikan matriks balikan
+   */
   public Matrix getInverseGJ() {
     // kalo ga ketemu, return matrix null
     // kalo ketemu return matrix inversenya
@@ -344,6 +402,10 @@ class Matrix {
     return res;
   }
 
+  /**
+   * mencari matriks balikan menggunakan kofaktor
+   * @return mengembalikan matriks balikan
+   */
   public Matrix getInverseCofactor() {
     Matrix ret = new Matrix(this);
     BigDecimal det = ret.getDeterminantGJ();
@@ -355,10 +417,17 @@ class Matrix {
   //================================================================================
   // Setter
   //================================================================================
+
+  /**
+   * mengubah matriks ini menjadi bentuk eselon
+   */
   public void toEchelon() {
     gaussElim(this);
   }
 
+  /**
+   * mengubah matriks ini menjadi bentuk eselon tereduksi
+   */
   public void toReducedEchelon() {
     gaussJordanElim(this);
   }
@@ -367,6 +436,9 @@ class Matrix {
   // Input / Output
   //================================================================================
 
+  /**
+   * menampilkan matriks ke layar
+   */
   public void show() {
     try {
       if (this.mat == null) {
@@ -386,6 +458,10 @@ class Matrix {
     }
   }
   
+  /**
+   * menyimpan matriks ke file
+   * @param filename nama file
+   */
   public void showFile(String filename) throws IOException {
     try {
       if (this.mat == null) {
@@ -413,6 +489,9 @@ class Matrix {
     }
   }
 
+  /**
+   * metode statik untuk membaca matriks dari keyboard
+   */
   public static Matrix readKB() {
     Scanner in = new Scanner(System.in);
     int m_sz, n_sz;
@@ -431,6 +510,10 @@ class Matrix {
     return ret;
   }
 
+  /**
+   * metode statik untuk membaca matriks dari file
+   * @param filename nama file
+   */
   public static Matrix readFile(String filename){
     int line_cnt=0;
     String line;
@@ -467,7 +550,12 @@ class Matrix {
       return mat;                  
     }    
   }
-
+  
+  /**
+   * metode statik untuk parsing dari string ke BigDecimal
+   * @param s array string
+   * @param n banyak baris string
+   */
   private static BigDecimal[][] parse(String[] s, int n){
     BigDecimal[][] res;
 
@@ -497,24 +585,45 @@ class Matrix {
   // OBE (Basic Elementary Operation) & Elimination Helpers
   //================================================================================
 
+  /**
+   * swap berguna untuk menukar baris
+   * @param r1 baris 1
+   * @param r2 baris 2
+   */
   public void swap(int r1, int r2) {
     BigDecimal[] tmp = mat[r1];
     mat[r1] = mat[r2];
     mat[r2] = tmp;
   }
 
+  /**
+   * menjumlahkan baris dengan kelipatan baris lain
+   * @param r1 baris 1
+   * @param r2 baris 2
+   * @param fac skalar
+   */
   public void add(int r1, int r2, BigDecimal fac) {
     for (int i=1;i<=this.getN();i++){
       this.mat[r1][i] = this.mat[r1][i].add(this.mat[r2][i].multiply(fac));
     }
   }
 
+  /**
+   * mengalikan baris dengan skalar
+   * @param r baris
+   * @param x skalar
+   */
   public void rowtimesX(int r, BigDecimal x) {
     for (int i=1;i<=this.getN();i++){
       this.mat[r][i] = this.mat[r][i].multiply(x);
     }
   }
 
+  /**
+   * mencari nilai terdepan dari baris
+   * @param r baris
+   * @return nilai depan
+   */
   public int leading(int r) {
     for (int i=1;i<=this.getN();i++){
       if (!Util.isZero(mat[r][i])) return i;
@@ -523,6 +632,13 @@ class Matrix {
     return -1;
   }
 
+  /**
+   * mencari nonzero pertama pada baris
+   * @param M matriks
+   * @param r baris
+   * @param c kolom
+   * @return nilai non zero pertama
+   */
   private int nextCandidate(Matrix M, int r, int c) {
     int ret = r;
     for (int i = r; i <= M.m; i++) {
@@ -533,6 +649,13 @@ class Matrix {
     return ret;
   }
 
+  /**
+   * mencari leading nonzero pertama
+   * @param M matriks
+   * @param row baris
+   * @param col kolom
+   * @return nilai non zero pertama
+   */
   private int findNextLeading(Matrix M, int row, int col) {
     int ret = col;
     while (Util.isZero(M.mat[row][ret]) && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
@@ -541,6 +664,12 @@ class Matrix {
     return ret;
   }
 
+  /**
+   * membagi baris agar leadingnya menjadi 1
+   * @param M matriks
+   * @param r baris
+   * @param c kolom
+   */
   private void normalize(Matrix M, int row, int col) {
     BigDecimal norm = M.mat[row][col];
     for (int j = col; j <= M.n; j++) {
@@ -551,6 +680,12 @@ class Matrix {
   //================================================================================
   // Operation
   //================================================================================
+
+  /**
+   * mengalikan matriks dengan matriks M
+   * @param M matriks pengali
+   * @return hasil perkalian
+   */
   public Matrix mult(Matrix M) {
     Matrix ret = new Matrix(this.m, M.n);
     for (int i = 1; i <= ret.m; i++) {
@@ -563,6 +698,11 @@ class Matrix {
     return ret;
   }
 
+  /**
+   * mengalikan matriks dengan konstanta
+   * @param k konstanta
+   * @return hasil perkalian
+   */
   public Matrix multKons(BigDecimal k) {
     Matrix ret = new Matrix(this);
     for (int i = 1; i <= ret.getM(); i++) {
@@ -573,12 +713,22 @@ class Matrix {
     return ret;
   }
 
+  /**
+   * membagi matriks dengan konstanta
+   * @param k konstanta
+   * @return hasil pembagian
+   */
   public Matrix divKons(BigDecimal k) {
     Matrix ret = new Matrix(this);
     BigDecimal kdiv = BigDecimal.ONE.divide(k, Util.divScale, RoundingMode.HALF_UP);
     return ret.multKons(kdiv);
   }
 
+  /**
+   * melakukan eliminasi Gauss
+   * @param M matriks
+   * @return matriks setelah eliminasi Gauss
+   */
   private Matrix gaussElim(Matrix M) {
     int nex = 1;
     for (int no = 1; no <= Math.min(M.m, M.n); no++) {
@@ -633,6 +783,11 @@ class Matrix {
     return M;
   }
 
+  /**
+   * melakukan eliminasi Gauss-Jordan
+   * @param M matriks
+   * @return matriks setelah eliminasi Gauss-Jordan
+   */
   private Matrix gaussJordanElim(Matrix M) {
     int nex = 1;
     for (int no = 1; no <= Math.min(M.m, M.n); no++) {
