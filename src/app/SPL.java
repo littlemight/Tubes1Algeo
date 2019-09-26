@@ -1,6 +1,8 @@
 package app;
 import app.Matrix;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -189,16 +191,8 @@ class SPL {
 
     for (int i=c-1;i>0;i--){
       for (int j=i+1;j<c;j++){
-<<<<<<< HEAD
-        double fac;
-        if (Math.abs(free_sol.mat[i][j]) < EPS){
-          free_sol.mat[i][j]=0;
-          continue;
-        }
-=======
         BigDecimal fac;
         if (Util.isZero(free_sol.mat[i][j])) continue;
->>>>>>> 0ff16b9394029fd3c1c0fb1af44abcd17aedaf41
         
         fac = free_sol.mat[i][j];
         free_sol.mat[i][j] = BigDecimal.ZERO;
@@ -250,17 +244,10 @@ class SPL {
       System.out.print("X" + i + " =");
       first = true;
       for (int j=1;j<c;j++){
-<<<<<<< HEAD
-        if (Math.abs(free_solution.mat[i][j])<EPS) continue;
-        nemu = true;
-        if (free_solution.mat[i][j]<0){
-          if (free_solution.mat[i][j]==-1){
-=======
         if (Util.isZero(free_solution.mat[i][j])) continue;
-
+        nemu = true;
         if (free_solution.mat[i][j].compareTo(BigDecimal.ZERO) < 0){
           if (free_solution.mat[i][j].equals(BigDecimal.ONE.negate())){
->>>>>>> 0ff16b9394029fd3c1c0fb1af44abcd17aedaf41
             System.out.print(" -");
             if (!first) {
               System.out.print(" ");
@@ -288,14 +275,8 @@ class SPL {
         first = false;
         System.out.print(free_var[j-1]);
       }
-<<<<<<< HEAD
-      if (Math.abs(free_solution.mat[i][c])>EPS){
-        nemu = true;
-        if (free_solution.mat[i][c]<0) {
-=======
       if (!Util.isZero(free_solution.mat[i][c])){
         if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
->>>>>>> 0ff16b9394029fd3c1c0fb1af44abcd17aedaf41
           System.out.print(" -");
           if (!first) {
             System.out.print(" ");
@@ -316,6 +297,73 @@ class SPL {
 
     for (int i=1;i<=r;i++){
       sol.mat[i][1] = free_solution.mat[i][c];
+    }
+  }
+
+  public void showFile(String filename){
+    try {
+      PrintWriter pwriter = new PrintWriter(new FileWriter(filename));
+
+      if (state == 0) {
+        System.out.println("Solusi tidak ada");
+        return;
+      }
+      int r=free_solution.getM(), c=free_solution.getN();
+      boolean first;
+      for (int i=1;i<=r;i++){
+        boolean nemu=false;
+        pwriter.print("X" + i + " =");
+        first = true;
+        for (int j=1;j<c;j++){
+          if (Util.isZero(free_solution.mat[i][j])) continue;
+          nemu = true;
+          if (free_solution.mat[i][j].compareTo(BigDecimal.ZERO) < 0){
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE.negate())){
+              pwriter.print(" -");
+              if (!first) {
+                pwriter.print(" ");
+              }  
+            } else{
+              pwriter.print(" -");
+              if (!first) {
+                pwriter.print(" ");
+              }  
+              pwriter.print(Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          } else if (first){
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+              pwriter.print(" ");  
+            } else{
+              pwriter.print(" " + Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          } else{
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+              pwriter.print(" + ");  
+            } else{
+             pwriter.print(" + " + Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          }
+          first = false;
+          pwriter.print(free_var[j-1]);
+        }
+        if (!Util.isZero(free_solution.mat[i][c])){
+          if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
+            pwriter.print(" -");
+            if (!first) {
+              pwriter.print(" ");
+            }  
+            pwriter.print(Util.formatOutputAbs(free_solution.mat[i][c]));
+          } else if (!first) {
+            pwriter.print(" + " + Util.formatOutputAbs(free_solution.mat[i][c]));
+          } else pwriter.print(" " + Util.formatOutputAbs(free_solution.mat[i][c]));
+        }
+        if (!nemu) pwriter.print(" " + 0);
+        pwriter.println();
+      }
+
+      pwriter.close();
+    } catch (NullPointerException e) {
+      System.out.println("Matriks tidak valid.");
     }
   }
 }

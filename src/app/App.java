@@ -42,6 +42,7 @@ public class App {
             solusi.showAug();
             solusi.showEF();
             solusi.showSol();
+            solusi.showFile("../test/hasil.txt");
             System.out.println();
     
             System.out.println("Pake Gauss Jordan: ");
