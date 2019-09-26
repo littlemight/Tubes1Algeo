@@ -1,5 +1,6 @@
 package app;
 import java.util.*;
+import java.io.*;
 
 public class Driver {
 
@@ -56,6 +57,9 @@ public class Driver {
             System.out.print("select a command: ");
             cmd = in.nextInt();
             switch(cmd){
+                case 1:
+                    linearProgram(in);
+                    break;
                 case 2:
                     determinantProgram(in);
                     break;
@@ -102,7 +106,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                mat.showFile(test);
+                try {
+                    mat.showFile(test);
+                } catch(IOException e){
+                    System.out.println("Hasil tidak bisa disimpan ke file. ");
+                }
             } 
 
         } else {
@@ -143,7 +151,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                inverse.showFile(test);
+                try {
+                    inverse.showFile(test);
+                } catch(IOException e){
+                    System.out.println("Hasil tidak bisa disimpan ke file. ");
+                }
             } 
 
         } else {
@@ -183,7 +195,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                cofactor.showFile(test);
+                try {
+                    cofactor.showFile(test);
+                } catch(IOException e){
+                    System.out.println("Hasil tidak bisa disimpan ke file. ");
+                }
             } 
 
         } else {
@@ -223,7 +239,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                adjoint.showFile(test);
+                try {
+                    adjoint.showFile(test);
+                } catch(IOException e){
+                    System.out.println("Hasil tidak bisa disimpan ke file. ");
+                }
             } 
 
         } else {
