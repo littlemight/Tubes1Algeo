@@ -132,7 +132,37 @@ public class Driver {
                 break;
         }
 
-        
+        System.out.println("Apakah anda ingin menyimpan hasil matriks augmented ke file? (Y/N) ");
+        String test = in.nextLine();
+        if(test.equals("Y")){
+            System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+            test = in.nextLine();
+            try {
+                spl.showAugFile(test);
+            } catch (IOException e){
+                System.out.println("Output ke file " + test + " gagal.");
+            } 
+        } 
+        System.out.println("Apakah anda ingin menyimpan hasil matriks echelon ke file? (Y/N) ");
+        test = in.nextLine();
+        if(test.equals("Y")){
+            System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+            test = in.nextLine();
+            try {
+                spl.showEFFile(test);
+            } catch (IOException e){
+                System.out.println("Output ke file " + test + " gagal.");
+            } 
+        } 
+        System.out.println("Apakah anda ingin menyimpan solusi dari sistem persamaan linear ke file? (Y/N) ");
+        test = in.nextLine();
+        if(test.equals("Y")){
+            System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+            test = in.nextLine();
+            spl.showFile(test);
+        } 
+
+
     }
 
     public static void determinantProgram(Scanner in){
@@ -161,29 +191,7 @@ public class Driver {
         if(mat.isSquare()){
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
-<<<<<<< HEAD
-            System.out.println("Tentukan metode yang ingin anda gunakan: ");
-            System.out.println("1. Gauss");
-            System.out.println("2. Gauss-Jordan");
-            System.out.println("3. Ekspansi Kofaktor");
-            do {
-                cmd = in.nextInt();
-            } while(cmd > 3 || cmd < 1);
-            in.nextLine();
-            switch(cmd){
-                case 1:
-                    System.out.println("Determinan dari matriks tersebut menggunakan metode Gauss adalah: " + Util.formatOutputLong(mat.getDeterminantG()));
-                    break;
-                case 2:
-                    System.out.println("Determinan dari matriks tersebut menggunakan metode Gauss-Jordan adalah: " + Util.formatOutputLong(mat.getDeterminantGJ()));
-                    break;
-                case 3:
-                    System.out.println("Determinan dari matriks tersebut menggunakan metode ekspansi kofaktor adalah: " + Util.formatOutputLong(mat.getDeterminantCofactor()));
-                    break;
-            }
-=======
             System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminantGJ());
->>>>>>> 32b4baa33add3e8cc6d39a239bf41e533d12c722
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
             if(test.equals("Y")){
@@ -191,15 +199,9 @@ public class Driver {
                 test = in.nextLine();
                 try {
                     mat.showFile(test);
-<<<<<<< HEAD
-                } catch(IOException e){
-                    System.out.println("Hasil tidak bisa disimpan ke file. ");
-                }
-=======
                 } catch (IOException e){
                     System.out.println("Output ke file " + test + " gagal.");
                 } 
->>>>>>> 32b4baa33add3e8cc6d39a239bf41e533d12c722
             } 
 
         } else {
@@ -244,15 +246,9 @@ public class Driver {
                 test = in.nextLine();
                 try {
                     inverse.showFile(test);
-<<<<<<< HEAD
-                } catch(IOException e){
-                    System.out.println("Hasil tidak bisa disimpan ke file. ");
-                }
-=======
                 } catch (IOException e){
                     System.out.println("Output ke file " + test + " gagal.");
                 } 
->>>>>>> 32b4baa33add3e8cc6d39a239bf41e533d12c722
             } 
 
         } else {
@@ -295,17 +291,10 @@ public class Driver {
                 test = in.nextLine();
                 try {
                     cofactor.showFile(test);
-<<<<<<< HEAD
-                } catch(IOException e){
-                    System.out.println("Hasil tidak bisa disimpan ke file. ");
-                }
-            }
-=======
                 } catch (IOException e){
                     System.out.println("Output ke file " + test + " gagal.");
                 } 
             } 
->>>>>>> 32b4baa33add3e8cc6d39a239bf41e533d12c722
 
         } else {
             System.out.println("Matriks tidak memiliki kofaktor karena bukan matriks persegi.");
@@ -347,15 +336,9 @@ public class Driver {
                 test = in.nextLine();
                 try {
                     adjoint.showFile(test);
-<<<<<<< HEAD
-                } catch(IOException e){
-                    System.out.println("Hasil tidak bisa disimpan ke file. ");
-                }
-=======
                 } catch (IOException e){
                     System.out.println("Output ke file " + test + " gagal.");
                 } 
->>>>>>> 32b4baa33add3e8cc6d39a239bf41e533d12c722
             } 
 
         } else {
