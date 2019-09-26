@@ -1,6 +1,7 @@
 package app;
 import java.util.*;
 import java.io.*;
+import app.*;
 
 public class Driver {
 
@@ -19,9 +20,9 @@ public class Driver {
         System.out.println("||                                              ||");
         System.out.println("--------------------------------------------------");
         System.out.println();
-        System.out.println("To continue, please type in 'menu' to enter the main menu, or 'exit' to quit the program");
+        System.out.println("Untuk melanjutkan, ketikkan 'menu' untuk memasuki, atau 'exit' untuk keluar program");
         System.out.println();
-        System.out.print("enter a command: ");
+        System.out.print("Masukkan perintah: ");
 
         String cmd = in.nextLine();
         do {
@@ -47,12 +48,12 @@ public class Driver {
         int cmd;
         do {
             System.out.println("----------------------MENU------------------------");
-            System.out.println("1. Linear System of Equation");
-            System.out.println("2. Determinant of a Matrix");
-            System.out.println("3. Inverse Matrix");
-            System.out.println("4. Cofactor Matrix");
-            System.out.println("5. Adjoint Matrix");
-            System.out.println("6. Polynomial Interpolation");
+            System.out.println("1. Sistem Persamaan Linier");
+            System.out.println("2. Determinant Matriks");
+            System.out.println("3. Matriks Balikan");
+            System.out.println("4. Matriks Kofaktor");
+            System.out.println("5. Matriks Adjoin");
+            System.out.println("6. Interpolasi Polinom");
             System.out.println("7. Studi Kasus");
             System.out.println("8. Exit");
             System.out.println("--------------------------------------------------");
@@ -83,20 +84,20 @@ public class Driver {
                     break;
             }
         } while(cmd!=8);
-        System.out.println("Thank you for trying the trial.");
+        System.out.println("Terima kasih sudah menggunakan produk kami, more at junho.id/buy.");
     }
 
     public static void linearProgram(Scanner in){
-        System.out.println("Program ini akan mencari solusi dari sistem persamaan linear dengan menggunakan bermacam-macam metode");
+        System.out.println("Program ini akan mencari solusi dari sistem persamaan linier dengan menggunakan bermacam-macam metode");
         System.out.println("Silahkan pilih jenis input (pastikan persamaan sudah dalam bentuk matriks augmented): ");
         System.out.println("1. Input Keyboard");
         System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
+        System.out.print("Masukkan perintah: ");
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         in.nextLine();
@@ -104,27 +105,40 @@ public class Driver {
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
-            System.out.println("masukkan nama file yang berisi matriks (lengkap dengan ekstensi): ");
+            System.out.println("Masukkan nama file yang berisi matriks (lengkap dengan ekstensi): ");
             String filename = in.nextLine();
+            filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
         }
-        titit(in, mat);
+        if (mat.getN() <= 1) {
+            System.out.println("Matriks augmented tidak valid.");
+        } else {
+            System.out.println("Matriks yang anda masukkan adalah: ");
+            mat.show();
+            splUtil(in, mat);
+        }
     }
 
-    private static void titit(Scanner in, Matrix t){
+    private static void splUtil(Scanner in, Matrix t){
         int cmd;
         SPL spl = new SPL(t);
-        System.out.println("Pilih metode yang ingin digunakan untuk mencari solusi dari sistem persamaan linear");
+        System.out.println("Pilih metode yang ingin digunakan untuk mencari solusi dari sistem persamaan linier");
         System.out.println("1. Metode eliminasi Gauss");
         System.out.println("2. Metode eliminasi Gauss-Jordan");
         System.out.println("3. Metode matriks balikan");
         System.out.println("4. Kaidah Cramer");
+
+        System.out.print("Masukkan perintah: ");
         do {
             cmd = in.nextInt();
+            if (cmd < 1 || cmd > 4) {
+                System.out.println("Perintah tidak valid! coba lagi");
+                System.out.print("Masukkan perintah: ");
+            }
         } while(cmd < 1 || cmd > 4);
         in.nextLine();
         
-        System.out.println("Berikut solusi dari sistem persamaan linear yang sudah di masukkan.");
+        System.out.println("Berikut solusi dari sistem persamaan linier yang sudah di masukkan.");
         switch(cmd){
             case 1:
                 spl.solveGauss();
@@ -163,18 +177,22 @@ public class Driver {
                 System.out.println("Output ke file " + test + " gagal.");
             } 
         } 
-        System.out.println("Apakah anda ingin menyimpan hasil matriks echelon ke file? (Y/N) ");
-        test = in.nextLine();
-        if(test.equals("Y")){
-            System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+
+        if (cmd == 1 || cmd == 2) {
+            System.out.println("Apakah anda ingin menyimpan hasil matriks eselon ke file? (Y/N) ");
             test = in.nextLine();
-            try {
-                spl.showEFFile(test);
-            } catch (IOException e){
-                System.out.println("Output ke file " + test + " gagal.");
+            if(test.equals("Y")){
+                System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+                test = in.nextLine();
+                try {
+                    spl.showEFFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
             } 
-        } 
-        System.out.println("Apakah anda ingin menyimpan solusi dari sistem persamaan linear ke file? (Y/N) ");
+        }
+        
+        System.out.println("Apakah anda ingin menyimpan solusi dari sistem persamaan linier ke file? (Y/N) ");
         test = in.nextLine();
         if(test.equals("Y")){
             System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
@@ -183,37 +201,21 @@ public class Driver {
         } 
     }
 
-    public static void interpolationProgram(Scanner in){
-        System.out.println("Program ini akan melakukan interpolasi pada titik-titik yang di input menggunakan keyboard atau dari file");
-        System.out.println("Silahkan pilih jenis input titik: ");
-        System.out.println("1. Input Keyboard");
-        System.out.println("2. File");
-        System.out.print("masukkan perintah: ");
-        int cmd = in.nextInt();
-
-        while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
-            cmd = in.nextInt();
-        }
-        in.nextLine();
-        Interpolasi itp;
-        if(cmd==1){
-                itp = Interpolasi.readKB();
-        } else {
-            System.out.println("masukkan nama file yang berisi data titik-titik yang akan di interpolasi: ");
-            String filename = in.nextLine();
-            itp = Interpolasi.readFile(filename);
-        }
-
-        
+    private static void interpolasiUtil(Scanner in, Interpolasi itp){
+        int cmd;
         System.out.println("Pilih metode yang ingin digunakan untuk interpolasi");
         System.out.println("1. Metode eliminasi Gauss");
         System.out.println("2. Metode eliminasi Gauss-Jordan");
         System.out.println("3. Metode matriks balikan");
         System.out.println("4. Kaidah Cramer");
+
+        System.out.print("Masukkan perintah: ");
         do {
             cmd = in.nextInt();
+            if (cmd < 1 || cmd > 4) {
+                System.out.println("Perintah tidak valid! coba lagi");
+                System.out.print("Masukkan perintah: ");
+            }
         } while(cmd < 1 || cmd > 4);
         in.nextLine();
 
@@ -242,15 +244,14 @@ public class Driver {
             while(q > 0){
                 System.out.print("Masukkan x: ");
                 double x = in.nextDouble();
-                if(itp.isInRange(x)){
-                    itp.queryY(x);
-                } else {
+                if(!itp.isInRange(x)){
                     itp.warnX();
                 }
+                itp.queryY(x);
                 q--;
             }
+            in.nextLine();
         } 
-        in.nextLine();
 
         System.out.println("Apakah anda ingin menyimpan persamaan hasil interpolasi ke file? (Y/N) ");
         test = in.nextLine();
@@ -264,7 +265,38 @@ public class Driver {
             } 
         } 
 
+    }
 
+    public static void interpolationProgram(Scanner in){
+        System.out.println("Program ini akan melakukan interpolasi pada titik-titik yang di input menggunakan keyboard atau dari file");
+        System.out.println("Silahkan pilih jenis input titik: ");
+        System.out.println("1. Input Keyboard");
+        System.out.println("2. File");
+        System.out.print("Masukkan perintah: ");
+        int cmd = in.nextInt();
+
+        while(cmd!=1 && cmd !=2){
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
+            cmd = in.nextInt();
+        }
+
+        in.nextLine();
+        Interpolasi itp;
+        if(cmd==1){
+            itp = Interpolasi.readKB();
+            if (itp == null) {
+                System.out.println("Masukkan titik tidak valid (ada titik yang tidak unik, atau ada satu absis dengan dua ordinat).");
+                return;
+            }
+        } else {
+            System.out.println("Masukkan nama file yang berisi data titik-titik yang akan di interpolasi: ");
+            String filename = in.nextLine();
+            filename = "./test/" + filename;
+            itp = Interpolasi.readFile(filename);
+        }
+
+        interpolasiUtil(in, itp);
     }
 
     public static void caseStudies(Scanner in){
@@ -273,8 +305,8 @@ public class Driver {
         System.out.println("2. 1_2");
         System.out.println("3. 1_3");
         System.out.println("4. Matriks Hilbert");
-        System.out.println("5. spl_1");
-        System.out.println("6. spl_2");
+        System.out.println("5. 2_1");
+        System.out.println("6. 2_2");
         System.out.println("7. 2_i");
         System.out.println("8. 2_ii");
         System.out.println("9. 3_5x5");
@@ -293,8 +325,94 @@ public class Driver {
         StudiKasus.initKasus();
         switch(cmd){
             case 1:
-                titit(in, StudiKasus.spl1_1);
+                splUtil(in, StudiKasus.spl1_1);
                 break;
+            case 2:
+                splUtil(in, StudiKasus.spl1_2);
+                break;
+            case 3:
+                splUtil(in, StudiKasus.spl1_3);
+                break;
+            case 4:
+                System.out.println("Studi Kasus untuk matriks Hilbert, untuk nilai n dari 1 sampai 10");
+                System.out.print("Masukkan banyaknya uji coba: ");
+                int t = in.nextInt();
+                while(t > 0){
+                    int n;
+                    do {
+                        System.out.print("Masukkan n : ");
+                        n = in.nextInt();
+                        if(n < 1 || n > 10){
+                            System.out.println("masukkan tidak valid!");
+                        }
+                    } while (n < 1 || n > 10);
+                    splUtil(in, StudiKasus.hilbert[n]);
+                    t--;
+                }
+                in.nextLine();
+                break;
+            case 5:
+                splUtil(in, StudiKasus.spl2_1);
+                break;
+            case 6:
+                splUtil(in, StudiKasus.spl2_2);
+                break;
+            case 7:
+                splUtil(in, StudiKasus.spl2_i);
+                break;
+            case 8:
+                splUtil(in, StudiKasus.spl2_ii);
+                break;
+            case 9:
+                detUtil(in, StudiKasus.det3_5);
+                break;
+            case 10:
+                detUtil(in, StudiKasus.det3_10);
+                break;
+            case 11:
+                splUtil(in, StudiKasus.spl4_rang);
+                break;
+            case 12:
+                interpolasiUtil(in, StudiKasus.inter_penduduk);
+                break;
+            case 13:
+                interpolasiUtil(in, StudiKasus.inter_pendudukEx);
+                break;
+            case 14:
+                int n;
+                do {
+                    System.out.print("Masukkan derajat polinom yang ingin dibuat: ");
+                    n = in.nextInt();
+                    if(n<1){
+                        System.out.println("derajat tidak valid");
+                    }
+                } while(n<1);
+                StudiKasus.initSeder(n);
+                interpolasiUtil(in, StudiKasus.inter_seder);
+                break;
+        }
+    }
+
+    private static void detUtil(Scanner in, Matrix mat){
+        in.nextLine();
+        if(mat.isSquare()){
+            System.out.println("Matriks yang anda masukkan adalah: ");
+            mat.show();
+            System.out.println("Determinan dari matriks tersebut adalah: " + Util.formatOutput(mat.getDeterminantGJ()));
+            System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
+            String test = in.nextLine();
+            if(test.equals("Y")){
+                System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+                test = in.nextLine();
+                try {
+                    mat.showFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
+            } 
+
+        } else {
+            System.out.println("Matriks tidak memiliki determinan karena bukan matriks persegi.");
         }
     }
 
@@ -318,20 +436,47 @@ public class Driver {
         } else { // pasti cmd=2
             System.out.println("masukkan nama file yang berisi matriks (lengkap dengan ekstensi): ");
             String filename = in.nextLine();
+            filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
         }
+        // getDeterminanG
+        // getDeterminanGJ
+        // getDeterminanCofactor
 
         if(mat.isSquare()){
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
-            System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminantGJ());
+            System.out.println("Silahkan pilih metode yang akan digunakan untuk mencari determinan: ");
+            System.out.println("1. Gauss");
+            System.out.println("2. Gauss-Jordan");
+            System.out.println("3. Kofaktor");
+            System.out.print("masukkan perintah: ");
+            cmd = in.nextInt();
+            while(cmd < 1 || cmd > 3){
+                System.out.println("Perintah tidak valid! coba lagi");
+                System.out.print("Masukkan perintah: ");
+                cmd = in.nextInt();
+            }
+            switch(cmd){
+                case 1:
+                    System.out.println("Determinan dari matriks tersebut menggunakan eliminasi Gauss adalah: " + Util.formatOutputLong(mat.getDeterminantG()));
+                    break;
+                case 2:
+                    System.out.println("Determinan dari matriks tersebut menggunakan eliminasi Gauss-Jordan adalah: " + Util.formatOutputLong(mat.getDeterminantGJ()));
+                    break;
+                case 3:
+                    System.out.println("Determinan dari matriks tersebut menggunakan matriks kofaktor adalah: " + Util.formatOutputLong(mat.getDeterminantCofactor()));
+                    break;
+
+            }
+            in.nextLine();
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
                 test = in.nextLine();
                 try {
-                    mat.showFile(test);
+                    Util.showBD(mat.getDeterminantG(), test);
                 } catch (IOException e){
                     System.out.println("Output ke file " + test + " gagal.");
                 } 
@@ -352,8 +497,8 @@ public class Driver {
         int cmd = in.nextInt();
 
         while(cmd!=1 && cmd !=2){
-            System.out.println("perintah tidak valid! coba lagi");
-            System.out.print("masukkan perintah: ");
+            System.out.println("Perintah tidak valid! coba lagi");
+            System.out.print("Masukkan perintah: ");
             cmd = in.nextInt();
         }
         in.nextLine();
@@ -361,8 +506,9 @@ public class Driver {
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
-            System.out.println("masukkan nama file yang berisi matriks: ");
+            System.out.println("Masukkan nama file yang berisi matriks: ");
             String filename = in.nextLine();
+            filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
         }
 
@@ -370,13 +516,13 @@ public class Driver {
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
 
-            System.out.println("pilih metode untuk mencari matriks balikan");
+            System.out.println("Pilih metode untuk mencari matriks balikan");
             System.out.println("1. Gauss-Jordan");
             System.out.println("2. Matriks Adjoin");
             do {
                 cmd = in.nextInt();
             } while(cmd < 1 || cmd > 2);
-            Matrix inverse;
+            Matrix inverse = new Matrix();
             switch(cmd){
                 case 1:
                     inverse = mat.getInverseGJ();
@@ -424,6 +570,7 @@ public class Driver {
         } else { // pasti cmd=2
             System.out.println("masukkan nama file yang berisi matriks: ");
             String filename = in.nextLine();
+            filename = "./test/" + filename;            
             mat = Matrix.readFile(filename);
         }
 
@@ -463,12 +610,14 @@ public class Driver {
             cmd = in.nextInt();
         }
         in.nextLine();
+
         Matrix mat;
         if(cmd==1){
             mat = Matrix.readKB();
         } else { // pasti cmd=2
             System.out.println("masukkan nama file yang berisi matriks: ");
             String filename = in.nextLine();
+            filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
         }
 

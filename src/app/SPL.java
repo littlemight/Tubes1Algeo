@@ -64,7 +64,7 @@ class SPL {
     BigDecimal det = A.getDeterminantGJ();
     this.state = (det.compareTo(BigDecimal.ZERO) == 0) ? 0 : 1;
     this.sol = new Matrix(A.getM(), 1);
-    if (Util.isZero(det)) {
+    if (det.compareTo(BigDecimal.ZERO) == 0) {
       return;
     }
     try {
@@ -81,6 +81,10 @@ class SPL {
         }
         BigDecimal det2 = dummy.getDeterminantGJ();
         this.sol.mat[i][1] = det2.divide(det, Util.divScale, RoundingMode.HALF_UP);
+      }
+      free_solution = new Matrix(this.A.getN(), this.A.getN());
+      for (int i = 1; i <= this.A.getN(); i++) {
+        free_solution.mat[i][this.A.getN()] = this.sol.mat[i][1];
       }
     } catch (ArrayIndexOutOfBoundsException e){
       System.out.println("Dimensi matriks tidak valid untuk metode cramer.");
@@ -123,6 +127,11 @@ class SPL {
   public void solveInverse() {
     if (A.getInverseGJ().mat != null) {
       sol = new Matrix((A.getInverseGJ()).mult(B));
+      free_solution = new Matrix(this.A.getN(), this.A.getN());
+      for (int i = 1; i <= this.A.getN(); i++) {
+        free_solution.mat[i][this.A.getN()] = this.sol.mat[i][1];
+      }
+      this.state = 1;
     } else {
       sol.mat = null;
     }
@@ -370,7 +379,7 @@ class SPL {
       PrintWriter pwriter = new PrintWriter(new FileWriter(filename));
 
       if (state == 0) {
-        System.out.println("Solusi tidak ada");
+        pwriter.write("Solusi tidak ada");
         pwriter.close();
         return;
       }

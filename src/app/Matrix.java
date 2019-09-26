@@ -291,9 +291,9 @@ class Matrix {
         break;
       }
     }
-    if (Util.isZero(det)) {
-      det = BigDecimal.ZERO;
-    }
+    // if (Util.isZero(det)) {
+    //   det = BigDecimal.ZERO;
+    // }
     return det;
   }
 

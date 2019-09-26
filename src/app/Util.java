@@ -1,5 +1,8 @@
 package app;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -52,5 +55,11 @@ class Util {
 
   public static boolean isZero(BigDecimal val) {
     return (val.abs().compareTo(EPS) < 0);
+  }
+
+  public static void showBD(BigDecimal val, String filename) throws IOException {
+      BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+      writer.write(Util.formatOutputLong(val));
+      writer.close();
   }
 }

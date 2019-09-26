@@ -203,7 +203,6 @@ class Interpolasi {
 
   public boolean isInRange(double x) {
     BigDecimal xdec = BigDecimal.valueOf(x);
-    System.out.println(x_min + " " + x_max);
     return (xdec.compareTo(x_min) >= 0 && xdec.compareTo(x_max) <= 0);
   }
 
@@ -227,7 +226,7 @@ class Interpolasi {
       System.out.println("Masukkan nama file:");
       String str = in.nextLine();
       System.out.println(str);
-      Interpolasi sol = Interpolasi.readFile("../test/" + str);
+      Interpolasi sol = Interpolasi.readFile("./test/" + str);
       System.out.println();
 
       System.out.println("GAUSS");
