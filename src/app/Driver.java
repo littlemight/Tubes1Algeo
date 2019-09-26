@@ -75,6 +75,9 @@ public class Driver {
                 case 5:
                     adjointProgram(in);
                     break;
+                case 6:
+                    interpolationProgram(in);
+                    break;
             }
         } while(cmd!=8);
         System.out.println("Thank you for trying the trial.");
@@ -162,6 +165,88 @@ public class Driver {
             System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
             test = in.nextLine();
             spl.showFile(test);
+        } 
+    }
+
+    public static void interpolationProgram(Scanner in){
+        System.out.println("Program ini akan melakukan interpolasi pada titik-titik yang di input menggunakan keyboard atau dari file");
+        System.out.println("Silahkan pilih jenis input titik: ");
+        System.out.println("1. Input Keyboard");
+        System.out.println("2. File");
+        System.out.print("masukkan perintah: ");
+        int cmd = in.nextInt();
+
+        while(cmd!=1 && cmd !=2){
+            System.out.println("perintah tidak valid! coba lagi");
+            System.out.print("masukkan perintah: ");
+            cmd = in.nextInt();
+        }
+        in.nextLine();
+        Interpolasi itp;
+        if(cmd==1){
+                itp = Interpolasi.readKB();
+        } else {
+            System.out.println("masukkan nama file yang berisi data titik-titik yang akan di interpolasi: ");
+            String filename = in.nextLine();
+            itp = Interpolasi.readFile(filename);
+        }
+
+        
+        System.out.println("Pilih metode yang ingin digunakan untuk interpolasi");
+        System.out.println("1. Metode eliminasi Gauss");
+        System.out.println("2. Metode eliminasi Gauss-Jordan");
+        System.out.println("3. Metode matriks balikan");
+        System.out.println("4. Kaidah Cramer");
+        do {
+            cmd = in.nextInt();
+        } while(cmd < 1 || cmd > 4);
+        in.nextLine();
+
+        System.out.println("Berikut persamaan yang dihasilkan dari interpolasi dengan metode yang dipilih.");
+        switch(cmd){
+            case 1:
+                itp.solveInterGauss();
+                break;
+            case 2:
+                itp.solveInterGaussJordan();
+                break;
+            case 3:
+                itp.solveInterInverse();
+                break;
+            case 4:
+                itp.solveInterCramer();
+                break;
+        }
+        itp.showPersamaan();
+
+        System.out.println("Apakah anda ingin mencari nilai persamaan fungsi untuk masukan x? (Y/N) ");
+        String test = in.nextLine();
+        if(test.equals("Y")){
+            System.out.print("Masukkan jumlah titik yang ingin dicari: ");
+            int q = in.nextInt();
+            while(q > 0){
+                System.out.print("Masukkan x: ");
+                double x = in.nextDouble();
+                if(itp.isInRange(x)){
+                    itp.queryY(x);
+                } else {
+                    itp.warnX();
+                }
+                q--;
+            }
+        } 
+        in.nextLine();
+
+        System.out.println("Apakah anda ingin menyimpan persamaan hasil interpolasi ke file? (Y/N) ");
+        test = in.nextLine();
+        if(test.equals("Y")){
+            System.out.print("Masukkan nama file (lengkap dengan ekstensi): ");
+            test = in.nextLine();
+            try {
+                itp.showPersamaanFile(test);
+            } catch (IOException e){
+                System.out.println("Output ke file " + test + " gagal.");
+            } 
         } 
 
 
