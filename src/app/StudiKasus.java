@@ -5,6 +5,9 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
 
+/**
+ * class StudiKasus
+ */
 class StudiKasus {
   static Matrix spl1_1, spl1_2, spl1_3;
   static Matrix spl2_1, spl2_2, spl2_i, spl2_ii;
@@ -15,6 +18,9 @@ class StudiKasus {
   static Interpolasi inter_pendudukEx;
   static Interpolasi inter_seder;
 
+  /**
+   * inisialisasi matriks
+   */
   public static void initKasus() {
     // 1. SPL
     spl1_1 = new Matrix(Matrix.readFile("./test/1_" + 1 + ".txt"));
@@ -44,6 +50,10 @@ class StudiKasus {
     inter_pendudukEx = Interpolasi.readFile("./test/5_PendudukE6.txt");
   }
 
+  /**
+   * initseder inisialisasi sederhana
+   * @param n
+   */
   public static void initSeder(int n) { // n = derajat interpolasi yang diinginkan
     BigDecimal x_lo = BigDecimal.ZERO;
     BigDecimal x_hi = BigDecimal.valueOf(2);
@@ -64,6 +74,11 @@ class StudiKasus {
     inter_seder = new Interpolasi(x, y);
   }
 
+  /**
+   * membuat nilai fungsi f(x)
+   * @param x
+   * @return mengembalikan nilai fungsi f(x)
+   */
   public static BigDecimal func(BigDecimal x) {
     BigDecimal ret = BigDecimal.ZERO;
     MathContext mc = new MathContext(30);

@@ -6,10 +6,18 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Class Util berguna untuk menampung method-method pembantu untuk menjalankan program
+ */
 class Util { 
   private static BigDecimal EPS = BigDecimal.valueOf(1e-12);
   public static final int divScale = 50;
 
+  /**
+   * untuk format string
+   * @param val
+   * @return string setelah di format
+   */
   public static String formatOutputAbsLong(BigDecimal val) { // normalize absolute value of val
     String ret = "";
     if (!isZero(val)) {
@@ -18,6 +26,11 @@ class Util {
     return ret;
   }
 
+  /**
+   * untuk format string
+   * @param val
+   * @return string setelah di format
+   */
   public static String formatOutputAbs(BigDecimal val) { // normalize absolute value of val
     String ret = "";
     if (!isZero(val)) {
@@ -26,6 +39,11 @@ class Util {
     return ret;
   }
 
+  /**
+   * untuk format string
+   * @param val
+   * @return string setelah di format
+   */
   public static String formatOutputLong(BigDecimal val) { // normalize value of val
     String ret = "";
     if (!isZero(val)) {
@@ -35,6 +53,11 @@ class Util {
     return ret;
   }
 
+  /**
+   * untuk format string
+   * @param val
+   * @return string setelah di format
+   */
   public static String formatOutput(BigDecimal val) { // normalize value of val
     String ret = "";
     if (!isZero(val)) {
@@ -44,6 +67,12 @@ class Util {
     return ret;
   }
 
+  /**
+   * fast binary exponentiation pada BigDecimal
+   * @param val
+   * @param p 
+   * @return nilai setelah di pangkatkan
+   */
   public static BigDecimal fastPow(BigDecimal val, int p) {
     if (p == 0) return BigDecimal.ONE;
     if (p == 1) return val;
@@ -53,10 +82,21 @@ class Util {
     return ret; 
   }
 
+  /**
+   * mengecek apabila BigDecimal mendekati 0
+   * @param val
+   * @return menghasilkan true atau false
+   */
   public static boolean isZero(BigDecimal val) {
     return (val.abs().compareTo(EPS) < 0);
   }
 
+  /**
+   * menyimpan BigDecimal pada file
+   * @param val
+   * @param filename 
+   * @throws IOException
+   */
   public static void showBD(BigDecimal val, String filename) throws IOException {
       BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
       writer.write(Util.formatOutputLong(val));

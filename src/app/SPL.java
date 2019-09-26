@@ -8,6 +8,9 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.io.*;
 
+/**
+ * class SPL
+ */
 class SPL {
   public Matrix M; // Augmented matrix
   public Matrix A; // Coefficient matrix
@@ -18,11 +21,10 @@ class SPL {
   public static String[] free_var;
   private int state;
 
-  /*
-  0 : doesnt have sol
-  1 : unique sol
-  2 : many sol
-  */
+  /**
+   * konstruktor dari matriks augmented
+   * @param aug
+   */
   public SPL(Matrix aug) { // Constructor from augmented matrix
     M = new Matrix(aug);
     EF = new Matrix(M.getEchelon());
@@ -44,7 +46,11 @@ class SPL {
     genFreeVar();
   }
 
-
+  /**
+   * konstruktor dari matriks koefisien K, dan matriks hasil X
+   * @param K 
+   * @param X
+   */
   public SPL(Matrix K, Matrix X) {
     A = new Matrix(K);
     B = new Matrix(X);
@@ -59,7 +65,10 @@ class SPL {
     sol = new Matrix(M.getN(), 1);
     genFreeVar();
   }
-  
+
+  /**
+   * menyelesaikan SPL dengan Cramer
+   */
   public void solveCramer() {
     BigDecimal det = A.getDeterminantGJ();
     this.state = (det.compareTo(BigDecimal.ZERO) == 0) ? 0 : 1;
@@ -91,6 +100,9 @@ class SPL {
     }
   }
 
+  /**
+   * Melakukan pembangkit variabel bebas sebagai parameter
+   */
   public static void genFreeVar() {
     if (free_var != null) return;
     
@@ -112,18 +124,27 @@ class SPL {
     }
   }
 
+  /**
+   * menyelesaikan SPL dengan eliminasi Gauss
+   */
   public void solveGauss() {
     EF = new Matrix(M.getEchelon());
     state = this.getState();
     solvePar();
   }
 
+  /**
+   * menyelesaikan SPL dengan eliminasi Gauss-Jordan
+   */
   public void solveGaussJordan() {
     EF = new Matrix(M.getReducedEchelon());
     state = this.getState();
     solvePar();
   }
 
+  /**
+   * menyelesaikan SPL dengan matriks balikan
+   */
   public void solveInverse() {
     if (A.getInverseGJ().mat != null) {
       sol = new Matrix((A.getInverseGJ()).mult(B));
@@ -137,6 +158,10 @@ class SPL {
     }
   }
 
+  /**
+   * mengembalikan state apakah SPL memiliki solusi unik, solusi tak hingga, atau tidak memiliki solusi
+   * @return state
+   */
   private int getState() {
     int ret_state;
     if (!hasSol()) {
@@ -151,6 +176,10 @@ class SPL {
     return ret_state;
   }
 
+  /**
+   * mengembalikan apakah SPL mempunyai solusi atau tidak
+   * @return mengembalikan true atau false
+   */
   private boolean hasSol() {
     boolean bisa = true;
     for (int i = EF.getM(); i >= 1 && bisa; i--) {
@@ -167,6 +196,10 @@ class SPL {
     return bisa;
   }
 
+  /**
+   * mengecek apakah SPL memiliki solusi unik
+   * @return mengembalikan true atau false
+   */
   private boolean isUnique() {
     boolean unik = true;
     for (int i = 1; i <= Math.min(EF.getM(), EF.getN()) && unik; i++) {
@@ -177,6 +210,9 @@ class SPL {
     return unik;
   }
 
+  /**
+   * membuat solusi parametrik
+   */
   private void solvePar() {
     int r=EF.getM(), c=EF.getN();
     boolean[] udh = new boolean[c];
@@ -210,7 +246,7 @@ class SPL {
         fac = free_sol.mat[i][j];
         free_sol.mat[i][j] = BigDecimal.ZERO;
         free_sol.add(i, j, fac);
-      }
+      }   
     }
 
     free_solution = new Matrix(c-1,c);
@@ -225,6 +261,9 @@ class SPL {
     }
   }
 
+  /**
+   * menampilkan matriks augmented
+   */
   public void showAug() {
     for (int i = 1; i <= this.M.getM(); i++) {
       for (int j = 1; j <= this.M.getN() - 1; j++) {
@@ -235,6 +274,11 @@ class SPL {
     }
   }
 
+  /**
+   * menyimpan matriks augmented ke file
+   * @param filename
+   * @throws IOException
+   */
   public void showAugFile(String filename) throws IOException {
     try {
       if (this.M.mat == null) {
@@ -265,6 +309,9 @@ class SPL {
     }
   }
 
+  /**
+   * menampilkan bentuk eselon
+   */
   public void showEF() {
     for (int i = 1; i <= this.M.getM(); i++) {
       for (int j = 1; j <= this.M.getN() - 1; j++) {
@@ -275,6 +322,11 @@ class SPL {
     }
   }
 
+  /**
+   * menyimpan matriks eselon ke file
+   * @param filename
+   * @throws IOException
+   */
   public void showEFFile(String filename) throws IOException {
     try {
       if (this.M.mat == null) {
@@ -305,6 +357,9 @@ class SPL {
     }
   }
 
+  /**
+   * menampilkan solusi SPL
+   */
   public void showSol(){ 
     if (state == 0) {
       System.out.println("Solusi tidak ada");
@@ -365,6 +420,9 @@ class SPL {
     }
   }
 
+  /**
+   * menyimpan solusi SPL
+   */
   public void storeSol() { // state = 1
     int r = free_solution.getM(), c = free_solution.getN();
     sol = new Matrix(r, 1);
@@ -374,6 +432,10 @@ class SPL {
     }
   }
 
+  /**
+   * menyimpan solusi SPL dalam file
+   * @param filename
+   */
   public void showFile(String filename){
     try {
       PrintWriter pwriter = new PrintWriter(new FileWriter(filename));
