@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.io.*;
 
 class SPL {
   private Matrix M; // Augmented matrix
@@ -60,7 +61,7 @@ class SPL {
   }
   
   public void solveCramer() {
-    BigDecimal det = A.getDeterminant();
+    BigDecimal det = A.getDeterminantGJ();
     this.state = (det.compareTo(BigDecimal.ZERO) == 0) ? 0 : 1;
     this.sol = new Matrix(A.getM(), 1);
     try {
@@ -75,7 +76,7 @@ class SPL {
             }
           }
         }
-        BigDecimal det2 = dummy.getDeterminant();
+        BigDecimal det2 = dummy.getDeterminantGJ();
         this.sol.mat[i][1] = det2.divide(det, 30, RoundingMode.HALF_UP);
       }
     } catch (ArrayIndexOutOfBoundsException e){
@@ -222,6 +223,36 @@ class SPL {
     }
   }
 
+  public void showAugFile(String filename) throws IOException {
+    try {
+      if (this.M.mat == null) {
+        throw new NullPointerException();
+      }
+      String ret = "";
+      BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+      for (int i = 1; i <= this.M.getM(); i++) {
+        for (int j = 1; j <= this.M.getN(); j++) {
+          String result = Util.formatOutput(this.M.mat[i][j]);
+          ret += result;
+          if (j == this.M.getN()) {
+            if (i < this.M.getM()) {
+              ret += "\n";
+            }
+          } else {
+            ret += " ";
+            if (j == this.M.getN() - 1) {
+              ret += "| ";
+            }
+          }
+        }
+      }
+      writer.write(ret);
+      writer.close();
+    } catch (NullPointerException e) {
+      System.out.println("Matriks tidak valid.");
+    }
+  }
+
   public void showEF() {
     for (int i = 1; i <= this.M.getM(); i++) {
       for (int j = 1; j <= this.M.getN() - 1; j++) {
@@ -229,6 +260,36 @@ class SPL {
       }
       System.out.printf("| %.4f", this.EF.mat[i][this.EF.getN()]);
       System.out.println();
+    }
+  }
+
+  public void showEFFile(String filename) throws IOException {
+    try {
+      if (this.M.mat == null) {
+        throw new NullPointerException();
+      }
+      String ret = "";
+      BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+      for (int i = 1; i <= this.EF.getM(); i++) {
+        for (int j = 1; j <= this.EF.getN(); j++) {
+          String result = Util.formatOutput(this.EF.mat[i][j]);
+          ret += result;
+          if (j == this.EF.getN()) {
+            if (i < this.EF.getM()) {
+              ret += "\n";
+            }
+          } else {
+            ret += " ";
+            if (j == this.EF.getN() - 1) {
+              ret += "| ";
+            }
+          }
+        }
+      }
+      writer.write(ret);
+      writer.close();
+    } catch (NullPointerException e) {
+      System.out.println("Matriks tidak valid.");
     }
   }
 
@@ -247,7 +308,7 @@ class SPL {
         if (Util.isZero(free_solution.mat[i][j])) continue;
         nemu = true;
         if (free_solution.mat[i][j].compareTo(BigDecimal.ZERO) < 0){
-          if (free_solution.mat[i][j].equals(BigDecimal.ONE.negate())){
+          if (free_solution.mat[i][j].compareTo(BigDecimal.ONE.negate()) == 0){
             System.out.print(" -");
             if (!first) {
               System.out.print(" ");
@@ -260,13 +321,13 @@ class SPL {
             System.out.print(Util.formatOutputAbs(free_solution.mat[i][j]));
           }
         } else if (first){
-          if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+          if (free_solution.mat[i][j].compareTo(BigDecimal.ONE) == 0){
             System.out.print(" ");  
           } else{
             System.out.print(" " + Util.formatOutputAbs(free_solution.mat[i][j]));
           }
         } else{
-          if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+          if (free_solution.mat[i][j].compareTo(BigDecimal.ONE) == 0){
             System.out.print(" + ");  
           } else{
            System.out.print(" + " + Util.formatOutputAbs(free_solution.mat[i][j]));
