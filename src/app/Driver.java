@@ -57,7 +57,7 @@ public class Driver {
             System.out.println("7. Studi Kasus");
             System.out.println("8. Exit");
             System.out.println("--------------------------------------------------");
-            System.out.print("select a command: ");
+            System.out.print("Pilihan: ");
             cmd = in.nextInt();
             in.nextLine();
             switch(cmd){
