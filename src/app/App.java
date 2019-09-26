@@ -14,6 +14,7 @@ public class App {
             // Matrix M = new Matrix(Matrix.readKB());
             System.out.println("Matrix:");
             // M.show();
+<<<<<<< HEAD
             // System.out.println("G:");
             // System.out.println(Util.formatOutput(M.getDeterminantG()));
             // System.out.println();
@@ -22,6 +23,17 @@ public class App {
             // System.out.println();
             // System.out.println("KOFAK:");
             // System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
+=======
+            System.out.println("G:");
+            System.out.println(Util.formatOutput(M.getDeterminantG()));
+            System.out.println();
+            System.out.println("GJ:");
+            System.out.println(Util.formatOutput(M.getDeterminantGJ()));
+            System.out.println();
+            System.out.println("KOFAK:");
+            System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
+
+>>>>>>> 298705edb249450ae9013e9b7f0a8eae5e50fc05
             // System.out.println("nama file simpan");
             // String nm = in.nextLine();
             // M.showFile("../test/" + nm);
@@ -47,12 +59,25 @@ public class App {
             }
             System.out.println();
     
+<<<<<<< HEAD
             System.out.println("Kofaktor:");
             if (M.getInverseCofactor() != null) {
                 M.getInverseCofactor().show();
             } else {
                 System.out.println("Tidak punya inverse.");
             }
+=======
+            SPL solusi = new SPL(M);
+            System.out.println("SPL:");
+            System.out.println("Pake Gauss: ");
+            solusi.solveGauss();
+            // solusi.EF.show();
+            // solusi.showAug();
+            solusi.showEF();
+            solusi.showSol();
+            solusi.showFile("../test/hasil.txt");
+            System.out.println();
+>>>>>>> 298705edb249450ae9013e9b7f0a8eae5e50fc05
 
             // SPL solusi = new SPL(M);
             // System.out.println("SPL:");
