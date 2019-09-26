@@ -108,8 +108,12 @@ public class Driver {
             String filename = in.nextLine();
             mat = Matrix.readFile(filename);
         }
-        SPL spl = new SPL(mat);
+        titit(in, mat);
+    }
 
+    private static void titit(Scanner in, Matrix t){
+        int cmd;
+        SPL spl = new SPL(t);
         System.out.println("Pilih metode yang ingin digunakan untuk mencari solusi dari sistem persamaan linear");
         System.out.println("1. Metode eliminasi Gauss");
         System.out.println("2. Metode eliminasi Gauss-Jordan");
@@ -119,7 +123,7 @@ public class Driver {
             cmd = in.nextInt();
         } while(cmd < 1 || cmd > 4);
         in.nextLine();
-
+        
         System.out.println("Berikut solusi dari sistem persamaan linear yang sudah di masukkan.");
         switch(cmd){
             case 1:
@@ -131,12 +135,20 @@ public class Driver {
                 spl.showSol();
                 break;
             case 3:
-                spl.solveInverse();
-                spl.showSol();
+                try {
+                    spl.solveInverse();
+                    spl.showSol();
+                } catch(NullPointerException e){
+                    System.out.println("Solusi tidak dapat ditemukan menggunakan metode ini.");
+                }
                 break;
             case 4:
-                spl.solveCramer();
-                spl.showSol();
+                if (spl.A.isSquare()) {
+                    spl.solveCramer();
+                    spl.showSol();
+                } else {
+                    System.out.println("Solusi tidak dapat ditemukan menggunakan metode ini.");
+                }
                 break;
         }
 
@@ -278,9 +290,11 @@ public class Driver {
             System.out.print("masukkan perintah: ");
             cmd = in.nextInt();
         }
-
+        StudiKasus.initKasus();
         switch(cmd){
-            
+            case 1:
+                titit(in, StudiKasus.spl1_1);
+                break;
         }
     }
 
@@ -373,7 +387,6 @@ public class Driver {
                     System.out.println("Matriks balikan yang didapat menggunakan metode Matriks Adjoin dari matriks diatas adalah: ");
                     break;
             }
-            inverse.show();
             inverse.show();
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
