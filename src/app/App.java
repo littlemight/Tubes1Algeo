@@ -10,10 +10,13 @@ public class App {
         System.out.print("Nama file: ");
         String namaFile = in.nextLine();
         while (!Objects.equals(namaFile, new String("stop"))) {
-            Matrix M = new Matrix(Matrix.readFile("../test/" + namaFile + ".txt"));
-
+            Matrix M = new Matrix(Matrix.readFile("../test/" + namaFile));
+            
             System.out.println("Matrix:");
             M.show();
+            System.out.println("nama file simpan");
+            String nm = in.nextLine();
+            M.showFile("../test/" + nm);
             System.out.println();
             
             System.out.println("Echelon:");
@@ -36,12 +39,14 @@ public class App {
             System.out.println("Pake Gauss: ");
             solusi.solveGauss();
             // solusi.EF.show();
+            solusi.showAug();
+            solusi.showEF();
             solusi.showSol();
             System.out.println();
     
             System.out.println("Pake Gauss Jordan: ");
             solusi.solveGaussJordan();
-            solusi.showSol();
+            solusi.showAug();
             System.out.println();
     
             // System.out.println("Pake Cramer: ");

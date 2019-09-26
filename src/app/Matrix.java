@@ -4,12 +4,12 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.text.DecimalFormat;
 
 class Matrix {
   final int m;
   final int n;
   public BigDecimal[][] mat;
-  private static final BigDecimal EPS = BigDecimal.valueOf(1e-12);
 
   //================================================================================
   // Constructor
@@ -158,7 +158,7 @@ class Matrix {
           if (no != mx) {
             M.swap(no, mx);
           }
-          if (M.mat[no][nex].abs().compareTo(EPS) >= 0) {
+          if (!Util.isZero(M.mat[no][nex])) {
             for (int i = 1; i <= M.m; i++) {
               if (i == no) continue;
               BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
@@ -176,7 +176,7 @@ class Matrix {
     }
 
     for (int i = 1; i <= n; i++) {
-      if (M.mat[i][i].abs().compareTo(EPS) < 0) {
+      if (Util.isZero(M.mat[i][i])) {
         det = BigDecimal.ZERO;
         break;
       }
@@ -292,7 +292,7 @@ class Matrix {
       if (this.mat == null) {
         throw new NullPointerException();
       }
-      System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
+      // System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
       for (int i = 1; i <= this.getM(); i++) {
         for (int j = 1; j <= this.getN(); j++) {
           System.out.printf("%.4f ", this.mat[i][j]);
@@ -300,10 +300,41 @@ class Matrix {
         System.out.println();
       }
     } catch (NullPointerException e) {
-      System.out.println("Matriks invalid.");
+      System.out.println("Matriks tidak valid.");
     }
   }
   
+  public void showFile(String filename) throws IOException {
+    try {
+      if (this.mat == null) {
+        throw new NullPointerException();
+      }
+      // System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
+      String ret = "";
+      BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+      for (int i = 1; i <= this.getM(); i++) {
+        for (int j = 1; j <= this.getN(); j++) {
+          // DecimalFormat df = new DecimalFormat();
+          // df.setMaximumFractionDigits(2);
+          // df.setMinimumFractionDigits(0);
+          // df.setGroupingUsed(false);
+          String result = Util.formatOutput(this.mat[i][j]);
+          ret += result;
+          if (j == this.getN()) {
+            if (i < this.getM()) {
+              ret += "\n";
+            }
+          }
+          else ret += " ";
+        }
+      }
+      writer.write(ret);
+      writer.close();
+    } catch (NullPointerException e) {
+      System.out.println("Matriks tidak valid.");
+    }
+  }
+
   public static Matrix readKB() {
     Scanner in = new Scanner(System.in);
     int m_sz, n_sz;
@@ -348,19 +379,16 @@ class Matrix {
     }
     catch(FileNotFoundException ex) {
       System.out.println(
-          "Unable to open file '" + 
+          "File tidak dapat dibuka '" + 
           filename + "'");
       return mat;            
     }
     catch(IOException ex) {
       System.out.println(
-          "Error reading file '" 
+          "File tidak dapat dibaca '" 
           + filename + "'");
       return mat;                  
-      // Or we could just do this: 
-      // ex.printStackTrace();
-    }
-    
+    }    
   }
 
   private static BigDecimal[][] parse(String[] s, int n){
@@ -400,13 +428,9 @@ class Matrix {
   }
 
   public void add(int r1, int r2, BigDecimal fac) {
-    // try {
-      for (int i=1;i<=this.getN();i++){
-        this.mat[r1][i] = this.mat[r1][i].add(this.mat[r2][i].multiply(fac));
-      }
-    // } catch (NullPointerException e) {
-    //   System.out.println("mampus");
-    // }
+    for (int i=1;i<=this.getN();i++){
+      this.mat[r1][i] = this.mat[r1][i].add(this.mat[r2][i].multiply(fac));
+    }
   }
 
   public void rowtimesX(int r, BigDecimal x) {
@@ -435,7 +459,7 @@ class Matrix {
 
   private int findNextLeading(Matrix M, int row, int col) {
     int ret = col;
-    while (M.mat[row][ret].abs().compareTo(EPS) < 0 && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
+    while (Util.isZero(M.mat[row][ret]) && ret < M.n && nextCandidate(M, row, ret) == row) { // Find next leading non zero element
       ret++;
     }
     return ret;
@@ -466,9 +490,6 @@ class Matrix {
   private Matrix gaussElim(Matrix M) {
     int nex = 1;
     for (int no = 1; no <= Math.min(M.m, M.n); no++) {
-      // Find next candidate
-      // M.show();
-      // System.out.println("Next");
       int mx = nextCandidate(M, no, nex);
 
       // Swap
@@ -531,12 +552,11 @@ class Matrix {
         M.swap(no, mx);
       }
 
-      if (M.mat[no][nex].abs().compareTo(EPS) > 0) {
+      if (!Util.isZero(M.mat[no][nex])) {
         // OBE
         for (int i = 1; i <= M.m; i++) {
           if (i == no) continue;
           BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
-          // System.out.println(M.mat[i][nex] + " " + fac + " " + M.mat[no][nex]);
           M.add(i, no, fac.negate());
           M.mat[i][nex] = BigDecimal.ZERO;
         }
@@ -551,11 +571,10 @@ class Matrix {
           if (no != mx) {
             M.swap(no, mx);
           }
-          if (M.mat[no][nex].abs().compareTo(EPS) > 0) {
+          if (!Util.isZero(M.mat[no][nex])) {
             for (int i = 1; i <= M.m; i++) {
               if (i == no) continue;
               BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
-              // System.out.println(M.mat[i][nex] + " " + fac + " " + M.mat[no][nex]);
               M.add(i, no, fac.negate());
               M.mat[i][nex] = BigDecimal.ZERO;
             }
@@ -577,4 +596,5 @@ class Matrix {
     }
     return M;
   }
+  
 }

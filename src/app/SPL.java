@@ -14,7 +14,6 @@ class SPL {
   public Matrix sol;
   public static String[] free_var;
   private int state;
-  private BigDecimal EPS = BigDecimal.valueOf(1e-12);
 
   /*
   0 : doesnt have sol
@@ -211,6 +210,26 @@ class SPL {
     }
   }
 
+  public void showAug() {
+    for (int i = 1; i <= this.M.getM(); i++) {
+      for (int j = 1; j <= this.M.getN() - 1; j++) {
+        System.out.printf("%.4f ", this.M.mat[i][j]);
+      }
+      System.out.printf("| %.4f", this.M.mat[i][this.M.getN()]);
+      System.out.println();
+    }
+  }
+
+  public void showEF() {
+    for (int i = 1; i <= this.M.getM(); i++) {
+      for (int j = 1; j <= this.M.getN() - 1; j++) {
+        System.out.printf("%.4f ", this.EF.mat[i][j]);
+      }
+      System.out.printf("| %.4f", this.EF.mat[i][this.EF.getN()]);
+      System.out.println();
+    }
+  }
+
   public void showSol(){ 
     if (state == 0) {
       System.out.println("Solusi tidak ada");
@@ -269,7 +288,7 @@ class SPL {
   }
 
   public void storeSol(){ // state = 1
-    int r=free_solution.getM(), c=free_solution.getN();
+    int r = free_solution.getM(), c = free_solution.getN();
     sol = new Matrix(r, 1);
 
     for (int i=1;i<=r;i++){
