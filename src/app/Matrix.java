@@ -299,6 +299,7 @@ class Matrix {
     return res;
   }
 
+  
   public static Matrix inverse(Matrix in_ar) {
     // kalo ga ketemu, return matrix null
     // kalo ketemu return matrix inversenya
