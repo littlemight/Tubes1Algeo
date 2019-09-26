@@ -395,6 +395,11 @@ public class Driver {
         }
     }
 
+    /**
+     * Primitif untuk antarmuka operasi determinan matriks
+     * @param in
+     * @param mat
+     */
     private static void detUtil(Scanner in, Matrix mat){
         in.nextLine();
         if(mat.isSquare()){
@@ -418,6 +423,10 @@ public class Driver {
         }
     }
 
+    /**
+     * Primitif yang memanggil operasi-operasi determinan matriks
+     * @param in
+     */
     public static void determinantProgram(Scanner in){
         System.out.println("Program ini akan menghitung determinan dari matriks persegi");
         System.out.println("Silahkan pilih jenis input matriks: ");
@@ -441,9 +450,6 @@ public class Driver {
             filename = "./test/" + filename;
             mat = Matrix.readFile(filename);
         }
-        // getDeterminanG
-        // getDeterminanGJ
-        // getDeterminanCofactor
 
         if(mat.isSquare()){
             System.out.println("Matriks yang anda masukkan adalah: ");
@@ -490,6 +496,10 @@ public class Driver {
 
     }
 
+    /**
+     * Primitif yang memanggil operasi-operasi matriks balikan
+     * @param in
+     */
     public static void inverseProgram(Scanner in){
         System.out.println("Program ini akan mencari matriks invers dari matriks persegi");
         System.out.println("Silahkan pilih jenis input matriks: ");
@@ -558,6 +568,10 @@ public class Driver {
         }
     }
 
+    /**
+     * Primitif yang memanggil operasi-operasi matriks kofaktor
+     * @param in
+     */
     public static void cofactorProgram(Scanner in){
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
@@ -604,6 +618,10 @@ public class Driver {
         }
     }
 
+    /**
+     * Primitif untuk memanggil operasi-operasi matriks adjoin
+     * @param in
+     */
     public static void adjointProgram(Scanner in){
         System.out.println("Silahkan pilih jenis input matriks: ");
         System.out.println("1. Input Keyboard");
