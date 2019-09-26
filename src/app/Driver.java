@@ -236,8 +236,25 @@ public class Driver {
         if(mat.isSquare()){
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
-            System.out.println("Matriks invers dari matriks diatas adalah: ");
-            Matrix inverse = mat.getInverseGJ();
+
+            System.out.println("pilih metode untuk mencari matriks balikan");
+            System.out.println("1. Gauss-Jordan");
+            System.out.println("2. Matriks Adjoin");
+            do {
+                cmd = in.nextInt();
+            } while(cmd < 1 || cmd > 2);
+            Matrix inverse;
+            switch(cmd){
+                case 1:
+                    inverse = mat.getInverseGJ();
+                    System.out.println("Matriks balikan yang didapat menggunakan metode Gauss-Jordan dari matriks diatas adalah: ");
+                    break;
+                case 2:
+                    inverse = mat.getInverseCofactor();
+                    System.out.println("Matriks balikan yang didapat menggunakan metode Matriks Adjoin dari matriks diatas adalah: ");
+                    break;
+            }
+            inverse.show();
             inverse.show();
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
