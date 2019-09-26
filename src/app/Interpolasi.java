@@ -11,6 +11,11 @@ class Interpolasi {
   BigDecimal x_min, x_max;    
   HashSet<BigDecimal> recX;
   
+  /**
+   * Konstruktor dari matriks masukan titik x dan y
+   * @param x
+   * @param y
+   */
   Interpolasi (BigDecimal[][] x, BigDecimal[][] y) {
      Matrix B = new Matrix(y);
      BigDecimal[][] kons = new BigDecimal[y.length][x.length];
@@ -42,6 +47,10 @@ class Interpolasi {
      solver = new SPL(A, B);
   }
 
+  /**
+   * Primitif untuk membaca masukan titik dari keyboard
+   * @return
+   */
   public static Interpolasi readKB() {
     Scanner in = new Scanner(System.in);
     System.out.print("Masukkan banyaknya titik: ");
@@ -85,6 +94,11 @@ class Interpolasi {
     }
   }
 
+  /**
+   * Primitif untuk membaca masukan dari file input bernama "filename"
+   * @param filename
+   * @return
+   */
   public static Interpolasi readFile(String filename){
     Matrix temp = new Matrix();
 
@@ -126,11 +140,17 @@ class Interpolasi {
     }
   }
 
+  /**
+   * Primitif untuk menyelesaikan interpolasi, menggunakan operasi Gauss
+   */
   public void solveInterGauss() {
     solver.solveGauss();
     makePersamaan();
   }
 
+  /**
+   * Primitif untuk menyelesaikan interpolasi, menggunakan operasi Gauss-Jordan
+   */
   public void solveInterGaussJordan() {
     solver.solveGaussJordan();
     makePersamaan();
@@ -146,6 +166,9 @@ class Interpolasi {
     makePersamaan();
   }
 
+  /**
+   * Primitif untuk membuat persamaan interpolasi dalam bentuk string
+   */
   public void makePersamaan() {
     persamaan = "p(x) =";
     boolean first = true;
@@ -181,17 +204,29 @@ class Interpolasi {
     }
   }
 
-
+  /**
+   * Primitif untuk menampilkan persamaan interpolasi
+   */
   public void showPersamaan() {
     System.out.println(persamaan);
   }
   
+  /**
+   * Primitif untuk menyimpan string persamaan interpolasi ke file bernama "filename"
+   * @param filename
+   * @throws IOException
+   */
   public void showPersamaanFile(String filename) throws IOException {
     BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
     writer.write(persamaan);
     writer.close();
   }
 
+  /**
+   * Primitif untuk mendapatkan nilai y dari x berdasarkan fungsi interpolasi
+   * @param x
+   * @return
+   */
   public BigDecimal getY(double x) {
     BigDecimal ret = BigDecimal.ZERO;
     BigDecimal xdec = BigDecimal.valueOf(x);
@@ -201,71 +236,28 @@ class Interpolasi {
     return ret;
   }
 
+  /**
+   * Primitif untuk memeriksa apakah nilai x berada di rentang interpolasi untuk absis titik-titik yang menjadi acuan interpolasi sebelumnya
+   * @param x
+   * @return
+   */
   public boolean isInRange(double x) {
     BigDecimal xdec = BigDecimal.valueOf(x);
     return (xdec.compareTo(x_min) >= 0 && xdec.compareTo(x_max) <= 0);
   }
 
+  /**
+   * Primitif untuk mendapatkan string yang merupakan nilai y untuk masukan x sesuai fungsi interpolasi yang sudah didapat
+   * @param x
+   */
   public void queryY(double x) { // x sudah di range xmin xmax
     System.out.println("y = " + Util.formatOutput(this.getY(x)));
   }
 
-  public void queryYFile(double x) { // x sudah di range xmin xmax
-    // BigDecimal xdec = BigDecimal.valueOf(x);
-    // System.out.println("y = " + Util.formatOutput(xdec));
-  }
-
+  /**
+   * Primitif untuk memberikan peringatan jika titik x yang ditanya diluar rentang interpolasi untuk absis-absis titik yang menjadi acuan interpolasi 
+   */
   public void warnX() {
     System.out.println("! Titik di luar selang interpolasi [" + Util.formatOutput(this.x_min) + ", " + Util.formatOutput(this.x_max) + "], interpolasi mungkin tidak akurat.");
-    // kalo diluar titik, harus pake ekstrapolasi
-  }
-  
-  public static void main(String[] args) {
-    try {
-      Scanner in = new Scanner(System.in);
-      System.out.println("Masukkan nama file:");
-      String str = in.nextLine();
-      System.out.println(str);
-      Interpolasi sol = Interpolasi.readFile("./test/" + str);
-      System.out.println();
-
-      System.out.println("GAUSS");
-      sol.solveInterGauss();
-      sol.showPersamaan();
-      System.out.println();
-
-      System.out.println("ECHELON FORM:");
-      sol.solver.EF.show();
-      sol.showPersamaan();
-      System.out.println();
-
-      System.out.println("GAUSS JORDAN");
-      sol.showPersamaan();
-      sol.solveInterGaussJordan();
-      System.out.println();
-
-      System.out.println("CRAMER");
-      sol.solveInterCramer();
-      sol.showPersamaan();
-      System.out.println();
-
-      System.out.println("INVERSE");
-      sol.solveInterInverse();
-      sol.showPersamaan();
-      System.out.println();
-
-      System.out.println("Masukkan X: ");
-      double x = in.nextDouble();
-      if (!sol.isInRange(x)) {
-        System.out.println("! Titik di luar selang interpolasi [" + Util.formatOutput(sol.x_min) + ", " + Util.formatOutput(sol.x_max) + "], interpolasi mungkin tidak akurat.");
-      } 
-      sol.queryY(x);
-
-      // for (int i = 1; i <= sol.x.length - 1; i++) {
-      //   System.out.println(sol.x[i] + " " + Util.formatOutput(sol.getY(sol.x[i].doubleValue())));
-      // }
-    } catch (NullPointerException e){
-      System.out.println("Input tidak valid.");
-    }
   }
 }
