@@ -60,13 +60,13 @@ public class Driver {
         do {
             System.out.println("----------------------MENU------------------------");
             System.out.println("1. Sistem Persamaan Linier");
-            System.out.println("2. Determinant Matriks");
+            System.out.println("2. Matriks Determinan");
             System.out.println("3. Matriks Balikan");
             System.out.println("4. Matriks Kofaktor");
             System.out.println("5. Matriks Adjoin");
             System.out.println("6. Interpolasi Polinom");
             System.out.println("7. Studi Kasus");
-            System.out.println("8. Exit");
+            System.out.println("8. Keluar");
             System.out.println("--------------------------------------------------");
             System.out.print("Pilihan: ");
             cmd = in.nextInt();
