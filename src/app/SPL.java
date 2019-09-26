@@ -337,6 +337,7 @@ class SPL {
         System.out.print(free_var[j-1]);
       }
       if (!Util.isZero(free_solution.mat[i][c])){
+        nemu = true;
         if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
           System.out.print(" -");
           if (!first) {
@@ -347,7 +348,7 @@ class SPL {
           System.out.print(" + " + Util.formatOutputAbs(free_solution.mat[i][c]));
         } else System.out.print(" " + Util.formatOutputAbs(free_solution.mat[i][c]));
       }
-      if (!nemu) System.out.print(0);
+      if (!nemu) System.out.print(" " + 0);
       System.out.println();
     }
   }
@@ -367,6 +368,7 @@ class SPL {
 
       if (state == 0) {
         System.out.println("Solusi tidak ada");
+        pwriter.close();
         return;
       }
       int r=free_solution.getM(), c=free_solution.getN();
@@ -408,6 +410,7 @@ class SPL {
           pwriter.print(free_var[j-1]);
         }
         if (!Util.isZero(free_solution.mat[i][c])){
+          nemu = true;
           if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
             pwriter.print(" -");
             if (!first) {
@@ -425,6 +428,10 @@ class SPL {
       pwriter.close();
     } catch (NullPointerException e) {
       System.out.println("Matriks tidak valid.");
+    } catch(IOException ex) {
+      System.out.println(
+          "File tidak dapat dibaca '" 
+          + filename + "'");
     }
   }
 }

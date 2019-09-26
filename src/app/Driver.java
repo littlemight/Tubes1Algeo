@@ -1,5 +1,6 @@
 package app;
 import java.util.*;
+import java.io.*;
 
 public class Driver {
 
@@ -96,13 +97,17 @@ public class Driver {
         if(mat.isSquare()){
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
-            System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminant());
+            System.out.println("Determinan dari matriks tersebut adalah: " + mat.getDeterminantGJ());
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                mat.showFile(test);
+                try {
+                    mat.showFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
             } 
 
         } else {
@@ -143,7 +148,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                inverse.showFile(test);
+                try {
+                    inverse.showFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
             } 
 
         } else {
@@ -183,7 +192,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                cofactor.showFile(test);
+                try {
+                    cofactor.showFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
             } 
 
         } else {
@@ -223,7 +236,11 @@ public class Driver {
             if(test.equals("Y")){
                 System.out.print("Masukkan nama file: ");
                 test = in.nextLine();
-                adjoint.showFile(test);
+                try {
+                    adjoint.showFile(test);
+                } catch (IOException e){
+                    System.out.println("Output ke file " + test + " gagal.");
+                } 
             } 
 
         } else {

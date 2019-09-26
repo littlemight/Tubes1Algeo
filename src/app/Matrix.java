@@ -391,7 +391,7 @@ class Matrix {
       writer.close();
     } catch (NullPointerException e) {
       System.out.println("Matriks tidak valid.");
-    }
+    } 
   }
 
   public static Matrix readKB() {
