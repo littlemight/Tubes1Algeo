@@ -38,6 +38,8 @@ public class Driver {
         if(cmd.equals("menu")){
             showMenu();
         }
+
+        in.close();
     }
 
     private static void showMenu(){
