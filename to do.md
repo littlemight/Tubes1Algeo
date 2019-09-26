@@ -1,4 +1,5 @@
 # NOTES
+link laporan mana :(
 
 ## CARA TES
 Jalanin App.class, masukin nama file yang ada di folder test. Kalo mau ngasih matriks uji sendiri edit file "custom.txt" di folder test.
@@ -7,6 +8,7 @@ Buar generate matriks:
 
 Buat ngetes hasil operasi2 matriks:
 - https://matrix.reshish.com/
+- https://matrixcalc.org/en/
 - wolfram
 - etc
 
@@ -34,7 +36,7 @@ Buat ngetes hasil operasi2 matriks:
 - [x] Kaidah Cramer (belum di test)
 
 ## INTERPOLASI POLINOM
-- [ ] Nunggu SPL
+- [x] Mostly done
 
 ## MAIN 
 - [ ] I/O dari keyboard
@@ -47,5 +49,5 @@ Buat ngetes hasil operasi2 matriks:
 - [ ] sisanya (mager)
 
 ## GUI
-- [ ] lul
+- [ ] skip
 
