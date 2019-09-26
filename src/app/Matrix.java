@@ -5,7 +5,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 
+/**
+ * test
+ */
 class Matrix {
+  /**
+   * 
+   */
   final int m;
   final int n;
   public BigDecimal[][] mat;
@@ -14,6 +20,9 @@ class Matrix {
   // Constructor
   //================================================================================
 
+  /**
+   * Kok gak kelihatan sih
+   */
   public Matrix() {
     this.m = 0;
     this.n = 0;
@@ -107,6 +116,7 @@ class Matrix {
             }
           }
           res.mat[i][j] = dummy.getDeterminantGJ();
+          if ((i + j) % 2 == 1) res.mat[i][j] = res.mat[i][j].negate();
         }
       }
       return res;
@@ -177,7 +187,7 @@ class Matrix {
       if (!Util.isZero(M.mat[no][nex])) {
         // OBE
         for (int i = no + 1; i <= M.m; i++) {
-          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
           M.add(i, no, fac.negate());
         }
 
@@ -195,7 +205,7 @@ class Matrix {
           }
           if (!Util.isZero(M.mat[no][nex])) {
             for (int i = no + 1; i <= M.m; i++) {
-              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
               M.add(i, no, fac.negate());
               M.mat[i][nex] = BigDecimal.ZERO;
             }
@@ -242,7 +252,7 @@ class Matrix {
         // OBE
         for (int i = 1; i <= M.m; i++) {
           if (i == no) continue;
-          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
           M.add(i, no, fac.negate());
         }
 
@@ -261,7 +271,7 @@ class Matrix {
           if (!Util.isZero(M.mat[no][nex])) {
             for (int i = 1; i <= M.m; i++) {
               if (i == no) continue;
-              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
               M.add(i, no, fac.negate());
               M.mat[i][nex] = BigDecimal.ZERO;
             }
@@ -299,19 +309,18 @@ class Matrix {
     return res;
   }
 
-  
-  public static Matrix inverse(Matrix in_ar) {
+  public Matrix getInverseGJ() {
     // kalo ga ketemu, return matrix null
     // kalo ketemu return matrix inversenya
     // prekondisi n == m
     
-    int m=in_ar.getM();
-    int n=m;
+    int m = this.getM();
+    int n = m;
     Matrix ar = new Matrix(m,n+n);
 
     for (int i=1;i<=m;i++){
         for (int j=1;j<=n;j++){
-            ar.mat[i][j] = in_ar.mat[i][j];
+            ar.mat[i][j] = this.mat[i][j];
             ar.mat[i][j+n] = BigDecimal.ZERO;
         }
         ar.mat[i][i+n] = BigDecimal.ONE;
@@ -335,6 +344,14 @@ class Matrix {
     return res;
   }
 
+  public Matrix getInverseCofactor() {
+    Matrix ret = new Matrix(this);
+    BigDecimal det = ret.getDeterminantGJ();
+    if (Util.isZero(det)) {
+      return null;
+    }
+    return ret.getAdjoint().divKons(det);
+  }
   //================================================================================
   // Setter
   //================================================================================
@@ -358,7 +375,8 @@ class Matrix {
       // System.out.printf("Baris: %d | Kolom: %d\n", this.getM(), this.getN());
       for (int i = 1; i <= this.getM(); i++) {
         for (int j = 1; j <= this.getN(); j++) {
-          System.out.print(Util.formatOutput(this.mat[i][j]));
+          System.out.print(Util.formatOutputLong(this.mat[i][j]));
+          // System.out.print(this.mat[i][j]);
           if (j < this.getN()) System.out.print(" ");
         }
         System.out.println();
@@ -392,7 +410,7 @@ class Matrix {
       writer.close();
     } catch (NullPointerException e) {
       System.out.println("Matriks tidak valid.");
-    } 
+    }
   }
 
   public static Matrix readKB() {
@@ -526,7 +544,7 @@ class Matrix {
   private void normalize(Matrix M, int row, int col) {
     BigDecimal norm = M.mat[row][col];
     for (int j = col; j <= M.n; j++) {
-      M.mat[row][j] = M.mat[row][j].divide(norm, 30, RoundingMode.HALF_UP);
+      M.mat[row][j] = M.mat[row][j].divide(norm, Util.divScale, RoundingMode.HALF_UP);
     }
   }
 
@@ -545,6 +563,22 @@ class Matrix {
     return ret;
   }
 
+  public Matrix multKons(BigDecimal k) {
+    Matrix ret = new Matrix(this);
+    for (int i = 1; i <= ret.getM(); i++) {
+      for (int j = 1; j <= ret.getN(); j++) {
+        ret.mat[i][j] = ret.mat[i][j].multiply(k);   
+      }
+    }
+    return ret;
+  }
+
+  public Matrix divKons(BigDecimal k) {
+    Matrix ret = new Matrix(this);
+    BigDecimal kdiv = BigDecimal.ONE.divide(k, Util.divScale, RoundingMode.HALF_UP);
+    return ret.multKons(kdiv);
+  }
+
   private Matrix gaussElim(Matrix M) {
     int nex = 1;
     for (int no = 1; no <= Math.min(M.m, M.n); no++) {
@@ -558,7 +592,7 @@ class Matrix {
       if (!Util.isZero(M.mat[no][nex])) {
         // OBE
         for (int i = no + 1; i <= M.m; i++) {
-          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
           M.add(i, no, fac.negate());
           M.mat[i][nex] = BigDecimal.ZERO;
         }
@@ -575,7 +609,7 @@ class Matrix {
           }
           if (!Util.isZero(M.mat[no][nex])) {
             for (int i = no + 1; i <= M.m; i++) {
-              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
               M.add(i, no, fac.negate());
               M.mat[i][nex] = BigDecimal.ZERO;
             }
@@ -614,7 +648,7 @@ class Matrix {
         // OBE
         for (int i = 1; i <= M.m; i++) {
           if (i == no) continue;
-          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+          BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
           M.add(i, no, fac.negate());
           M.mat[i][nex] = BigDecimal.ZERO;
         }
@@ -632,7 +666,7 @@ class Matrix {
           if (!Util.isZero(M.mat[no][nex])) {
             for (int i = 1; i <= M.m; i++) {
               if (i == no) continue;
-              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], 30, RoundingMode.HALF_UP);
+              BigDecimal fac = M.mat[i][nex].divide(M.mat[no][nex], Util.divScale, RoundingMode.HALF_UP);
               M.add(i, no, fac.negate());
               M.mat[i][nex] = BigDecimal.ZERO;
             }

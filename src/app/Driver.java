@@ -237,7 +237,7 @@ public class Driver {
             System.out.println("Matriks yang anda masukkan adalah: ");
             mat.show();
             System.out.println("Matriks invers dari matriks diatas adalah: ");
-            Matrix inverse = Matrix.inverse(mat);
+            Matrix inverse = mat.getInverseGJ();
             inverse.show();
             System.out.println("Apakah anda ingin menyimpan hasil ke file? (Y/N) ");
             String test = in.nextLine();
