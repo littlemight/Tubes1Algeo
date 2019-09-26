@@ -13,7 +13,7 @@ public class Driver {
         System.out.println("||                                              ||");
         System.out.println("||          -Sistem Persamaan Linier-           ||");
         System.out.println("||                -Version 1.0-                 ||");
-        System.out.println("||                     By                       ||");
+        System.out.println("||                    Dari                      ||");
         System.out.println("||                Jun From Korea                ||");
         System.out.println("||                                              ||");
         System.out.println("||                                              ||");
@@ -77,6 +77,9 @@ public class Driver {
                     break;
                 case 6:
                     interpolationProgram(in);
+                    break;
+                case 7:
+                    caseStudies(in);
                     break;
             }
         } while(cmd!=8);
@@ -250,6 +253,35 @@ public class Driver {
         } 
 
 
+    }
+
+    public static void caseStudies(Scanner in){
+        System.out.println("Berikut adalah pengujian studi kasus yang diberikan pada spesifikasi tugas ini.");
+        System.out.println("1. 1_1");
+        System.out.println("2. 1_2");
+        System.out.println("3. 1_3");
+        System.out.println("4. Matriks Hilbert");
+        System.out.println("5. spl_1");
+        System.out.println("6. spl_2");
+        System.out.println("7. 2_i");
+        System.out.println("8. 2_ii");
+        System.out.println("9. 3_5x5");
+        System.out.println("10. 3_10x10");
+        System.out.println("11. 4_Rangkaian");
+        System.out.println("12. 5_Penduduk (dalam jutaan) ");
+        System.out.println("13. 5_Penduduk");
+        System.out.println("14. Menghitung fungsi f(x)");
+        int cmd = in.nextInt();
+
+        while(cmd < 1 || cmd > 14){
+            System.out.println("perintah tidak valid! coba lagi");
+            System.out.print("masukkan perintah: ");
+            cmd = in.nextInt();
+        }
+
+        switch(cmd){
+            
+        }
     }
 
     public static void determinantProgram(Scanner in){
