@@ -22,6 +22,7 @@ public class App {
             System.out.println();
             System.out.println("KOFAK:");
             System.out.println(Util.formatOutput(M.getDeterminantCofactor()));
+
             // System.out.println("nama file simpan");
             // String nm = in.nextLine();
             // M.showFile("../test/" + nm);
@@ -46,6 +47,17 @@ public class App {
             // }
             // System.out.println();
     
+            SPL solusi = new SPL(M);
+            System.out.println("SPL:");
+            System.out.println("Pake Gauss: ");
+            solusi.solveGauss();
+            // solusi.EF.show();
+            // solusi.showAug();
+            solusi.showEF();
+            solusi.showSol();
+            solusi.showFile("../test/hasil.txt");
+            System.out.println();
+
             // SPL solusi = new SPL(M);
             // System.out.println("SPL:");
             // System.out.println("Pake Gauss: ");

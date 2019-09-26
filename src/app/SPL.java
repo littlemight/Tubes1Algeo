@@ -1,6 +1,8 @@
 package app;
 import app.Matrix;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -299,11 +301,12 @@ class SPL {
     int r=free_solution.getM(), c=free_solution.getN();
     boolean first;
     for (int i=1;i<=r;i++){
+      boolean nemu=false;
       System.out.print("X" + i + " =");
       first = true;
       for (int j=1;j<c;j++){
         if (Util.isZero(free_solution.mat[i][j])) continue;
-
+        nemu = true;
         if (free_solution.mat[i][j].compareTo(BigDecimal.ZERO) < 0){
           if (free_solution.mat[i][j].compareTo(BigDecimal.ONE.negate()) == 0){
             System.out.print(" -");
@@ -334,6 +337,7 @@ class SPL {
         System.out.print(free_var[j-1]);
       }
       if (!Util.isZero(free_solution.mat[i][c])){
+        nemu = true;
         if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
           System.out.print(" -");
           if (!first) {
@@ -344,6 +348,7 @@ class SPL {
           System.out.print(" + " + Util.formatOutputAbs(free_solution.mat[i][c]));
         } else System.out.print(" " + Util.formatOutputAbs(free_solution.mat[i][c]));
       }
+      if (!nemu) System.out.print(" " + 0);
       System.out.println();
     }
   }
@@ -354,6 +359,79 @@ class SPL {
 
     for (int i=1;i<=r;i++){
       sol.mat[i][1] = free_solution.mat[i][c];
+    }
+  }
+
+  public void showFile(String filename){
+    try {
+      PrintWriter pwriter = new PrintWriter(new FileWriter(filename));
+
+      if (state == 0) {
+        System.out.println("Solusi tidak ada");
+        pwriter.close();
+        return;
+      }
+      int r=free_solution.getM(), c=free_solution.getN();
+      boolean first;
+      for (int i=1;i<=r;i++){
+        boolean nemu=false;
+        pwriter.print("X" + i + " =");
+        first = true;
+        for (int j=1;j<c;j++){
+          if (Util.isZero(free_solution.mat[i][j])) continue;
+          nemu = true;
+          if (free_solution.mat[i][j].compareTo(BigDecimal.ZERO) < 0){
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE.negate())){
+              pwriter.print(" -");
+              if (!first) {
+                pwriter.print(" ");
+              }  
+            } else{
+              pwriter.print(" -");
+              if (!first) {
+                pwriter.print(" ");
+              }  
+              pwriter.print(Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          } else if (first){
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+              pwriter.print(" ");  
+            } else{
+              pwriter.print(" " + Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          } else{
+            if (free_solution.mat[i][j].equals(BigDecimal.ONE)){
+              pwriter.print(" + ");  
+            } else{
+             pwriter.print(" + " + Util.formatOutputAbs(free_solution.mat[i][j]));
+            }
+          }
+          first = false;
+          pwriter.print(free_var[j-1]);
+        }
+        if (!Util.isZero(free_solution.mat[i][c])){
+          nemu = true;
+          if (free_solution.mat[i][c].compareTo(BigDecimal.ZERO) < 0) {
+            pwriter.print(" -");
+            if (!first) {
+              pwriter.print(" ");
+            }  
+            pwriter.print(Util.formatOutputAbs(free_solution.mat[i][c]));
+          } else if (!first) {
+            pwriter.print(" + " + Util.formatOutputAbs(free_solution.mat[i][c]));
+          } else pwriter.print(" " + Util.formatOutputAbs(free_solution.mat[i][c]));
+        }
+        if (!nemu) pwriter.print(" " + 0);
+        pwriter.println();
+      }
+
+      pwriter.close();
+    } catch (NullPointerException e) {
+      System.out.println("Matriks tidak valid.");
+    } catch(IOException ex) {
+      System.out.println(
+          "File tidak dapat dibaca '" 
+          + filename + "'");
     }
   }
 }
