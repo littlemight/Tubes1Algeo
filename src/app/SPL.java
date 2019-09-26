@@ -192,7 +192,10 @@ class SPL {
     for (int i=c-1;i>0;i--){
       for (int j=i+1;j<c;j++){
         double fac;
-        if (Math.abs(free_sol.mat[i][j]) < EPS) continue;
+        if (Math.abs(free_sol.mat[i][j]) < EPS){
+          free_sol.mat[i][j]=0;
+          continue;
+        }
         
         fac = free_sol.mat[i][j];
         free_sol.mat[i][j] = 0;
@@ -220,11 +223,12 @@ class SPL {
     int r=free_solution.getM(), c=free_solution.getN();
     boolean first;
     for (int i=1;i<=r;i++){
+      boolean nemu=false;
       System.out.print("X" + i + " =");
       first = true;
       for (int j=1;j<c;j++){
         if (Math.abs(free_solution.mat[i][j])<EPS) continue;
-
+        nemu = true;
         if (free_solution.mat[i][j]<0){
           if (free_solution.mat[i][j]==-1){
             System.out.print(" -");
@@ -255,6 +259,7 @@ class SPL {
         System.out.print(free_var[j-1]);
       }
       if (Math.abs(free_solution.mat[i][c])>EPS){
+        nemu = true;
         if (free_solution.mat[i][c]<0) {
           System.out.print(" -");
           if (!first) {
@@ -265,6 +270,7 @@ class SPL {
           System.out.print(" + " + free_solution.mat[i][c]);
         } else System.out.print(" " + free_solution.mat[i][c]);
       }
+      if (!nemu) System.out.print(0);
       System.out.println();
     }
   }
