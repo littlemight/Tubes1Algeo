@@ -60,7 +60,7 @@ public class Driver {
         do {
             System.out.println("----------------------MENU------------------------");
             System.out.println("1. Sistem Persamaan Linier");
-            System.out.println("2. Matriks Determinan");
+            System.out.println("2. Determinan Matriks");
             System.out.println("3. Matriks Balikan");
             System.out.println("4. Matriks Kofaktor");
             System.out.println("5. Matriks Adjoin");
