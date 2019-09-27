@@ -84,7 +84,7 @@ Ketika memilih pilihan ini, anda akan diberikan dua pilihan yaitu ingin menginpu
 ## Dokumentasi
 Dokumentasi lebih lanjut dapat dilihat di folder doc, dan menampilkan file "index.html" di web browser.
 
-### Uji Studi Kasus Dengan Kakas Online
+## Uji Studi Kasus Dengan Kakas Online
 1_1
 http://matrixcalc.org/en/slu.html#solve-using-Gauss-Jordan-elimination%28%7B%7B1,1,-1,-1,1%7D,%7B2,5,-7,-5,-2%7D,%7B2,-1,1,3,4%7D,%7B5,2,-4,2,6%7D%7D%29
 
