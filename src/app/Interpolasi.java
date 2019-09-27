@@ -159,11 +159,18 @@ class Interpolasi {
     makePersamaan();
   }
 
+  /**
+   * Primitif untuk menyelesaikan interpolasi, menggunakan operasi Cramer
+   */
   public void solveInterCramer() {
     solver.solveCramer();
     makePersamaan();
   }
 
+
+  /**
+   * Primitif untuk menyelesaikan interpolasi, menggunakan operasi matriks balikan
+   */
   public void solveInterInverse() {
     solver.solveInverse();
     makePersamaan();

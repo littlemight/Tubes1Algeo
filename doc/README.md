@@ -96,7 +96,8 @@ Ketika memilih pilihan ini, anda akan diberikan dua pilihan yaitu ingin menginpu
 4_Rangkaian. http://matrixcalc.org/en/slu.html#solve-using-Gauss-Jordan-elimination%28%7B%7B1,1,1,0,0,0,0,0,0,0,0%7D,%7B0,-1,0,1,-1,0,0,0,0,0,0%7D,%7B0,0,-1,0,0,1,0,0,0,0,0%7D,%7B0,0,0,0,1,-1,0,0,0,0,0%7D,%7B5,-10,0,-20,0,0,0,0,0,0,200%7D,%7B0,-10,10,0,15,5,0,0,0,0,0%7D,%7B0,0,0,20,0,0,0,0,0,1,0%7D,%7B0,0,0,0,15,0,0,0,1,-1,0%7D,%7B0,0,0,0,0,5,0,1,-1,0,0%7D,%7B0,0,10,0,0,0,1,-1,0,0,0%7D%7D%29
 4_Penduduk. 
 
-4_PendudukE6.
+Menyederhanakan fungsi. 
+https://www.desmos.com/calculator/6fxrm2aqjw
 
 ### Keluar
 pilihan ini untuk keluar dari program
