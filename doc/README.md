@@ -7,6 +7,7 @@ Kelompok Jun From Korea:
 - Michel Fang          (13518137)
 
 
+
 ## Deskripsi Program
 Program ini dibuat sesuai spesifikasi Tugas Besar 1. Dengan beberapa tambahan tertentu, Program ini dapat menerima input dari keyboard atau file, lalu dapat menampilkan hasil ke layar atau menyimpan ke file. Lalu, program ini dapat melakukan banyak operasi pada matriks, menyelesaikan sistem persamaan linier, juga membuat interpolasi fungsi dari titik-titik yang dimasukkan.
 
@@ -79,6 +80,9 @@ Ketika memilih pilihan ini, anda akan diberikan dua pilihan yaitu ingin menginpu
 
 ### Interpolasi Polinom
 Ketika memilih pilihan ini, anda akan diberikan dua pilihan yaitu ingin menginput dari keyboard atau dari file. setelah memilih dan menginput kumpulan titik-titik, maka akan dilakukan interpolasi untuk mencari fungsi hasil interpolasi.
+
+## Dokumentasi
+Dokumentasi lebih lanjut dapat dilihat di folder doc, dan menampilkan file "index.html" di web browser.
 
 ### Uji Studi Kasus Dengan Kakas Online
 1_1
